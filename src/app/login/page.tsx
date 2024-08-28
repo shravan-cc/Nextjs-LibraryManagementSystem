@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { roboto } from "../layout";
 
-export default function SignUp() {
+export default function Login() {
   return (
     <main>
       <div className="flex items-center justify-center min-h-screen bg-CustomPeach">
@@ -20,48 +20,12 @@ export default function SignUp() {
             <CardTitle
               className={`text-2xl font-bold text-center ${roboto.className}`}
             >
-              SignUp
+              Login
             </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 px-16">
             <form>
               <div className="grid gap-3">
-                <div className="grid gap-1">
-                  <Label className="sr-only" htmlFor="name">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    placeholder="Name"
-                    type="text"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                  />
-                </div>
-                <div className="grid gap-1">
-                  <Label className="sr-only" htmlFor="phone">
-                    Phone Number
-                  </Label>
-                  <Input
-                    id="phone"
-                    placeholder="Phone no."
-                    type="number"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                  />
-                </div>
-                <div className="grid gap-1">
-                  <Label className="sr-only" htmlFor="address">
-                    Address
-                  </Label>
-                  <Input
-                    id="address"
-                    placeholder="Address"
-                    type="text"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                  />
-                </div>
                 <div className="grid gap-1">
                   <Label className="sr-only" htmlFor="email">
                     Email
@@ -87,19 +51,7 @@ export default function SignUp() {
                     autoCorrect="off"
                   />
                 </div>
-                <div className="grid gap-1">
-                  <Label className="sr-only" htmlFor="confirm-password">
-                    Confirm Password
-                  </Label>
-                  <Input
-                    id="confirm-password"
-                    placeholder="Confirm Password"
-                    type="password"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                  />
-                </div>
-                <Button className="bg-CustomOrange">Sign Up</Button>
+                <Button className="bg-CustomOrange">Login</Button>
               </div>
             </form>
 
@@ -121,12 +73,12 @@ export default function SignUp() {
           </CardContent>
           <CardFooter className="flex justify-center">
             <p className="px-8 text-center text-sm text-black">
-              Already have an account?{" "}
+              Do not have an account??{" "}
               <Link
-                href="/login"
+                href="/signup"
                 className="text-CustomDarkOrange hover:text-primary"
               >
-                Login
+                Signup
               </Link>
             </p>
           </CardFooter>
