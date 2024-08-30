@@ -76,17 +76,13 @@
       "compositePrimaryKeys": {
         "books_id": {
           "name": "books_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "books_isbnNo_unique": {
           "name": "books_isbnNo_unique",
-          "columns": [
-            "isbnNo"
-          ]
+          "columns": ["isbnNo"]
         }
       }
     },
@@ -155,29 +151,21 @@
       "compositePrimaryKeys": {
         "members_id": {
           "name": "members_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "members_phone_unique": {
           "name": "members_phone_unique",
-          "columns": [
-            "phone"
-          ]
+          "columns": ["phone"]
         },
         "members_email_unique": {
           "name": "members_email_unique",
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         },
         "members_refreshToken_unique": {
           "name": "members_refreshToken_unique",
-          "columns": [
-            "refreshToken"
-          ]
+          "columns": ["refreshToken"]
         }
       }
     },
@@ -240,12 +228,8 @@
           "name": "transactions_bookId_books_id_fk",
           "tableFrom": "transactions",
           "tableTo": "books",
-          "columnsFrom": [
-            "bookId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["bookId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -253,12 +237,8 @@
           "name": "transactions_memberId_members_id_fk",
           "tableFrom": "transactions",
           "tableTo": "members",
-          "columnsFrom": [
-            "memberId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["memberId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -266,9 +246,7 @@
       "compositePrimaryKeys": {
         "transactions_id": {
           "name": "transactions_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -303,17 +281,13 @@
       "compositePrimaryKeys": {
         "user_id": {
           "name": "user_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "user_email_unique": {
           "name": "user_email_unique",
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       }
     }

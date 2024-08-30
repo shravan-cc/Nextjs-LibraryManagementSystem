@@ -5,7 +5,7 @@ import { IPageRequest, IPagedResponse } from "./pagination.response";
 import { IRepository } from "./repository";
 
 import { IBook, IBookBase } from "@/models/book.model";
-import { BooksTable } from "@/database/src/drizzle/schema";
+import { BooksTable } from "../drizzle/schema";
 
 export class BookRepository implements IRepository<IBookBase, IBook> {
   constructor(private readonly db: MySql2Database<Record<string, unknown>>) {}

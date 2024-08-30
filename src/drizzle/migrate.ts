@@ -1,10 +1,10 @@
-import { drizzle } from 'drizzle-orm/mysql2';
-import { migrate } from 'drizzle-orm/mysql2/migrator';
-import mysql from 'mysql2/promise';
+import { drizzle } from "drizzle-orm/mysql2";
+import { migrate } from "drizzle-orm/mysql2/migrator";
+import mysql from "mysql2/promise";
 // Create a function to initialize the database connection and perform migrations
 async function initializeDb() {
   // Database URL
-  const databaseUrl = 'mysql://user:user_password@localhost:3306/library_db';
+  const databaseUrl = "mysql://user:user_password@localhost:3306/library_db";
   //   Connection for migrations
   const migrationClient = await mysql.createConnection({
     uri: databaseUrl,
@@ -13,7 +13,7 @@ async function initializeDb() {
   //   Perform migrations
   await migrate(drizzle(migrationClient), {
     migrationsFolder:
-      '/mnt/c/Users/shravantr/Documents/assignmentprime/Library_Management/Library_Management_System/drizzle/migrations', // Adjust this path to your migrations folder
+      "/mnt/c/Users/shravantr/Documents/assignmentprime/Library_Management/Library_Management_System/drizzle/migrations", // Adjust this path to your migrations folder
   });
   await migrationClient.end();
 }
