@@ -76,9 +76,7 @@
       "compositePrimaryKeys": {
         "book_id": {
           "name": "book_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
