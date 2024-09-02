@@ -1,8 +1,12 @@
 import { signIn } from "@/auth";
-import { Button } from "../ui/button";
 import Image from "next/image";
+import { Button } from "../ui/button";
 
-export default function GoogleAuth() {
+interface GoogleAuthProps {
+  buttonLabel: string;
+}
+
+export default function GoogleAuth({ buttonLabel }: GoogleAuthProps) {
   return (
     <form
       action={async () => {
@@ -17,7 +21,7 @@ export default function GoogleAuth() {
           width={25}
           height={25}
         />
-        Sign in with Google
+        {buttonLabel}
       </Button>
     </form>
   );
