@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { MemberRepository } from "@/repositories/member.repository";
 import bcrypt from "bcrypt";
 import { IMember } from "@/models/member.model";
-
+import Google from "next-auth/providers/google";
 // async function getUser(email: string): Promise<User | undefined> {
 //   try {
 //     const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
@@ -30,6 +30,7 @@ function mapMemberToUser(member: IMember): User {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
+    Google,
     Credentials({
       async authorize(credentials) {
         console.log(credentials);

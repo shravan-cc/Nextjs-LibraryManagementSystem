@@ -16,7 +16,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 
-export default function SignUp() {
+interface SignUpProps {
+  children: React.ReactNode;
+}
+
+export default function SignUp({ children }: SignUpProps) {
   //   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
   //     e.preventDefault();
   //     const formData = new FormData(e.target);
@@ -153,7 +157,7 @@ export default function SignUp() {
               </div>
             </div>
             <div className="flex justify-center items-center">
-              <Button variant="outline" className="w-full max-w-52 flex gap-2">
+              {/* <Button variant="outline" className="w-full max-w-52 flex gap-2">
                 <Image
                   src="/Google.png"
                   alt="Google pic Image"
@@ -161,7 +165,8 @@ export default function SignUp() {
                   height={25}
                 />
                 Sign in with Google
-              </Button>
+              </Button> */}
+              {children}
             </div>
           </CardContent>
           <CardFooter className="flex justify-center">

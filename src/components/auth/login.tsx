@@ -113,7 +113,7 @@ export default function Login() {
                 href="/signup"
                 className="text-CustomDarkOrange hover:text-primary"
               >
-                Login
+                Signup
               </Link>
             </p>
           </CardFooter>

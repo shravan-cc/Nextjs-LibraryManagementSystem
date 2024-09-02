@@ -1,5 +1,4 @@
 "use client";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,13 +29,14 @@ import {
   User,
   Users,
 } from "lucide-react";
-import { signOut } from "next-auth/react";
+import React from "react";
 
 interface BookProps {
   books: IBook[] | undefined;
+  children: React.ReactNode;
 }
 
-export default function Home({ books }: BookProps) {
+export default function Home({ books, children }: BookProps) {
   return (
     <div className="min-h-screen flex flex-col bg-CustomPeach">
       <header className="px-4 lg:px-6 h-16 flex items-center border-b bg-white shadow-md">
@@ -80,12 +80,15 @@ export default function Home({ books }: BookProps) {
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Button>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </Button>
-              </DropdownMenuItem>
+              {/* <DropdownMenuItem>
+                <form>
+                  <Button type="submit">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </Button>
+                </form>
+              </DropdownMenuItem> */}
+              {children}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

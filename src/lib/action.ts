@@ -5,7 +5,7 @@ import { BookRepository } from "@/repositories/book.repository";
 import { MemberRepository } from "@/repositories/member.repository";
 import bcrypt from "bcrypt";
 import { AuthError } from "next-auth";
-import { signIn } from "../auth";
+import { signIn, signOut } from "../auth";
 import { db } from "./db";
 
 const memberRepo = new MemberRepository(db);
