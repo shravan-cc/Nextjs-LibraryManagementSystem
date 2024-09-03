@@ -7,7 +7,7 @@ import { registerUser, State } from "@/lib/action";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 
-export default function SignUp() {
+export default function SignUpForm() {
   //   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
   //     e.preventDefault();
   //     const formData = new FormData(e.target);

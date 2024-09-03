@@ -1,16 +1,13 @@
 import GoogleAuth from "@/components/auth/GoogleAuth";
-import Login from "@/components/auth/login";
-import { Button } from "@/components/ui/button";
+import LoginForm from "@/components/auth/LoginForm";
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@radix-ui/react-label";
 import Link from "next/link";
-import { Input } from "postcss";
 
 export default function LoginPage() {
   return (
@@ -27,7 +24,7 @@ export default function LoginPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4 px-16">
-              <Login />
+              <LoginForm />
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">

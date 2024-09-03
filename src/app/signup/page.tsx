@@ -1,5 +1,5 @@
 import GoogleAuth from "@/components/auth/GoogleAuth";
-import SignUp from "@/components/auth/signup";
+import SignUpForm from "@/components/auth/SignupForm";
 import {
   Card,
   CardContent,
@@ -21,7 +21,7 @@ export default function SignUpPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4 px-16">
-              <SignUp />
+              <SignUpForm />
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">

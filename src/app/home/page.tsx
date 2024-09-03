@@ -1,4 +1,6 @@
-import Home from "@/components/homePage";
+import Pagination from "@/components/home/pagination";
+import SearchBook from "@/components/home/search";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,9 +9,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { fetchBooks } from "@/lib/action";
-import { IBook } from "@/models/book.model";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,19 +17,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  BookCopy,
-  ChevronLeft,
-  ChevronRight,
-  MapPin,
-  Phone,
-  User,
-  Users,
-} from "lucide-react";
+import { fetchBooks } from "@/lib/action";
+import { IBook } from "@/models/book.model";
+import { BookCopy, MapPin, Phone, User, Users } from "lucide-react";
 import SignOut from "../../components/auth/signout";
 
-export default async function HomePage() {
-  const books: IBook[] | undefined = await fetchBooks();
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams?: {
+    query?: string;
+    page?: string;
+  };
+}) {
+  const query: string = searchParams?.query || "";
+  const currentPage = searchParams!.page || 1;
+  const limit = 8;
+  const offset = (Number(currentPage) - 1) * limit;
+  const fetchedBooks = await fetchBooks(query, limit, offset);
+  const books: IBook[] | undefined = fetchedBooks?.items;
+  const totalBooks = fetchedBooks!.pagination.total;
+  const totalPages = Math.ceil(totalBooks / limit);
   return (
     <>
       {/* <Home books={books}>
@@ -81,14 +88,6 @@ export default async function HomePage() {
                   <User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </DropdownMenuItem>
-                {/* <DropdownMenuItem>
-                <form>
-                  <Button type="submit">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                  </Button>
-                </form>
-              </DropdownMenuItem> */}
                 <SignOut />
               </DropdownMenuContent>
             </DropdownMenu>
@@ -97,7 +96,7 @@ export default async function HomePage() {
         <main className="flex-1 overflow-y-auto py-6">
           <div className="container mx-auto px-4 md:px-6">
             <div className="mb-6">
-              <Home />
+              <SearchBook />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {books?.map((book) => (
@@ -161,22 +160,10 @@ export default async function HomePage() {
                 </Card>
               ))}
             </div>
-            <div className="flex justify-center mt-8 space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-white hover:bg-orange-100"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-white hover:bg-orange-100"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
+            <Pagination
+              totalPages={totalPages}
+              currentPage={Number(currentPage)}
+            />
           </div>
         </main>
       </div>
