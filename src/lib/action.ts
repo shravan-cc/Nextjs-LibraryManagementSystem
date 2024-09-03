@@ -5,8 +5,9 @@ import { BookRepository } from "@/repositories/book.repository";
 import { MemberRepository } from "@/repositories/member.repository";
 import bcrypt from "bcrypt";
 import { AuthError } from "next-auth";
-import { signIn } from "../auth";
+import { auth, signIn } from "../auth";
 import { db } from "./db";
+import { redirect } from "next/navigation";
 
 const memberRepo = new MemberRepository(db);
 const bookRepo = new BookRepository(db);
@@ -22,7 +23,14 @@ export async function authenticate(
 ) {
   try {
     console.log("Success");
-    await signIn("credentials", formData);
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: formData.get("email"),
+      password: formData.get("password"),
+    });
+    if (result) {
+      redirect("/home");
+    }
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -89,34 +97,6 @@ export async function registerUser(prevState: State, formData: FormData) {
     console.log("Error during registration:", error);
     return { message: "Error during registration:", error };
   }
-
-  // try {
-  //   const response = await fetch("/api/signup", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       firstName,
-  //       lastName,
-  //       phone,
-  //       address,
-  //       email,
-  //       password,
-  //     }),
-  //   });
-  //   if (response.ok) {
-  //     alert("Success");
-  //     return { message: "Success" };
-  //   } else {
-  //     alert("Failure");
-  //     return { message: "Failure" };
-  //   }
-  // } catch (error) {
-  //   console.error("Error during registration:", error);
-  //   alert("An error occurred during registration. Please try again.");
-  //   return {
-  //     message: "An error occurred during registration. Please try again.",
-  //   };
-  // }
 }
 
 export async function fetchBooks(
@@ -138,5 +118,20 @@ export async function fetchBooks(
     }
   } catch (error) {
     console.error("Error handling book request:", error);
+  }
+}
+
+export async function fetchUserDetails() {
+  const session = await auth();
+  const user = session!.user;
+  const email = user!.email;
+  try {
+    const userDetails = await memberRepo.getByEmail(email as string);
+    if (!userDetails) {
+      throw new Error("Details could not be found");
+    }
+    return userDetails;
+  } catch (error) {
+    console.error("Error finding details of user", error);
   }
 }

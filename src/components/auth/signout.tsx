@@ -2,6 +2,8 @@ import { signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { LogOut } from "lucide-react";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export default function SignOut() {
   return (
@@ -9,8 +11,7 @@ export default function SignOut() {
       <form
         action={async () => {
           "use server";
-          await signOut();
-          console.log("Logged out");
+          await signOut({ redirectTo: "/login" });
         }}
       >
         <Button type="submit">
