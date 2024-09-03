@@ -1,7 +1,7 @@
+import { signOut } from "@/auth";
+import { Button } from "@/components/ui/button";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { signOut } from "@/auth";
 
 export default function SignOut() {
   return (

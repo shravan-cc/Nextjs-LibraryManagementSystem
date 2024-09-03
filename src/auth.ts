@@ -1,12 +1,12 @@
-import NextAuth, { User } from "next-auth";
-import { authConfig } from "./auth.config";
-import Credentials from "next-auth/providers/credentials";
-import { z } from "zod";
 import { db } from "@/lib/db";
+import { IMember } from "@/models/member.model";
 import { MemberRepository } from "@/repositories/member.repository";
 import bcrypt from "bcrypt";
-import { IMember } from "@/models/member.model";
+import NextAuth, { User } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
+import { z } from "zod";
+import { authConfig } from "./auth.config";
 // async function getUser(email: string): Promise<User | undefined> {
 //   try {
 //     const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;

@@ -5,7 +5,7 @@ import { BookRepository } from "@/repositories/book.repository";
 import { MemberRepository } from "@/repositories/member.repository";
 import bcrypt from "bcrypt";
 import { AuthError } from "next-auth";
-import { signIn, signOut } from "../auth";
+import { signIn } from "../auth";
 import { db } from "./db";
 
 const memberRepo = new MemberRepository(db);
@@ -119,10 +119,11 @@ export async function registerUser(prevState: State, formData: FormData) {
   // }
 }
 
-export async function fetchBooks() {
-  const search = "";
-  const limit = 7;
-  const offset = 0;
+export async function fetchBooks(
+  search: string,
+  limit: number,
+  offset: number
+) {
   try {
     const books = await bookRepo.list({
       search: search,
@@ -131,7 +132,7 @@ export async function fetchBooks() {
     });
     if (books) {
       console.log("Received books");
-      return books.items;
+      return books;
     } else {
       console.log("Books not received");
     }

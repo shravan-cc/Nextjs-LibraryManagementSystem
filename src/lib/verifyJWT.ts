@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
 dotenv.config();
 
