@@ -59,7 +59,7 @@ export async function registerUser(prevState: State, formData: FormData) {
     console.log("Failure");
     return {
       errors: validateFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Invoice.",
+      message: "Missing Fields. Failed to Register.",
     };
   }
 
@@ -130,7 +130,7 @@ export async function fetchUserDetails() {
     if (!userDetails) {
       throw new Error("Details could not be found");
     }
-    return userDetails;
+    return { userDetails, user };
   } catch (error) {
     console.error("Error finding details of user", error);
   }

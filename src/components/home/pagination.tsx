@@ -3,11 +3,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-}
+import { PaginationButtonProps, PaginationProps } from "@/lib/definition";
 
 export default function Pagination({
   currentPage,
@@ -16,7 +12,6 @@ export default function Pagination({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  // const currentPage = Number(searchParams.get("page")) || 1;
 
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
@@ -84,12 +79,6 @@ export default function Pagination({
       </Button>
     </div>
   );
-}
-
-interface PaginationButtonProps {
-  page: number | string;
-  isCurrent: boolean;
-  handlePageChange: (pageNumber: number | string) => void;
 }
 
 function PaginationButton({

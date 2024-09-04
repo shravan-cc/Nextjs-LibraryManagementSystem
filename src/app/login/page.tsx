@@ -12,9 +12,6 @@ import Link from "next/link";
 export default function LoginPage() {
   return (
     <>
-      {/* <Login>
-        <GoogleAuth buttonLabel="Login with Google" />
-      </Login> */}
       <main>
         <div className="flex items-center justify-center min-h-screen bg-CustomPeach">
           <Card className="w-full max-w-md bg-CustomPeachCream">

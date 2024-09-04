@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import Pagination from "@/components/home/pagination";
 import SearchBook from "@/components/home/search";
 import Profile from "@/components/profile/profile";
@@ -11,12 +10,8 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { fetchBooks } from "@/lib/action";
-import { db } from "@/lib/db";
 import { IBook } from "@/models/book.model";
-import { MemberRepository } from "@/repositories/member.repository";
 import { BookCopy, Users } from "lucide-react";
-
-const memberRepo = new MemberRepository(db);
 
 export default async function HomePage({
   searchParams,
@@ -60,20 +55,26 @@ export default async function HomePage({
                     <h3 className="font-bold text-sm line-clamp-1">
                       {book.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-muted-foreground line-clamp-1">
                       {book.author}
                     </p>
                   </CardHeader>
                   <CardContent className="p-4 pt-2 pb-0">
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      <Badge variant="secondary" className="text-xs">
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge
+                        variant="secondary"
+                        className="text-xs truncate mr-2 max-w-[70%]"
+                      >
                         {book.genre}
                       </Badge>
-                      <Badge variant="outline" className="text-xs">
+                      <Badge
+                        variant="outline"
+                        className="text-xs whitespace-nowrap"
+                      >
                         {book.pages} pages
                       </Badge>
                     </div>
-                    <div className="text-xs text-muted-foreground mb-1">
+                    <div className="text-xs text-muted-foreground mb-1 line-clamp-1">
                       <span className="font-semibold">Publisher:</span>{" "}
                       {book.publisher}
                     </div>

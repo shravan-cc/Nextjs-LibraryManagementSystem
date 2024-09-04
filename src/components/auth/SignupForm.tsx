@@ -8,12 +8,6 @@ import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 
 export default function SignUpForm() {
-  //   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     const formData = new FormData(e.target);
-  //     const data = Object.fromEntries(formData.entries());
-  //     console.log(data);
-  //   };
   const router = useRouter();
   const initialState: State = { message: "", errors: {} };
   const [state, formAction] = useActionState(registerUser, initialState);
@@ -39,6 +33,9 @@ export default function SignUpForm() {
               autoCapitalize="none"
               autoCorrect="off"
             />
+            {state.errors?.firstName && (
+              <p className="text-red-500 text-sm">{state.errors.firstName}</p>
+            )}
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="lastName">
@@ -52,6 +49,9 @@ export default function SignUpForm() {
               autoCapitalize="none"
               autoCorrect="off"
             />
+            {state.errors?.lastName && (
+              <p className="text-red-500 text-sm">{state.errors.lastName}</p>
+            )}
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="phone">
@@ -65,6 +65,9 @@ export default function SignUpForm() {
               autoCapitalize="none"
               autoCorrect="off"
             />
+            {state.errors?.phone && (
+              <p className="text-red-500 text-sm">{state.errors.phone}</p>
+            )}
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="address">
@@ -78,6 +81,9 @@ export default function SignUpForm() {
               autoCapitalize="none"
               autoCorrect="off"
             />
+            {state.errors?.address && (
+              <p className="text-red-500 text-sm">{state.errors.address}</p>
+            )}
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -92,6 +98,9 @@ export default function SignUpForm() {
               autoComplete="email"
               autoCorrect="off"
             />
+            {state.errors?.email && (
+              <p className="text-red-500 text-sm">{state.errors.email}</p>
+            )}
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="password">
@@ -105,6 +114,9 @@ export default function SignUpForm() {
               autoCapitalize="none"
               autoCorrect="off"
             />
+            {state.errors?.password && (
+              <p className="text-red-500 text-sm">{state.errors.password}</p>
+            )}
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="confirmPassword">
@@ -119,6 +131,14 @@ export default function SignUpForm() {
               autoCorrect="off"
             />
           </div>
+          {state.errors?.confirmPassword && (
+            <p className="text-red-500 text-sm">
+              {state.errors.confirmPassword}
+            </p>
+          )}
+          {state.message && state.message !== "Success" && (
+            <p className="text-red-500 text-sm mt-2">{state.message}</p>
+          )}
           <Button type="submit" className="bg-CustomOrange">
             Sign Up
           </Button>

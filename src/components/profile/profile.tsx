@@ -11,16 +11,21 @@ import { User } from "lucide-react";
 import SignOut from "../auth/signout";
 import { Button } from "@/components/ui/button";
 import { fetchUserDetails } from "@/lib/action";
+import Image from "next/image";
 
 export default async function Profile() {
-  const userDetails = await fetchUserDetails();
+  const fetchedUserDetails = await fetchUserDetails();
+  const userDetails = fetchedUserDetails?.userDetails;
+  const user = fetchedUserDetails?.user;
+  const userImage = user?.image || "/user.png";
+  console.log(userImage);
   return (
     <div className="ml-auto">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage src="/user.png" alt="User" />
+              <Image src={userImage} alt="User" width={32} height={32} />
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
           </Button>
