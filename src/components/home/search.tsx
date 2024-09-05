@@ -22,7 +22,7 @@ export default function SearchBook() {
   }, 300);
 
   return (
-    <div className="flex w-full max-w-sm items-center space-x-2 mb-4">
+    <div className="flex w-full max-w-sm items-center space-x-2 ">
       <Input
         type="text"
         placeholder="Search books..."

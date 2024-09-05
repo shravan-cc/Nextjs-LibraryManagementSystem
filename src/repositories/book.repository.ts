@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { count, eq, like, or } from "drizzle-orm";
+import { count, eq, like, or, and } from "drizzle-orm";
 import { MySql2Database } from "drizzle-orm/mysql2";
 import { IPageRequest, IPagedResponse } from "./pagination.response";
 import { IRepository } from "./repository";
@@ -99,23 +99,51 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
     }
   }
 
+  async getByIsBnNo(isbnNo: string): Promise<IBook | null> {
+    try {
+      const [result] = await this.db
+        .select()
+        .from(BooksTable)
+        .where(eq(BooksTable.isbnNo, isbnNo));
+
+      return (result as IBook) || null;
+    } catch (e: any) {
+      throw new Error(`Selection by isbnNo failed: ${e.message}`);
+    }
+  }
+
   async list(params: IPageRequest): Promise<IPagedResponse<IBook>> {
     try {
       const search = params.search?.toLowerCase();
-      const whereExpression = search
-        ? or(
-            like(BooksTable.title, `%${search}%`),
-            like(BooksTable.isbnNo, `%${search}%`)
-          )
-        : undefined;
+      const genre = params.genre?.toLowerCase();
+      const sortBy = params.sort;
+      const whereExpression = and(
+        search
+          ? or(
+              like(BooksTable.title, `%${search}%`),
+              like(BooksTable.isbnNo, `%${search}%`)
+            )
+          : undefined,
+        genre ? eq(BooksTable.genre, genre) : undefined
+      );
 
-      const books = await this.db
+      let books = await this.db
         .select()
         .from(BooksTable)
         .where(whereExpression)
         .limit(params.limit)
         .offset(params.offset)
         .execute();
+
+      if (sortBy === "title") {
+        books.sort((a, b) => a.title.localeCompare(b.title));
+      }
+      if (sortBy === "author") {
+        books.sort((a, b) => a.author.localeCompare(b.author));
+      }
+      if (sortBy === "availability") {
+        books.sort((a, b) => b.availableCopies - a.availableCopies);
+      }
 
       const result = await this.db
         .select({ count: count() })
