@@ -1,3 +1,5 @@
+import Pagination from "@/components/home/pagination";
+import SearchBar from "@/components/home/search";
 import { Button } from "@/components/ui/button";
 import {
   approveTransaction,
@@ -7,14 +9,30 @@ import {
 import { CheckCircle, XCircle } from "lucide-react";
 import { redirect } from "next/navigation";
 
-export default async function Transactions() {
-  const transactions = await fetchTransactionDetails("", 10, 0);
+export default async function Transactions({
+  searchParams,
+}: {
+  searchParams?: { query?: string; page?: string };
+}) {
+  const query: string = searchParams?.query || "";
+  const currentPage = searchParams!.page || 1;
+  const limit = 5;
+  const offset = (Number(currentPage) - 1) * limit;
+  const fetchedTransactions = await fetchTransactionDetails(
+    query,
+    limit,
+    offset
+  );
+  const transactions = fetchedTransactions!.items;
+  const totalTransactions = fetchedTransactions!.pagination.total;
+  const totalPages = Math.ceil(totalTransactions / limit);
   return (
     <>
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-orange-800">Transactions</h2>
         </div>
+        <SearchBar type="Transactions" />
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-orange-100">
@@ -118,6 +136,7 @@ export default async function Transactions() {
             </tbody>
           </table>
         </div>
+        <Pagination currentPage={Number(currentPage)} totalPages={totalPages} />
       </div>
     </>
   );

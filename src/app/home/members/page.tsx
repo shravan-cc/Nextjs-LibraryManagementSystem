@@ -1,3 +1,5 @@
+import Pagination from "@/components/home/pagination";
+import SearchBar from "@/components/home/search";
 import { Button } from "@/components/ui/button";
 import { fetchMembers, fetchUserDetails } from "@/lib/action";
 import { Edit, Plus, Trash2 } from "lucide-react";
@@ -10,10 +12,14 @@ export default async function Members({
 }) {
   const query: string = searchParams?.query || "";
   const currentPage = searchParams!.page || 1;
-  const userDetails = await fetchMembers("", 10, 0);
-  const totalMembers = userDetails!.pagination.total;
-  const memberDetails = await fetchMembers("", totalMembers, 0);
+  const limit = 5;
+  const offset = (Number(currentPage) - 1) * limit;
+  // const userDetails = await fetchMembers("", 10, 0);
+  // const totalMembers = userDetails!.pagination.total;
+  const memberDetails = await fetchMembers(query, limit, offset);
   const members = memberDetails!.items;
+  const totalMembers = memberDetails!.pagination.total;
+  const totalPages = Math.ceil(totalMembers / limit);
   return (
     <>
       <div className="space-y-4">
@@ -25,6 +31,7 @@ export default async function Members({
             </Button>
           </Link>
         </div>
+        <SearchBar type="Members" />
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-orange-100">
@@ -88,6 +95,7 @@ export default async function Members({
             </tbody>
           </table>
         </div>
+        <Pagination currentPage={Number(currentPage)} totalPages={totalPages} />
       </div>
     </>
   );

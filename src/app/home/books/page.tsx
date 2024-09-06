@@ -1,5 +1,5 @@
 import Pagination from "@/components/home/pagination";
-import SearchBook from "@/components/home/search";
+import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,7 +48,7 @@ export default async function HomePage({
   );
   const books: IBook[] | undefined = fetchedBooks?.items;
   const totalBooks = fetchedBooks!.pagination.total;
-  const genres = await getGenres(totalBooks);
+  const genres = await getGenres();
   const totalPages = Math.ceil(totalBooks / limit);
 
   return (
@@ -56,7 +56,7 @@ export default async function HomePage({
       <div className="space-y-4">
         <div className="flex flex-wrap gap-4 mb-4 items-center">
           <div className="flex-grow sm:flex-grow-0">
-            <SearchBook />
+            <SearchBar type="Books" />
           </div>
           <SortBooks />
           <FilterGenre genres={genres} />

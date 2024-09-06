@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
-export default function SearchBook() {
+export default function SearchBar({ type }: { type: string }) {
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const { replace } = useRouter();
@@ -25,7 +25,7 @@ export default function SearchBook() {
     <div className="flex w-full max-w-sm items-center space-x-2 ">
       <Input
         type="text"
-        placeholder="Search books..."
+        placeholder={`Search ${type}...`}
         className="bg-white"
         onChange={(e) => handleSearch(e.target.value)}
         defaultValue={searchParams.get("query")?.toString()}

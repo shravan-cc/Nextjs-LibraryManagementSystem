@@ -260,14 +260,8 @@ export async function fetchTransactionDetails(
       offset: offset,
     });
     if (transactions) {
-      console.log("Received Transactions");
-      const totalTransactions = transactions.pagination.total;
-      const getAllTransactions = await transactionRepo.list({
-        search: "",
-        limit: totalTransactions,
-        offset: 0,
-      });
-      return getAllTransactions.items;
+      console.log("Received Transaction");
+      return transactions;
     } else {
       console.log("Transactions not received");
     }
@@ -276,7 +270,7 @@ export async function fetchTransactionDetails(
   }
 }
 
-export async function getGenres(limit: number) {
+export async function getGenres() {
   const genre = await db.select().from(BooksTable);
   const genres = genre.map((genr) => genr.genre);
   return genre
