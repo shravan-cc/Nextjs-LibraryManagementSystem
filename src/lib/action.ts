@@ -316,44 +316,18 @@ export async function fetchTransactionRequests() {
   }
 }
 
-// export async function approveTransaction(id: number) {
-//   try {
-//     await db
-//       .update(RequestTransactionTable)
-//       .set({ status: "approved" })
-//       .where(eq(RequestTransactionTable.id, id));
-
-//     const getTransactionData =
-//       await requestTransactionRepo.getTransactionRequestDetails(id);
-
-//     console.log(getTransactionData);
-
-//     const today = new Date();
-//     const borrowDate = new Date(today);
-//     borrowDate.getDate();
-//     console.log(borrowDate.toString());
-//     const dueDate = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-//     console.log(borrowDate.toString());
-//     const transaction = await transactionRepo.create({
-//       memberId: getTransactionData.memberId,
-//       bookId: getTransactionData.bookId,
-//       borrowDate: borrowDate.toString(),
-//       dueDate: dueDate.toString(),
-//     });
-
-//     console.log("Transaction approved", transaction);
-//     return transaction;
-//   } catch (error: any) {
-//     console.error(error.message, error);
-//     throw new Error("Failed to approve Transaction", error);
-//   }
-// }
-
 export async function approveTransaction(id: number) {
   try {
+    const today = new Date();
+    const borrowDate = today.toISOString().slice(0, 10);
+    const dueDate = new Date(today.getTime() + 15 * 24 * 60 * 60 * 1000);
     await db
       .update(TransactionTable)
-      .set({ status: "approved" })
+      .set({
+        status: "approved",
+        borrowDate: borrowDate,
+        dueDate: dueDate.toISOString().slice(0, 10),
+      })
       .where(eq(TransactionTable.id, id));
 
     const issueBook = await transactionRepo.issueBook(id);
@@ -361,5 +335,17 @@ export async function approveTransaction(id: number) {
     return issueBook;
   } catch (error: any) {
     throw new Error("Failed to approve Transaction", error);
+  }
+}
+
+export async function rejectTransaction(id: number) {
+  try {
+    const result = await db
+      .update(TransactionTable)
+      .set({ status: "rejected" })
+      .where(eq(TransactionTable.id, id));
+    return result;
+  } catch (error: any) {
+    throw new Error("Failed to reject Transaction", error);
   }
 }

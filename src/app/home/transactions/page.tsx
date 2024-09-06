@@ -1,5 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { approveTransaction, fetchTransactionDetails } from "@/lib/action";
+import {
+  approveTransaction,
+  fetchTransactionDetails,
+  rejectTransaction,
+} from "@/lib/action";
 import { CheckCircle, XCircle } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -82,17 +86,31 @@ export default async function Transactions() {
                           variant="ghost"
                           size="sm"
                           className="text-xs hover:bg-green-100 text-green-600"
+                          disabled={transaction.status !== "pending"}
                         >
                           <CheckCircle className="h-4 w-4 mr-1" /> Approve
                         </Button>
                       </form>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-xs hover:bg-red-100 text-red-600"
+                      <form
+                        action={async () => {
+                          "use server";
+                          const result = await rejectTransaction(
+                            transaction.id
+                          );
+                          if (result) {
+                            redirect("/home/transactions");
+                          }
+                        }}
                       >
-                        <XCircle className="h-4 w-4 mr-1" /> Reject
-                      </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs hover:bg-red-100 text-red-600"
+                          disabled={transaction.status !== "pending"}
+                        >
+                          <XCircle className="h-4 w-4 mr-1" /> Reject
+                        </Button>
+                      </form>
                     </div>
                   </td>
                 </tr>

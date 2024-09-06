@@ -2,8 +2,8 @@ import BookForm from "@/components/admin/books/bookForm";
 import { fetchBooks } from "@/lib/action";
 import { BookRepository } from "@/repositories/book.repository";
 import { db } from "@/lib/db";
-import UpdateBookForm from "@/components/admin/updateBookForm";
 import { IBook } from "@/models/book.model";
+import UpdateBookForm from "@/components/admin/books/updateBookForm";
 
 const bookRepo = new BookRepository(db);
 

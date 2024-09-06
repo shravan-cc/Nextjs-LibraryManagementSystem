@@ -3,7 +3,13 @@ import { fetchMembers, fetchUserDetails } from "@/lib/action";
 import { Edit, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 
-export default async function Members() {
+export default async function Members({
+  searchParams,
+}: {
+  searchParams?: { query?: string; page?: string };
+}) {
+  const query: string = searchParams?.query || "";
+  const currentPage = searchParams!.page || 1;
   const userDetails = await fetchMembers("", 10, 0);
   const totalMembers = userDetails!.pagination.total;
   const memberDetails = await fetchMembers("", totalMembers, 0);

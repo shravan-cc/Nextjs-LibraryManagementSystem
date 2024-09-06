@@ -27,7 +27,7 @@ export default function BookForm() {
         action={formAction}
         className="space-y-6 bg-white p-6 rounded-lg shadow-md"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
           <div>
             <Label
               htmlFor="title"
@@ -41,6 +41,11 @@ export default function BookForm() {
               placeholder="Enter book title"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
+            {state.errors?.title ? (
+              <p className="text-red-500 text-sm">{state.errors.title}</p>
+            ) : (
+              <div className="min-h-6"></div>
+            )}
           </div>
           <div>
             <Label
@@ -55,6 +60,11 @@ export default function BookForm() {
               placeholder="Enter author name"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
+            {state.errors?.author ? (
+              <p className="text-red-500 text-sm">{state.errors.author}</p>
+            ) : (
+              <div className="min-h-6"></div>
+            )}
           </div>
           <div>
             <Label
@@ -69,6 +79,11 @@ export default function BookForm() {
               placeholder="Enter publisher name"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
+            {state.errors?.publisher ? (
+              <p className="text-red-500 text-sm">{state.errors.publisher}</p>
+            ) : (
+              <div className="min-h-6"></div>
+            )}
           </div>
           <div>
             <Label
@@ -83,6 +98,11 @@ export default function BookForm() {
               placeholder="Enter genre"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
+            {state.errors?.genre ? (
+              <p className="text-red-500 text-sm">{state.errors.genre}</p>
+            ) : (
+              <div className="min-h-6"></div>
+            )}
           </div>
           <div>
             <Label htmlFor="isbn" className="text-sm font-medium text-gray-700">
@@ -94,6 +114,11 @@ export default function BookForm() {
               placeholder="Enter ISBN number"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
+            {state.errors?.isbn ? (
+              <p className="text-red-500 text-sm">{state.errors.isbn}</p>
+            ) : (
+              <div className="min-h-6"></div>
+            )}
           </div>
           <div>
             <Label
@@ -109,6 +134,11 @@ export default function BookForm() {
               placeholder="Enter number of pages"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
+            {state.errors?.pages ? (
+              <p className="text-red-500 text-sm">{state.errors.pages}</p>
+            ) : (
+              <div className="min-h-6"></div>
+            )}
           </div>
           <div>
             <Label
@@ -124,8 +154,18 @@ export default function BookForm() {
               placeholder="Enter total copies"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
+            {state.errors?.totalCopies ? (
+              <p className="text-red-500 text-sm">{state.errors.totalCopies}</p>
+            ) : (
+              <div className="min-h-6"></div>
+            )}
           </div>
         </div>
+        {state.message && state.message !== "Success" ? (
+          <p className="text-red-500 text-sm mt-2">{state.message}</p>
+        ) : (
+          <div className="min-h-6"></div>
+        )}
         <div className="flex justify-end space-x-4">
           <Link href="/home/books">
             <Button
