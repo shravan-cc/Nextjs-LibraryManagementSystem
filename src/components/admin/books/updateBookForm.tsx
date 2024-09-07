@@ -7,6 +7,7 @@ import React, {
   useState,
 } from "react";
 import { addBook, editBook, State } from "@/lib/action";
+import { useToast } from "@/components/hooks/use-toast";
 import Link from "next/link";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
@@ -21,16 +22,20 @@ export default function UpdateBookForm({ books }: { books: IBook | null }) {
 
   const initialState: State = { message: "", errors: {} };
   const [state, formAction] = useActionState(updateBook, initialState);
-  const [showSuccessMessage, setSuccessMessage] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     if (state.message === "Success") {
-      setSuccessMessage(true);
+      toast({
+        title: "Success",
+        description: "Book edited successfully from the library.",
+        duration: 1500,
+        className: "bg-green-100 border-green-500 text-green-800 shadow-lg",
+      });
+      router.push("/home/books");
     }
-    setTimeout(() => {
-      setSuccessMessage(false);
-    }, 3000);
-  }, [state.message]);
+  }, [state.message, toast, router]);
   return (
     <>
       <form
@@ -172,16 +177,7 @@ export default function UpdateBookForm({ books }: { books: IBook | null }) {
             Edit Book
           </Button>
         </div>
-        {showSuccessMessage && <SuccessMessage />}
       </form>
     </>
   );
 }
-
-const SuccessMessage = () => (
-  <Alert className="fixed bottom-4 right-4 w-96 bg-green-100 border-green-500 text-green-800 shadow-lg animate-in slide-in-from-right">
-    <CheckCircle2 className="h-4 w-4" />
-    <AlertTitle>Success</AlertTitle>
-    <AlertDescription>Book edited successfully!</AlertDescription>
-  </Alert>
-);

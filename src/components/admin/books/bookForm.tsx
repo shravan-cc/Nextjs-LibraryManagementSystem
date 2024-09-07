@@ -8,19 +8,28 @@ import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { CheckCircle2 } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "../../ui/alert";
+import { useToast } from "@/components/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function BookForm() {
   const initialState: State = { message: "", errors: {} };
   const [state, formAction] = useActionState(addBook, initialState);
   const [showSuccessMessage, setSuccessMessage] = useState(false);
+  const router = useRouter();
+
+  const { toast } = useToast();
+
   useEffect(() => {
     if (state.message === "Success") {
-      setSuccessMessage(true);
+      toast({
+        title: "Success",
+        description: "Book added successfully to the library.",
+        duration: 1500,
+        className: "bg-green-100 border-green-500 text-green-800 shadow-lg",
+      });
+      router.push("/home/books");
     }
-    setTimeout(() => {
-      setSuccessMessage(false);
-    }, 3000);
-  }, [state.message]);
+  }, [state.message, toast, router]);
   return (
     <>
       <form
@@ -183,16 +192,16 @@ export default function BookForm() {
             Add Book
           </Button>
         </div>
-        {showSuccessMessage && <SuccessMessage />}
+        {/* {showSuccessMessage && <SuccessMessage />} */}
       </form>
     </>
   );
 }
 
-const SuccessMessage = () => (
-  <Alert className="fixed bottom-4 right-4 w-96 bg-green-100 border-green-500 text-green-800 shadow-lg animate-in slide-in-from-right">
-    <CheckCircle2 className="h-4 w-4" />
-    <AlertTitle>Success</AlertTitle>
-    <AlertDescription>Book added successfully to the library.</AlertDescription>
-  </Alert>
-);
+// const SuccessMessage = () => (
+//   <Alert className="fixed bottom-4 right-4 w-96 bg-green-100 border-green-500 text-green-800 shadow-lg animate-in slide-in-from-right">
+//     <CheckCircle2 className="h-4 w-4" />
+//     <AlertTitle>Success</AlertTitle>
+//     <AlertDescription>Book added successfully to the library.</AlertDescription>
+//   </Alert>
+// );

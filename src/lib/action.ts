@@ -343,3 +343,12 @@ export async function rejectTransaction(id: number) {
     throw new Error("Failed to reject Transaction", error);
   }
 }
+
+export async function deleteBook(id: number) {
+  const deletedBook = await bookRepo.delete(id);
+  if (deletedBook) {
+    return true;
+  } else {
+    return false;
+  }
+}
