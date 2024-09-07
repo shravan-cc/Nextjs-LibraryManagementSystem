@@ -8,7 +8,9 @@ export interface IPagedResponse<T> {
 }
 
 export interface IPageRequest {
+  genre?: string;
   search?: string;
+  sort?: string;
   offset: number;
   limit: number;
 }

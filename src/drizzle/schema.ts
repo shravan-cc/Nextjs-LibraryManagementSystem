@@ -12,6 +12,18 @@ export const UserTable = mysqlTable("user", {
   email: varchar("email", { length: 100 }).unique().notNull(),
 });
 
+export const BookTable = mysqlTable("books", {
+  id: serial("id").primaryKey().autoincrement(),
+  title: varchar("title", { length: 100 }).notNull(),
+  author: varchar("author", { length: 150 }).notNull(),
+  publisher: varchar("publisher", { length: 50 }),
+  genre: varchar("genre", { length: 31 }).notNull(),
+  isbnNo: varchar("isbnNo", { length: 31 }).unique().notNull(),
+  pages: int("pages").notNull(),
+  totalCopies: int("totalCopies").notNull(),
+  availableCopies: int("availableCopies").notNull(),
+});
+
 export const BooksTable = mysqlTable("books", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 100 }).notNull(),
@@ -50,8 +62,16 @@ export const TransactionTable = mysqlTable("transactions", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
-  borrowDate: varchar("borrowDate", { length: 10 }).notNull(),
-  dueDate: varchar("dueDate", { length: 15 }).notNull(),
+  borrowDate: varchar("borrowDate", { length: 100 }).notNull(),
+  dueDate: varchar("dueDate", { length: 100 }).notNull(),
   status: varchar("status", { length: 15 }).notNull(),
   returnDate: varchar("returnDate", { length: 10 }),
+});
+
+export const RequestTransactionTable = mysqlTable("TransactionRequests", {
+  id: serial("id").primaryKey().autoincrement(),
+  memberId: int("memberId").notNull(),
+  bookId: int("bookId").notNull(),
+  requestDate: varchar("requestDate", { length: 10 }).notNull(),
+  status: varchar("status", { length: 15 }).notNull(),
 });

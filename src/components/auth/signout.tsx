@@ -9,8 +9,7 @@ export default function SignOut() {
       <form
         action={async () => {
           "use server";
-          await signOut();
-          console.log("Logged out");
+          await signOut({ redirectTo: "/login" });
         }}
       >
         <Button type="submit">
