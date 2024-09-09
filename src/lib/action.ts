@@ -14,10 +14,11 @@ import { bookBaseSchema, bookSchema } from "@/models/book.model";
 import { TransactionRequestRepository } from "@/repositories/transactionRequest.repository";
 import {
   BooksTable,
+  BookTable,
   RequestTransactionTable,
   TransactionTable,
 } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
+import { eq, and, ne } from "drizzle-orm";
 
 const memberRepo = new MemberRepository(db);
 const bookRepo = new BookRepository(db);
@@ -350,5 +351,45 @@ export async function deleteBook(id: number) {
     return true;
   } else {
     return false;
+  }
+}
+
+export async function borrowBook(data: { memberId: number; bookId: number }) {
+  try {
+    const createdTransaction = await transactionRepo.create(data);
+    return createdTransaction;
+  } catch (error) {
+    console.error("Failed to create Transaction", error);
+  }
+}
+
+export async function fetchBooksByMember() {
+  try {
+    const currentMember = await fetchUserDetails();
+
+    if (!currentMember) {
+      throw new Error("User details not found");
+    }
+
+    const transactions = await db
+      .select({
+        id: TransactionTable.id,
+        title: BookTable.title,
+        author: BookTable.author,
+        dueDate: TransactionTable.dueDate,
+        status: TransactionTable.status,
+      })
+      .from(TransactionTable)
+      .innerJoin(BookTable, eq(TransactionTable.bookId, BookTable.id))
+      .where(
+        and(
+          eq(TransactionTable.memberId, currentMember.userDetails.id),
+          ne(TransactionTable.status, "Returned")
+        )
+      );
+
+    return transactions;
+  } catch (error) {
+    console.error("Failed to get the book details");
   }
 }

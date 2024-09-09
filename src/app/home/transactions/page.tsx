@@ -1,5 +1,6 @@
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   approveTransaction,
@@ -79,7 +80,17 @@ export default async function Transactions({
                     {transaction.borrowDate}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {transaction.status}
+                    <Badge
+                      variant={
+                        transaction.status === "approved"
+                          ? "default"
+                          : transaction.status === "rejected"
+                          ? "destructive"
+                          : "secondary"
+                      }
+                    >
+                      {transaction.status}
+                    </Badge>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {transaction.dueDate}

@@ -12,10 +12,13 @@ export class TransactionRepository
 {
   constructor(private readonly db: MySql2Database<Record<string, unknown>>) {}
 
-  async create(data: ITransactionBase): Promise<ITransaction> {
+  async create(data: {
+    memberId: number;
+    bookId: number;
+  }): Promise<ITransaction> {
     try {
       console.log("Creating transaction");
-      const transaction: Omit<ITransaction, "id"> = {
+      const transaction = {
         ...data,
         status: "pending",
       };

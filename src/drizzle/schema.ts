@@ -62,8 +62,8 @@ export const TransactionTable = mysqlTable("transactions", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
-  borrowDate: varchar("borrowDate", { length: 100 }).notNull(),
-  dueDate: varchar("dueDate", { length: 100 }).notNull(),
+  borrowDate: varchar("borrowDate", { length: 100 }),
+  dueDate: varchar("dueDate", { length: 100 }),
   status: varchar("status", { length: 15 }).notNull(),
   returnDate: varchar("returnDate", { length: 10 }),
 });
