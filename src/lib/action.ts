@@ -335,11 +335,10 @@ export async function approveTransaction(id: number) {
 
 export async function rejectTransaction(id: number) {
   try {
-    const result = await db
+    await db
       .update(TransactionTable)
       .set({ status: "rejected" })
       .where(eq(TransactionTable.id, id));
-    return result;
   } catch (error: any) {
     throw new Error("Failed to reject Transaction", error);
   }
