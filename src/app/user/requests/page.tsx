@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import CancelTransaction from "@/components/user/cancelrequest";
 import { fetchBooksByMember } from "@/lib/action";
 
 export default async function Requests() {
@@ -48,17 +49,7 @@ export default async function Requests() {
                       {request.status}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {request.status === "pending" && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-xs hover:bg-orange-100"
-                      >
-                        Cancel
-                      </Button>
-                    )}
-                  </td>
+                  <CancelTransaction request={request} />
                 </tr>
               ))}
             </tbody>

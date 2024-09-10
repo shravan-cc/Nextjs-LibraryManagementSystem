@@ -21,3 +21,11 @@ export type PageOption = {
 export interface filterGenreProps {
   genres: string[];
 }
+
+export interface RequestProps {
+  id: number;
+  title: string;
+  author: string;
+  dueDate: string | null;
+  status: string;
+}

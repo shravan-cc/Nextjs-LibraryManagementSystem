@@ -1,3 +1,4 @@
+import DeleteMember from "@/components/admin/members/deletemember";
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Button } from "@/components/ui/button";
@@ -75,20 +76,14 @@ export default async function Members({
                     {member.address}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 space-x-2">
-                    <Button
+                    {/* <Button
                       variant="ghost"
                       size="sm"
                       className="text-xs hover:bg-orange-100"
                     >
                       <Edit className="h-3 w-3 mr-1" /> Edit
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-xs hover:bg-red-100 text-red-600"
-                    >
-                      <Trash2 className="h-3 w-3 mr-1" /> Delete
-                    </Button>
+                    </Button> */}
+                    <DeleteMember member={member} />
                   </td>
                 </tr>
               ))}

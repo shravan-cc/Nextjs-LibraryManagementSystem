@@ -74,6 +74,19 @@ export class TransactionRepository
     }
   }
 
+  async delete(id: number): Promise<ITransaction | null> {
+    try {
+      const existingTransaction = await this.getById(id);
+      if (!existingTransaction) {
+        return null;
+      }
+      await this.db.delete(TransactionTable).where(eq(TransactionTable.id, id));
+      return existingTransaction;
+    } catch (e: any) {
+      throw new Error(`Deletion failed: ${e.message}`);
+    }
+  }
+
   async getById(id: number): Promise<ITransaction | null> {
     try {
       const [result] = await this.db
@@ -97,7 +110,7 @@ export class TransactionRepository
         .where(
           and(
             eq(TransactionTable.id, transactionId),
-            eq(TransactionTable.status, "Issued")
+            eq(TransactionTable.status, "approved")
           )
         );
       const [updatedTransaction] = await this.db
@@ -109,6 +122,7 @@ export class TransactionRepository
         .select()
         .from(BookTable)
         .where(eq(BookTable.id, updatedTransaction.bookId));
+      console.log(bookDetails);
 
       await this.db
         .update(BookTable)
@@ -118,6 +132,7 @@ export class TransactionRepository
       if (!updatedTransaction) {
         throw new Error("Failed to retrieve the newly updated transaction");
       }
+      console.log(updatedTransaction);
       return updatedTransaction as ITransaction;
     } catch (e: any) {
       throw new Error(`Selection failed: ${e.message}`);

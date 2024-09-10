@@ -40,7 +40,7 @@ export const MemberTable = mysqlTable("members", {
   id: serial("id").primaryKey().autoincrement(),
   firstName: varchar("firstName", { length: 50 }).notNull(),
   lastName: varchar("lastName", { length: 50 }).notNull(),
-  phone: bigint("phone", { mode: "number" }).unique().notNull(),
+  phone: bigint("phone", { mode: "number" }).unique(),
   address: varchar("address", { length: 100 }).notNull(),
   role: varchar("role", { length: 100 }).notNull(),
   password: varchar("password", { length: 100 }).notNull(),

@@ -3,7 +3,10 @@ import { fetchBooksByMember } from "@/lib/action";
 
 export default async function MyBooks() {
   const borrowBooks = await fetchBooksByMember();
-  const borrowedBooks = borrowBooks!.filter(
+  if (!borrowBooks) {
+    throw new Error("Books not found");
+  }
+  const borrowedBooks = borrowBooks.filter(
     (book) => book.status === "approved"
   );
   return (

@@ -3,7 +3,7 @@
 import { IMemberBase, memberBaseSchema } from "@/models/member.model";
 import { BookRepository } from "@/repositories/book.repository";
 import { MemberRepository } from "@/repositories/member.repository";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
 import { auth, signIn } from "../auth";
 import { db } from "./db";
@@ -291,8 +291,10 @@ export async function fetchUserDetails() {
   const session = await auth();
   const user = session!.user;
   const email = user!.email;
+  console.log(email);
   try {
     const userDetails = await memberRepo.getByEmail(email as string);
+    console.log(userDetails);
     if (!userDetails) {
       throw new Error("Details could not be found");
     }
@@ -390,5 +392,41 @@ export async function fetchBooksByMember() {
     return transactions;
   } catch (error) {
     console.error("Failed to get the book details");
+  }
+}
+
+export async function deleteMemberById(id: number) {
+  try {
+    const deletedMember = await memberRepo.delete(id);
+    return deletedMember;
+  } catch (error) {
+    console.error("Failed to delete member", error);
+  }
+}
+
+export async function deleteTransaction(id: number) {
+  try {
+    const deletedTransaction = await transactionRepo.delete(id);
+    return deleteTransaction;
+  } catch (error) {
+    console.error("Failed to delete transaction", error);
+  }
+}
+
+export async function getUserByEmail(email: string) {
+  try {
+    const member = await memberRepo.getByEmail(email);
+    return member;
+  } catch (error) {
+    console.error("Failed to fetch email", error);
+  }
+}
+
+export async function createUser(memberData: IMemberBase) {
+  try {
+    const createdUser = await memberRepo.create(memberData);
+    return createdUser;
+  } catch (error) {
+    console.error("Failed to create user for google login", error);
   }
 }

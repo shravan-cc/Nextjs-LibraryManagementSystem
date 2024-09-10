@@ -1,3 +1,4 @@
+import { Parentheses } from "lucide-react";
 import type { NextAuthConfig } from "next-auth";
 
 export const authConfig = {
@@ -8,6 +9,17 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const user = auth?.user;
+
+      // const paths = nextUrl.pathname;
+
+      // // Allow access to public routes (e.g., signup)
+      // const publicPaths = ["/", "/signup", "/login"]; // Add any other public paths here
+      // const isPublicPath = publicPaths.includes(paths);
+
+      // if (isPublicPath) {
+      //   return true; // Allow access to public pages
+      // }
+
       if (!user) {
         return false;
       }
