@@ -3,11 +3,11 @@
 import { useActionState, useEffect, useState } from "react";
 import { addBook, registerUser, State } from "@/lib/action";
 import Link from "next/link";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { CheckCircle2 } from "lucide-react";
-import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function MemberForm() {
   const initialState: State = { message: "", errors: {} };

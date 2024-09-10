@@ -1,5 +1,8 @@
+import ApproveTransaction from "@/components/admin/transactions/approveTransaction";
+import RejectTransaction from "@/components/admin/transactions/rejectTransaction";
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   approveTransaction,
@@ -79,7 +82,17 @@ export default async function Transactions({
                     {transaction.borrowDate}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {transaction.status}
+                    <Badge
+                      variant={
+                        transaction.status === "approved"
+                          ? "default"
+                          : transaction.status === "rejected"
+                          ? "destructive"
+                          : "secondary"
+                      }
+                    >
+                      {transaction.status}
+                    </Badge>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {transaction.dueDate}
@@ -89,46 +102,8 @@ export default async function Transactions({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex space-x-2">
-                      <form
-                        action={async () => {
-                          "use server";
-                          const result = await approveTransaction(
-                            transaction.id
-                          );
-                          if (result) {
-                            redirect("/home/transactions");
-                          }
-                        }}
-                      >
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-xs hover:bg-green-100 text-green-600"
-                          disabled={transaction.status !== "pending"}
-                        >
-                          <CheckCircle className="h-4 w-4 mr-1" /> Approve
-                        </Button>
-                      </form>
-                      <form
-                        action={async () => {
-                          "use server";
-                          const result = await rejectTransaction(
-                            transaction.id
-                          );
-                          if (result) {
-                            redirect("/home/transactions");
-                          }
-                        }}
-                      >
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-xs hover:bg-red-100 text-red-600"
-                          disabled={transaction.status !== "pending"}
-                        >
-                          <XCircle className="h-4 w-4 mr-1" /> Reject
-                        </Button>
-                      </form>
+                      <ApproveTransaction transaction={transaction} />
+                      <RejectTransaction transaction={transaction} />
                     </div>
                   </td>
                 </tr>

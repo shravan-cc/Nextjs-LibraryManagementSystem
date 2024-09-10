@@ -1,12 +1,13 @@
 import { db } from "@/lib/db";
 import { IMember } from "@/models/member.model";
 import { MemberRepository } from "@/repositories/member.repository";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { z } from "zod";
 import { authConfig } from "./auth.config";
+import { createUser, getUserByEmail } from "./lib/action";
 // async function getUser(email: string): Promise<User | undefined> {
 //   try {
 //     const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
@@ -59,4 +60,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        try {
+          if (user) {
+            const existingUser = await getUserByEmail(user.email!);
+            if (!existingUser) {
+              const result = await createUser({
+                firstName: user.name!,
+                lastName: "",
+                email: user.email!,
+                phone: null,
+                address: "",
+                password: user.id!,
+                role: "user",
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Error creating user:", error);
+          return false;
+        }
+      }
+      return true;
+    },
+  },
 });
