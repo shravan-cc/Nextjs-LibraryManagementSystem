@@ -128,7 +128,7 @@ export class TransactionRepository
         .update(BookTable)
         .set({ availableCopies: bookDetails.availableCopies + 1 })
         .where(eq(BookTable.id, bookDetails.id));
-
+ 
       if (!updatedTransaction) {
         throw new Error("Failed to retrieve the newly updated transaction");
       }

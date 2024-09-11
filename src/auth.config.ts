@@ -1,29 +1,58 @@
 import { Parentheses } from "lucide-react";
-import type { NextAuthConfig } from "next-auth";
+import type { CustomSession, NextAuthConfig } from "next-auth";
 
 export const authConfig = {
   pages: {
     signIn: "/login", // Redirect to this page for sign-in
   },
   callbacks: {
+    jwt({ token, user }) {
+      console.log("JWT Token User: ", user);
+      console.log("JWT Token: ", token);
+      if (user) {
+        const userData = {
+          id: user?.id,
+          name: user?.name,
+          email: user?.email,
+          role: user?.role,
+        };
+        token = { ...userData };
+      }
+      return token;
+    },
+    session({ session, token }: { session: CustomSession; token: any }) {
+      if (token) {
+        session.user = token;
+      }
+      console.log("Session: ", session);
+      return session;
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
+      console.log(auth);
       const user = auth?.user;
+      console.log("config", user);
 
-      // const paths = nextUrl.pathname;
+      const paths = nextUrl.pathname;
 
-      // // Allow access to public routes (e.g., signup)
-      // const publicPaths = ["/", "/signup", "/login"]; // Add any other public paths here
-      // const isPublicPath = publicPaths.includes(paths);
+      // Allow access to public routes (e.g., signup)
+      const publicPaths = ["/", "/signup", "/login"]; // Add any other public paths here
+      const isPublicPath = publicPaths.includes(paths);
 
-      // if (isPublicPath) {
-      //   return true; // Allow access to public pages
-      // }
+      if (isPublicPath) {
+        return true; // Allow access to public pages
+      }
 
       if (!user) {
         return false;
       }
-      const path = user.email === "shravan@gmail.com" ? "/home" : "/user";
+
+      // if (nextUrl.pathname === "/" && isLoggedIn) {
+      //   const path = user.role === "admin" ? "/home" : "/user";
+      //   return Response.redirect(new URL(path, nextUrl));
+      // }
+
+      const path = user.role === "admin" ? "/home" : "/user";
       const isOnDashboard = nextUrl.pathname.startsWith(path);
       if (isOnDashboard) {
         if (isLoggedIn) {

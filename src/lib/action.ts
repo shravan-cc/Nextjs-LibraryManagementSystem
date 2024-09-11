@@ -291,10 +291,8 @@ export async function fetchUserDetails() {
   const session = await auth();
   const user = session!.user;
   const email = user!.email;
-  console.log(email);
   try {
     const userDetails = await memberRepo.getByEmail(email as string);
-    console.log(userDetails);
     if (!userDetails) {
       throw new Error("Details could not be found");
     }
@@ -428,5 +426,24 @@ export async function createUser(memberData: IMemberBase) {
     return createdUser;
   } catch (error) {
     console.error("Failed to create user for google login", error);
+  }
+}
+
+export async function returnBook(bookId: number, memberId: number) {
+  try {
+    const [transaction] = await db
+      .select({ transactionId: TransactionTable.id })
+      .from(TransactionTable)
+      .where(
+        and(
+          eq(TransactionTable.bookId, bookId),
+          eq(TransactionTable.memberId, memberId)
+        )
+      );
+    const today = new Date();
+    const returnedDate = today.toISOString().slice(0, 10);
+    await transactionRepo.update(transaction.transactionId, returnedDate);
+  } catch (error) {
+    console.error("Failed to return the book", error);
   }
 }

@@ -25,6 +25,7 @@ function mapMemberToUser(member: IMember): User {
     id: String(member.id), // Convert id to string
     name: member.firstName,
     email: member.email,
+    role: member.role,
   };
 }
 
@@ -60,30 +61,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider === "google") {
-        try {
-          if (user) {
-            const existingUser = await getUserByEmail(user.email!);
-            if (!existingUser) {
-              const result = await createUser({
-                firstName: user.name!,
-                lastName: "",
-                email: user.email!,
-                phone: null,
-                address: "",
-                password: user.id!,
-                role: "user",
-              });
-            }
-          }
-        } catch (error) {
-          console.error("Error creating user:", error);
-          return false;
-        }
-      }
-      return true;
-    },
-  },
+  // callbacks: {
+  //   async signIn({ user, account }) {
+  //     if (account?.provider === "google") {
+  //       try {
+  //         if (user) {
+  //           const existingUser = await getUserByEmail(user.email!);
+  //           if (!existingUser) {
+  //             const result = await createUser({
+  //               firstName: user.name!,
+  //               lastName: "",
+  //               email: user.email!,
+  //               phone: null,
+  //               address: "",
+  //               password: user.id!,
+  //               role: "user",
+  //             });
+  //           }
+  //         }
+  //       } catch (error) {
+  //         console.error("Error creating user:", error);
+  //         return false;
+  //       }
+  //     }
+  //     return true;
+  //   },
+  // },
 });
