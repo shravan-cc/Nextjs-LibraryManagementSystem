@@ -1,41 +1,50 @@
+import FilterGenre from "@/components/admin/books/filterGenre";
 import ApproveTransaction from "@/components/admin/transactions/approveTransaction";
+import FilterTransactionByStatus from "@/components/admin/transactions/filterTransaction";
 import RejectTransaction from "@/components/admin/transactions/rejectTransaction";
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import ReturnBook from "@/components/user/returnBook";
 import {
   approveTransaction,
   fetchTransactionDetails,
   rejectTransaction,
 } from "@/lib/action";
-import { CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, Plus, XCircle } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default async function Transactions({
   searchParams,
 }: {
-  searchParams?: { query?: string; page?: string };
+  searchParams?: { query?: string; page?: string; status?: string };
 }) {
   const query: string = searchParams?.query || "";
+  const status: string = searchParams?.status || "";
   const currentPage = searchParams!.page || 1;
   const limit = 5;
   const offset = (Number(currentPage) - 1) * limit;
   const fetchedTransactions = await fetchTransactionDetails(
     query,
     limit,
-    offset
+    offset,
+    status
   );
   const transactions = fetchedTransactions!.items;
   const totalTransactions = fetchedTransactions!.pagination.total;
   const totalPages = Math.ceil(totalTransactions / limit);
+  console.log(totalPages);
   return (
     <>
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-orange-800">Transactions</h2>
         </div>
-        <SearchBar type="Transactions" />
+        <div className="flex flex-wrap gap-4 mb-4 items-center">
+          <SearchBar type="Transactions" />
+          <FilterTransactionByStatus />
+        </div>
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-orange-100">
@@ -104,6 +113,11 @@ export default async function Transactions({
                     <div className="flex space-x-2">
                       <ApproveTransaction transaction={transaction} />
                       <RejectTransaction transaction={transaction} />
+                      <ReturnBook
+                        bookId={transaction.bookId}
+                        memberId={transaction.memberId}
+                        status={transaction.status}
+                      />
                     </div>
                   </td>
                 </tr>

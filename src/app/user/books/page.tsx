@@ -111,7 +111,7 @@ export default async function HomePage({
               </CardContent>
               <CardFooter className="p-2 bg-orange-50 flex justify-between">
                 <IssueBook book={book} member={member} />
-                <ReturnBook book={book} member={member} />
+                {/* <ReturnBook book={book} member={member} /> */}
               </CardFooter>
             </Card>
           ))}

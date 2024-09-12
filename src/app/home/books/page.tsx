@@ -57,7 +57,7 @@ export default async function HomePage({
         <div className="flex flex-wrap gap-4 mb-4 items-center">
           <div className="flex-grow sm:flex-grow-0">
             <SearchBar type="Books" />
-          </div>
+          </div> 
           <SortBooks />
           <FilterGenre genres={genres} />
           <Link href="/home/books/addBook">

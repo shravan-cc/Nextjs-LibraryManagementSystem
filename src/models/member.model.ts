@@ -48,6 +48,10 @@ export const memberBaseSchema = z.object({
   password: z.string(),
 });
 
+export const editMemberSchema = memberBaseSchema.omit({
+  password: true,
+});
+
 export const memberSchema = memberBaseSchema.extend({
   id: z
     .number()

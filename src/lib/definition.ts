@@ -1,3 +1,7 @@
+import { IMember } from "@/models/member.model";
+import { User } from "next-auth";
+import React from "react";
+
 export interface GoogleAuthProps {
   buttonLabel: string;
 }
@@ -28,4 +32,35 @@ export interface RequestProps {
   author: string;
   dueDate: string | null;
   status: string;
+}
+
+export interface ProfileHandlerProps {
+  profilePath: string;
+  // editProfilePath: string;
+  userDetails: IMember | undefined;
+  userImage: string;
+  children: React.ReactNode;
+}
+
+export interface ViewProfileProps {
+  userDetails: IMember | undefined;
+  userImage: string;
+  user: User | undefined;
+}
+
+export interface ProfileSectionProps {
+  title: string;
+  icon: any;
+  children: React.ReactNode;
+}
+
+export interface InfoItemProps {
+  icon: any;
+  text: string | number | null;
+}
+
+export interface StatCardProps {
+  title: string;
+  value: number;
+  icon: any;
 }

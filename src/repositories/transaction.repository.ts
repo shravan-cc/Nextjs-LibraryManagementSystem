@@ -1,6 +1,6 @@
 import { MySql2Database } from "drizzle-orm/mysql2";
 import { BookTable, TransactionTable } from "../drizzle/schema";
-import { and, count, eq } from "drizzle-orm";
+import { and, count, desc, eq } from "drizzle-orm";
 import { ITransactionRepository } from "./repository";
 import { ITransaction, ITransactionBase } from "@/models/transaction.model";
 import { IPagedResponse, IPageRequest } from "./pagination.response";
@@ -128,7 +128,7 @@ export class TransactionRepository
         .update(BookTable)
         .set({ availableCopies: bookDetails.availableCopies + 1 })
         .where(eq(BookTable.id, bookDetails.id));
- 
+
       if (!updatedTransaction) {
         throw new Error("Failed to retrieve the newly updated transaction");
       }
@@ -145,16 +145,23 @@ export class TransactionRepository
         offset: params.offset,
         limit: params.limit,
       };
+      const status = params.status;
+      const whereExpression = status
+        ? eq(TransactionTable.status, status)
+        : undefined;
 
       const transactions = await this.db
         .select()
         .from(TransactionTable)
+        .where(whereExpression)
+        .orderBy(desc(TransactionTable.id))
         .limit(params.limit)
         .offset(params.offset);
 
       const [totalTransactionRows] = await this.db
         .select({ count: count() })
-        .from(TransactionTable);
+        .from(TransactionTable)
+        .where(whereExpression);
 
       const totalTransaction = totalTransactionRows.count;
       return {

@@ -30,7 +30,6 @@ function mapMemberToUser(member: IMember): User {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  ...authConfig,
   providers: [
     Google,
     Credentials({
@@ -61,30 +60,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  // callbacks: {
-  //   async signIn({ user, account }) {
-  //     if (account?.provider === "google") {
-  //       try {
-  //         if (user) {
-  //           const existingUser = await getUserByEmail(user.email!);
-  //           if (!existingUser) {
-  //             const result = await createUser({
-  //               firstName: user.name!,
-  //               lastName: "",
-  //               email: user.email!,
-  //               phone: null,
-  //               address: "",
-  //               password: user.id!,
-  //               role: "user",
-  //             });
-  //           }
-  //         }
-  //       } catch (error) {
-  //         console.error("Error creating user:", error);
-  //         return false;
-  //       }
-  //     }
-  //     return true;
-  //   },
-  // },
+  callbacks: {
+    ...authConfig.callbacks,
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        try {
+          if (user) {
+            const existingUser = await getUserByEmail(user.email!);
+            if (!existingUser) {
+              const result = await createUser({
+                firstName: user.name!,
+                lastName: "",
+                email: user.email!,
+                phone: null,
+                address: "",
+                password: user.id!,
+                role: "user",
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Error creating user:", error);
+          return false;
+        }
+      }
+      return true;
+    },
+  },
 });

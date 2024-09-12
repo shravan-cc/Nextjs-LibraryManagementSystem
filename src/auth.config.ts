@@ -6,9 +6,9 @@ export const authConfig = {
     signIn: "/login", // Redirect to this page for sign-in
   },
   callbacks: {
-    jwt({ token, user }) {
-      console.log("JWT Token User: ", user);
-      console.log("JWT Token: ", token);
+    jwt({ token, user, profile }) {
+      // console.log("JWT Token User: ", user);
+      // console.log("JWT Token: ", token);
       if (user) {
         const userData = {
           id: user?.id,
@@ -18,20 +18,23 @@ export const authConfig = {
         };
         token = { ...userData };
       }
+      if (profile && profile.picture) {
+        token.image = profile.picture;
+      }
       return token;
     },
     session({ session, token }: { session: CustomSession; token: any }) {
       if (token) {
         session.user = token;
       }
-      console.log("Session: ", session);
+      // console.log("Session: ", session);
       return session;
     },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      console.log(auth);
+      // console.log(auth);
       const user = auth?.user;
-      console.log("config", user);
+      // console.log("config", user);
 
       const paths = nextUrl.pathname;
 

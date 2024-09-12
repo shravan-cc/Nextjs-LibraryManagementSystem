@@ -1,6 +1,10 @@
 "use server";
 
-import { IMemberBase, memberBaseSchema } from "@/models/member.model";
+import {
+  editMemberSchema,
+  IMemberBase,
+  memberBaseSchema,
+} from "@/models/member.model";
 import { BookRepository } from "@/repositories/book.repository";
 import { MemberRepository } from "@/repositories/member.repository";
 import bcrypt from "bcryptjs";
@@ -201,6 +205,47 @@ export async function registerUser(prevState: State, formData: FormData) {
   }
 }
 
+export async function editMember(prevState: State, formData: FormData) {
+  console.log("In edit Member");
+  const validateFields = editMemberSchema.safeParse({
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    phone: Number(formData.get("phone")),
+    address: formData.get("address"),
+    email: formData.get("email"),
+    role: "user",
+  });
+
+  if (!validateFields.success) {
+    console.log("Failure");
+    console.log(validateFields.error.flatten().fieldErrors);
+    return {
+      errors: validateFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Register.",
+    };
+  }
+
+  const { firstName, lastName, phone, address, email, role } =
+    validateFields.data;
+
+  if (!firstName || !lastName || !phone || !address || !email) {
+    console.log("All fields are required");
+    return { message: "All Fields are required" };
+  }
+  try {
+    const existingUser = await memberRepo.getByEmail(email);
+    const editedMember = await memberRepo.update(
+      existingUser!.id,
+      validateFields.data
+    );
+    console.log(`Member ${editedMember!.firstName} edited successfully!`);
+    return { message: "Success" };
+  } catch (error) {
+    console.log("Error during editing profile:", error);
+    return { message: "Error during editing profile:", error };
+  }
+}
+
 export async function fetchBooks(
   search: string,
   limit: number,
@@ -252,13 +297,15 @@ export async function fetchMembers(
 export async function fetchTransactionDetails(
   search: string,
   limit: number,
-  offset: number
+  offset: number,
+  status: string
 ) {
   try {
     const transactions = await transactionRepo.list({
       search: search,
       limit: limit,
       offset: offset,
+      status: status,
     });
     if (transactions) {
       console.log("Received Transaction");

@@ -1,41 +1,43 @@
 "use client";
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectContent,
+  SelectItem,
 } from "@/components/ui/select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-export default function SortBooks() {
+export default function FilterTransactionByStatus() {
+  const status = ["All", "approved", "pending", "rejected", "Returned"];
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const { replace } = useRouter();
-
-  const [sortBy, setSort] = useState<string>("");
+  const [statusValue, setStatusValue] = useState<string>("All");
 
   const handleValueChange = (term: string) => {
     const params = new URLSearchParams(searchParams);
-    setSort(term);
+    setStatusValue(term);
     params.set("page", "1");
-    if (term && term !== "") {
-      params.set("sort", term);
+    if (term && term !== "All") {
+      params.set("status", term);
     } else {
-      params.delete("sort");
+      params.delete("status");
     }
     replace(`${pathName}?${params.toString()}`);
   };
   return (
-    <Select value={sortBy} onValueChange={handleValueChange}>
+    <Select value={statusValue} onValueChange={handleValueChange}>
       <SelectTrigger className="w-[180px] bg-white">
-        <SelectValue placeholder="Sort by" />
+        <SelectValue placeholder="Filter by genre" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="title">Title</SelectItem>
-        <SelectItem value="author">Author</SelectItem>
-        <SelectItem value="availability">Availability</SelectItem>
+        {status.map((statusValue) => (
+          <SelectItem key={statusValue} value={statusValue}>
+            {statusValue}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
