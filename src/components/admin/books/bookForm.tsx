@@ -14,9 +14,7 @@ export default function BookForm() {
   const [state, formAction] = useActionState(addBook, initialState);
   const [showSuccessMessage, setSuccessMessage] = useState(false);
   const router = useRouter();
-
   const { toast } = useToast();
-
   useEffect(() => {
     if (state.message === "Success") {
       toast({
@@ -26,6 +24,13 @@ export default function BookForm() {
         className: "bg-green-100 border-green-500 text-green-800 shadow-lg",
       });
       router.push("/home/books");
+    } else if (state.message && state.message !== "Success") {
+      toast({
+        title: "Failure",
+        description: `${state.message}`,
+        duration: 5000,
+        className: "bg-red-100 border-red-500 text-red-800 shadow-lg",
+      });
     }
   }, [state.message, toast, router]);
   return (
@@ -48,11 +53,7 @@ export default function BookForm() {
               placeholder="Enter book title"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
-            {state.errors?.title ? (
-              <p className="text-red-500 text-sm">{state.errors.title}</p>
-            ) : (
-              <div className="min-h-6"></div>
-            )}
+            
           </div>
           <div>
             <Label
@@ -121,8 +122,8 @@ export default function BookForm() {
               placeholder="Enter ISBN number"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
-            {state.errors?.isbn ? (
-              <p className="text-red-500 text-sm">{state.errors.isbn}</p>
+            {state.errors?.isbnNo ? (
+              <p className="text-red-500 text-sm">{state.errors.isbnNo}</p>
             ) : (
               <div className="min-h-6"></div>
             )}
@@ -168,11 +169,11 @@ export default function BookForm() {
             )}
           </div>
         </div>
-        {state.message && state.message !== "Success" ? (
+        {/* {state.message && state.message !== "Success" ? (
           <p className="text-red-500 text-sm mt-2">{state.message}</p>
         ) : (
           <div className="min-h-6"></div>
-        )}
+        )} */}
         <div className="flex justify-end space-x-4">
           <Link href="/home/books">
             <Button

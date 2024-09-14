@@ -1,26 +1,35 @@
-"use server";
-
-import { BookOpen, Edit, Mail, MapPin, Phone, User } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Card, CardContent, CardHeader } from "../ui/card";
+import { fetchBooksByMember, fetchTotalBooksOfMember } from "@/lib/action";
 import {
   InfoItemProps,
   ProfileSectionProps,
   StatCardProps,
   ViewProfileProps,
 } from "@/lib/definition";
+import { BookOpen, Edit, Mail, MapPin, Phone, User } from "lucide-react";
 import Image from "next/image";
-import { Button } from "../ui/button";
 import Link from "next/link";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "../ui/card";
 
 export default async function ViewProfile({
   userDetails,
   userImage,
   user,
 }: ViewProfileProps) {
-  console.log("Profile", user?.role);
+  const pendingRequests = await fetchBooksByMember();
+  if (!pendingRequests) {
+    throw new Error("Books not found");
+  }
+  const borrowedBooks = pendingRequests.filter(
+    (book) => book.status === "approved"
+  );
+
+  const totalBorrowedBooks = await fetchTotalBooksOfMember();
+  // console.log("Profile", user?.role);
+  // console.log("USerDetails in view Profile", userDetails?.role);
   const path =
-    user?.role === "user" ? "/user/editprofile" : "/home/editprofile";
+    userDetails?.role === "user" ? "/user/editprofile" : "/home/editprofile";
   console.log("In View Profile", path);
   return (
     <>
@@ -85,17 +94,17 @@ export default async function ViewProfile({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <StatCard
                 title="Books Borrowed"
-                value={30}
+                value={totalBorrowedBooks!.length}
                 icon={<BookOpen className="h-8 w-8 text-orange-500" />}
               />
               <StatCard
                 title="Currently Borrowed"
-                value={9}
+                value={borrowedBooks.length}
                 icon={<BookOpen className="h-8 w-8 text-orange-500" />}
               />
               <StatCard
                 title="Pending Requests"
-                value={2}
+                value={pendingRequests!.length}
                 icon={<BookOpen className="h-8 w-8 text-orange-500" />}
               />
             </div>

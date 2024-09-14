@@ -2,8 +2,7 @@
 
 import { User } from "lucide-react";
 
-import Link from "next/link";
-import { useState } from "react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,13 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import Link from "next/link";
+import { useState } from "react";
 
-import SignOut from "../auth/signout";
 import { Button } from "@/components/ui/button";
-import { fetchUserDetails } from "@/lib/action";
-import Image from "next/image";
 import { ProfileHandlerProps } from "@/lib/definition";
+import Image from "next/image";
 
 export default function ProfileHandler({
   profilePath,

@@ -1,11 +1,5 @@
 "use client";
 
-import { RequestProps } from "@/lib/definition";
-import { Button } from "../ui/button";
-import { deleteTransaction } from "@/lib/action";
-import { useToast } from "../hooks/use-toast";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { deleteTransaction } from "@/lib/action";
+import { RequestProps } from "@/lib/definition";
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useToast } from "../hooks/use-toast";
+import { Button } from "../ui/button";
 
 export default function CancelTransaction({
   request,
@@ -46,6 +46,7 @@ export default function CancelTransaction({
             variant="ghost"
             size="sm"
             className="text-xs hover:bg-orange-100"
+            disabled={request.status !== "pending"}
           >
             <Trash2 className="h-3 w-3 mr-1" /> Cancel
           </Button>

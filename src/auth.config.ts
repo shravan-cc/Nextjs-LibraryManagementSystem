@@ -1,4 +1,3 @@
-import { Parentheses } from "lucide-react";
 import type { CustomSession, NextAuthConfig } from "next-auth";
 
 export const authConfig = {

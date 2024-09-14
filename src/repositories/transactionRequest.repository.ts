@@ -1,6 +1,6 @@
-import { MySql2Database } from "drizzle-orm/mysql2";
 import { RequestTransactionTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
+import { MySql2Database } from "drizzle-orm/mysql2";
 
 export class TransactionRequestRepository {
   constructor(private readonly db: MySql2Database<Record<string, unknown>>) {}

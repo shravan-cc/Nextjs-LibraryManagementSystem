@@ -1,7 +1,6 @@
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,14 +10,13 @@ import {
 import { fetchBooks, fetchUserDetails, getGenres } from "@/lib/action";
 import { IBook } from "@/models/book.model";
 
-import { ArrowLeftCircle, BookCopy, Users } from "lucide-react";
+import { BookCopy, Users } from "lucide-react";
 
 import FilterGenre from "@/components/admin/books/filterGenre";
 import SortBooks from "@/components/admin/books/sortBooks";
 import IssueBook from "@/components/user/issueBook";
 import { db } from "@/lib/db";
 import { BookRepository } from "@/repositories/book.repository";
-import ReturnBook from "@/components/user/returnBook";
 
 const bookRepo = new BookRepository(db);
 

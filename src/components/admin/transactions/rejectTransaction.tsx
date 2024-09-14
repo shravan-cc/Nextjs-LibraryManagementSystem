@@ -2,16 +2,16 @@
 
 import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { approveTransaction, rejectTransaction } from "@/lib/action";
-import { ITransaction } from "@/models/transaction.model";
-import { CheckCircle, XCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/toottip";
+import { rejectTransaction } from "@/lib/action";
+import { ITransaction } from "@/models/transaction.model";
+import { XCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function RejectTransaction({
   transaction,

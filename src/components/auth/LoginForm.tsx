@@ -42,6 +42,11 @@ export default function LoginForm() {
               autoCorrect="off"
             />
           </div>
+          {errorMessage && (
+            <div className="text-red-500 text-sm font-medium">
+              {errorMessage}
+            </div>
+          )}
           <Button type="submit" className="bg-CustomOrange">
             Login
           </Button>

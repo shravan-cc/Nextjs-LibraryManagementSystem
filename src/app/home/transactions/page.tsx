@@ -1,19 +1,13 @@
-import FilterGenre from "@/components/admin/books/filterGenre";
 import ApproveTransaction from "@/components/admin/transactions/approveTransaction";
 import FilterTransactionByStatus from "@/components/admin/transactions/filterTransaction";
 import RejectTransaction from "@/components/admin/transactions/rejectTransaction";
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import ReturnBook from "@/components/user/returnBook";
 import {
-  approveTransaction,
-  fetchTransactionDetails,
-  rejectTransaction,
+  fetchTransactionDetails
 } from "@/lib/action";
-import { CheckCircle, Plus, XCircle } from "lucide-react";
-import { redirect } from "next/navigation";
 
 export default async function Transactions({
   searchParams,

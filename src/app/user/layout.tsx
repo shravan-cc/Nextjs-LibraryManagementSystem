@@ -1,7 +1,6 @@
-import AdminNavigation from "@/components/admin/nav";
 import Profile from "@/components/profile/profile";
 import { Button } from "@/components/ui/button";
-import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import UserNavigation from "@/components/user-nav";
 import { Menu } from "lucide-react";
 

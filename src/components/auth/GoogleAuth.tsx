@@ -1,7 +1,7 @@
 import { signIn } from "@/auth";
+import { GoogleAuthProps } from "@/lib/definition";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { GoogleAuthProps } from "@/lib/definition";
 
 export default function GoogleAuth({ buttonLabel }: GoogleAuthProps) {
   return (

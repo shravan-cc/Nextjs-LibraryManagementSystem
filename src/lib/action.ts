@@ -1,28 +1,27 @@
 "use server";
 
 import {
+  BooksTable,
+  BookTable,
+  RequestTransactionTable,
+  TransactionTable,
+} from "@/drizzle/schema";
+import { bookBaseSchema } from "@/models/book.model";
+import {
   editMemberSchema,
   IMemberBase,
   memberBaseSchema,
 } from "@/models/member.model";
 import { BookRepository } from "@/repositories/book.repository";
 import { MemberRepository } from "@/repositories/member.repository";
+import { TransactionRepository } from "@/repositories/transaction.repository";
+import { TransactionRequestRepository } from "@/repositories/transactionRequest.repository";
 import bcrypt from "bcryptjs";
+import { and, eq, ne } from "drizzle-orm";
 import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
 import { auth, signIn } from "../auth";
 import { db } from "./db";
-import { redirect } from "next/navigation";
-import { string } from "zod";
-import { TransactionRepository } from "@/repositories/transaction.repository";
-import { bookBaseSchema, bookSchema } from "@/models/book.model";
-import { TransactionRequestRepository } from "@/repositories/transactionRequest.repository";
-import {
-  BooksTable,
-  BookTable,
-  RequestTransactionTable,
-  TransactionTable,
-} from "@/drizzle/schema";
-import { eq, and, ne } from "drizzle-orm";
 
 const memberRepo = new MemberRepository(db);
 const bookRepo = new BookRepository(db);
@@ -158,7 +157,7 @@ export async function registerUser(prevState: State, formData: FormData) {
     address: formData.get("address"),
     email: formData.get("email"),
     password: formData.get("password"),
-    role: "user",
+    role: formData.get("role") || "user",
   });
   if (!validateFields.success) {
     console.log("Failure");
@@ -172,9 +171,16 @@ export async function registerUser(prevState: State, formData: FormData) {
   const { firstName, lastName, phone, address, email, password, role } =
     validateFields.data;
 
+  const confirmPassword = formData.get("confirmPassword");
+
   if (!firstName || !lastName || !phone || !address || !email || !password) {
     console.log("All fields are required");
     return { message: "All Fields are required" };
+  }
+
+  if (password !== confirmPassword) {
+    console.log("Passwords do not match");
+    return { message: "Passwords do not match." };
   }
   try {
     const existingUser = await memberRepo.getByEmail(email);
@@ -336,6 +342,7 @@ export async function getGenres() {
 
 export async function fetchUserDetails() {
   const session = await auth();
+  // console.log("In fetch User Details session", session);
   const user = session!.user;
   const email = user!.email;
   try {
@@ -343,6 +350,7 @@ export async function fetchUserDetails() {
     if (!userDetails) {
       throw new Error("Details could not be found");
     }
+    // console.log(`UserDetails:${userDetails}, user:${user}`);
     return { userDetails, user };
   } catch (error) {
     console.error("Error finding details of user", error);
@@ -433,6 +441,32 @@ export async function fetchBooksByMember() {
           ne(TransactionTable.status, "Returned")
         )
       );
+
+    return transactions;
+  } catch (error) {
+    console.error("Failed to get the book details");
+  }
+}
+
+export async function fetchTotalBooksOfMember() {
+  try {
+    const currentMember = await fetchUserDetails();
+
+    if (!currentMember) {
+      throw new Error("User details not found");
+    }
+
+    const transactions = await db
+      .select({
+        id: TransactionTable.id,
+        title: BookTable.title,
+        author: BookTable.author,
+        dueDate: TransactionTable.dueDate,
+        status: TransactionTable.status,
+      })
+      .from(TransactionTable)
+      .innerJoin(BookTable, eq(TransactionTable.bookId, BookTable.id))
+      .where(eq(TransactionTable.memberId, currentMember.userDetails.id));
 
     return transactions;
   } catch (error) {

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/toottip";
 import { approveTransaction } from "@/lib/action";
 import { ITransaction } from "@/models/transaction.model";
-import { CheckCircle, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function ApproveTransaction({

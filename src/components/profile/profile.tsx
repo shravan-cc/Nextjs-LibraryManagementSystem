@@ -8,8 +8,9 @@ export default async function Profile() {
   const user = fetchedUserDetails?.user;
   const userImage = user?.image || "/user.png";
   const profilePath =
-    user?.role === "admin" ? "/home/profile" : "/user/profile";
-  console.log("In Profile", user?.role);
+    userDetails?.role === "admin" ? "/home/profile" : "/user/profile";
+  // console.log("Details of user", userDetails);
+  // console.log("In Profile", user?.role);
   // const editProfilePath =
   //   user?.role === "admin" ? "/home/editprofile" : "/user/editprofile";
   console.log(userImage);

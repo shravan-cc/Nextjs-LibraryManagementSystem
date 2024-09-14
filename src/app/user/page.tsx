@@ -1,12 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { fetchBooks, fetchMembers } from "@/lib/action";
-import { BookOpen, Users, BarChart, Activity } from "lucide-react";
+import {
+  fetchBooks,
+  fetchMembers,
+  fetchTotalBooksOfMember,
+} from "@/lib/action";
+import { Activity, BarChart, BookOpen, Users } from "lucide-react";
 
 export default async function Dashboard() {
   const books = await fetchBooks("", 10, 0);
   const totalBooks = books!.pagination.total;
   const members = await fetchMembers("", 10, 0);
   const totalMembers = members?.pagination.total;
+  const totalBorrowedBooks = await fetchTotalBooksOfMember();
   return (
     <>
       <div className="space-y-4">
@@ -46,7 +51,9 @@ export default async function Dashboard() {
               <BarChart className="h-4 w-4 text-orange-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+23</div>
+              <div className="text-2xl font-bold">
+                {totalBorrowedBooks!.length}
+              </div>
               <p className="text-xs text-muted-foreground">
                 +180 from last month
               </p>

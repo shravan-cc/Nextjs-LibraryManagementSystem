@@ -2,16 +2,13 @@
 
 import { editMember, State } from "@/lib/action";
 import { IMember } from "@/models/member.model";
-import { useActionState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import Image from "next/image";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
-import { useToast } from "../hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { useActionState, useEffect } from "react";
+import { useToast } from "../hooks/use-toast";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
 
 export default function EditProfileForm({
   userDetails,

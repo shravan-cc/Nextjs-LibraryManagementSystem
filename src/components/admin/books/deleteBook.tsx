@@ -1,5 +1,6 @@
 "use client";
 
+import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,14 +11,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Trash2 } from "lucide-react";
-import { redirect, useRouter } from "next/navigation";
-import { BookRepository } from "@/repositories/book.repository";
-import { db } from "@/lib/db";
-import { IBook } from "@/models/book.model";
-import Link from "next/link";
 import { deleteBook } from "@/lib/action";
-import { useToast } from "@/components/hooks/use-toast";
+import { IBook } from "@/models/book.model";
+import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function DeleteBook({ book }: { book: IBook }) {

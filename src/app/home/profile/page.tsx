@@ -8,7 +8,11 @@ export default async function Profile() {
   const userImage = user?.image || "/user.png";
   return (
     <>
-      <ViewProfile userDetails={userDetails} userImage={userImage} />
+      <ViewProfile
+        userDetails={userDetails}
+        userImage={userImage}
+        user={user}
+      />
     </>
   );
 }

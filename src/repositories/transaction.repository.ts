@@ -1,11 +1,10 @@
+import { PageOption } from "@/lib/definition";
+import { ITransaction, ITransactionBase } from "@/models/transaction.model";
+import { and, count, desc, eq } from "drizzle-orm";
 import { MySql2Database } from "drizzle-orm/mysql2";
 import { BookTable, TransactionTable } from "../drizzle/schema";
-import { and, count, desc, eq } from "drizzle-orm";
-import { ITransactionRepository } from "./repository";
-import { ITransaction, ITransactionBase } from "@/models/transaction.model";
 import { IPagedResponse, IPageRequest } from "./pagination.response";
-import { PageOption } from "@/lib/definition";
-import { IBook } from "@/models/book.model";
+import { ITransactionRepository } from "./repository";
 
 export class TransactionRepository
   implements ITransactionRepository<ITransactionBase, ITransaction>

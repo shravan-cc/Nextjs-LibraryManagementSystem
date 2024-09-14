@@ -1,8 +1,8 @@
 import { fetchUserDetails } from "@/lib/action";
+import Image from "next/image";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import EditProfileForm from "./editProfileform";
-import Image from "next/image";
 
 export default async function EditProfile() {
   const fetchedUserDetails = await fetchUserDetails();

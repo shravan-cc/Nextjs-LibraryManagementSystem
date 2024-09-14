@@ -1,19 +1,24 @@
 "use client";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  Menu,
-  LayoutDashboard,
-  BookIcon,
-  UsersIcon,
-  FileText,
-  ClipboardList,
-} from "lucide-react";
-import { useState } from "react";
+import { BookIcon, FileText, LayoutDashboard, UsersIcon } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
 export default function UserNavigation() {
+  const pathName = usePathname();
   const [activeTab, setActiveTab] = useState("dashboard");
+  useEffect(() => {
+    if (pathName === "/user") {
+      setActiveTab("dashboard");
+    } else if (pathName.startsWith("/user/books")) {
+      setActiveTab("books");
+    } else if (pathName.startsWith("/user/MyBooks")) {
+      setActiveTab("MyBooks");
+    } else if (pathName.startsWith("/user/requests")) {
+      setActiveTab("requests");
+    }
+  }, [pathName]);
   const NavItem = ({
     icon,
     label,
@@ -22,24 +27,32 @@ export default function UserNavigation() {
     icon: React.ReactNode;
     label: string;
     value: string;
-  }) => (
-    <Link href={`/user/${value}`}>
-      <Button
-        variant={activeTab === value ? "default" : "ghost"}
-        className={`w-full justify-start ${
-          activeTab === value
-            ? "bg-orange-500 text-white hover:bg-CustomOrange"
-            : "hover:bg-CustomPeach"
-        }`}
-        onClick={() => {
-          setActiveTab(value);
-        }}
-      >
-        {icon}
-        <span className="ml-2">{label}</span>
-      </Button>
-    </Link>
-  );
+  }) => {
+    const path = value === "dashboard" ? "/user" : `/user/${value}`;
+    const isActive =
+      value === "dashboard"
+        ? activeTab === value && pathName === path
+        : activeTab === value && pathName.startsWith(path);
+
+    return (
+      <Link href={path}>
+        <Button
+          variant={activeTab === value ? "default" : "ghost"}
+          className={`w-full justify-start ${
+            isActive
+              ? "bg-orange-500 text-white hover:bg-CustomOrange"
+              : "hover:bg-CustomPeach bg-orange-50 text-black"
+          }`}
+          onClick={() => {
+            setActiveTab(value);
+          }}
+        >
+          {icon}
+          <span className="ml-2">{label}</span>
+        </Button>
+      </Link>
+    );
+  };
   return (
     <>
       <NavItem

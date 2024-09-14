@@ -11,15 +11,14 @@ import {
 import { fetchBooks, getGenres } from "@/lib/action";
 import { IBook } from "@/models/book.model";
 
-import { BookCopy, Edit, Plus, Trash2, Users } from "lucide-react";
+import { BookCopy, Edit, Plus, Users } from "lucide-react";
 import Link from "next/link";
 
-import { BookRepository } from "@/repositories/book.repository";
-import { db } from "@/lib/db";
-import { redirect } from "next/navigation";
+import DeleteBook from "@/components/admin/books/deleteBook";
 import FilterGenre from "@/components/admin/books/filterGenre";
 import SortBooks from "@/components/admin/books/sortBooks";
-import DeleteBook from "@/components/admin/books/deleteBook";
+import { db } from "@/lib/db";
+import { BookRepository } from "@/repositories/book.repository";
 
 const bookRepo = new BookRepository(db);
 
@@ -57,7 +56,7 @@ export default async function HomePage({
         <div className="flex flex-wrap gap-4 mb-4 items-center">
           <div className="flex-grow sm:flex-grow-0">
             <SearchBar type="Books" />
-          </div> 
+          </div>
           <SortBooks />
           <FilterGenre genres={genres} />
           <Link href="/home/books/addBook">

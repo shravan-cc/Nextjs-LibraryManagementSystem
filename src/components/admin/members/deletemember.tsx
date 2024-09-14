@@ -27,7 +27,7 @@ export default function DeleteMember({ member }: { member: IMember }) {
     if (deletedMember) {
       toast({
         title: "Success",
-        description: "Book deleted successfully from the library.",
+        description: "Member deleted successfully from the library.",
         duration: 1500,
         className: "bg-green-100 border-green-500 text-green-800 shadow-lg",
       });
