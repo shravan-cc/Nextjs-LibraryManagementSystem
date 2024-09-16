@@ -56,6 +56,7 @@ export const authConfig = {
 
       const path = user.role === "admin" ? "/home" : "/user";
       const isOnDashboard = nextUrl.pathname.startsWith(path);
+      console.log("Hello");
       if (isOnDashboard) {
         if (isLoggedIn) {
           return true;
