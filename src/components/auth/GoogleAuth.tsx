@@ -9,7 +9,7 @@ export default function GoogleAuth({ buttonLabel }: GoogleAuthProps) {
     <form
       action={async () => {
         "use server";
-        await signIn("google");
+        await signIn("google", { redirectTo: "/user" });
       }}
     >
       <Button variant="outline" className="w-full max-w-52 flex gap-2">
