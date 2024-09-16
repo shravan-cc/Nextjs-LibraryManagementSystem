@@ -5,7 +5,7 @@ import { IPageRequest, IPagedResponse } from "./pagination.response";
 import { IRepository } from "./repository";
 
 import { IBook, IBookBase } from "@/models/book.model";
-import { BooksTable } from "../drizzle/schema";
+import { BookTable } from "../drizzle/schema";
 
 export class BookRepository implements IRepository<IBookBase, IBook> {
   constructor(private readonly db: MySql2Database<Record<string, unknown>>) {}
@@ -17,13 +17,13 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
         availableCopies: data.totalCopies,
       };
       const [queryResult] = await this.db
-        .insert(BooksTable)
+        .insert(BookTable)
         .values(newBookdata)
         .$returningId();
       const [insertedBook] = await this.db
         .select()
-        .from(BooksTable)
-        .where(eq(BooksTable.id, queryResult.id));
+        .from(BookTable)
+        .where(eq(BookTable.id, queryResult.id));
 
       if (!insertedBook) {
         throw new Error("Failed to retrive the newly inserted Book");
@@ -48,9 +48,9 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
       };
 
       await this.db
-        .update(BooksTable)
+        .update(BookTable)
         .set(updatedBook)
-        .where(eq(BooksTable.id, id));
+        .where(eq(BookTable.id, id));
 
       const editedBook = await this.getById(id);
       if (!editedBook) {
@@ -68,7 +68,7 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
       if (!existingBook) {
         return null;
       }
-      await this.db.delete(BooksTable).where(eq(BooksTable.id, id));
+      await this.db.delete(BookTable).where(eq(BookTable.id, id));
       return existingBook;
     } catch (e: any) {
       throw new Error(`Deletion failed: ${e.message}`);
@@ -79,8 +79,8 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
     try {
       const [result] = await this.db
         .select()
-        .from(BooksTable)
-        .where(eq(BooksTable.id, id));
+        .from(BookTable)
+        .where(eq(BookTable.id, id));
       return (result as IBook) || null;
     } catch (e: any) {
       throw new Error(`Selection failed: ${e.message}`);
@@ -103,8 +103,8 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
     try {
       const [result] = await this.db
         .select()
-        .from(BooksTable)
-        .where(eq(BooksTable.isbnNo, isbnNo));
+        .from(BookTable)
+        .where(eq(BookTable.isbnNo, isbnNo));
 
       return (result as IBook) || null;
     } catch (e: any) {
@@ -120,16 +120,16 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
       const whereExpression = and(
         search
           ? or(
-              like(BooksTable.title, `%${search}%`),
-              like(BooksTable.isbnNo, `%${search}%`)
+              like(BookTable.title, `%${search}%`),
+              like(BookTable.isbnNo, `%${search}%`)
             )
           : undefined,
-        genre ? eq(BooksTable.genre, genre) : undefined
+        genre ? eq(BookTable.genre, genre) : undefined
       );
 
       let books = await this.db
         .select()
-        .from(BooksTable)
+        .from(BookTable)
         .where(whereExpression)
         .limit(params.limit)
         .offset(params.offset)
@@ -147,7 +147,7 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
 
       const result = await this.db
         .select({ count: count() })
-        .from(BooksTable)
+        .from(BookTable)
         .where(whereExpression);
 
       const totalCount = result[0].count;

@@ -26,7 +26,7 @@ export const authConfig = {
       if (token) {
         session.user = token;
       }
-      // console.log("Session: ", session);
+      // console.log("Session in auth.config.ts: ", session);
       return session;
     },
     authorized({ auth, request: { nextUrl } }) {
@@ -35,15 +35,15 @@ export const authConfig = {
       const user = auth?.user;
       // console.log("config", user);
 
-      const paths = nextUrl.pathname;
+      // const paths = nextUrl.pathname;
 
-      // Allow access to public routes (e.g., signup)
-      const publicPaths = ["/", "/signup", "/login"]; // Add any other public paths here
-      const isPublicPath = publicPaths.includes(paths);
+      // // Allow access to public routes (e.g., signup)
+      // const publicPaths = ["/", "/signup", "/login"]; // Add any other public paths here
+      // const isPublicPath = publicPaths.includes(paths);
 
-      if (isPublicPath) {
-        return true; // Allow access to public pages
-      }
+      // if (isPublicPath) {
+      //   return true; // Allow access to public pages
+      // }
 
       if (!user) {
         return false;
@@ -53,6 +53,8 @@ export const authConfig = {
       //   const path = user.role === "admin" ? "/home" : "/user";
       //   return Response.redirect(new URL(path, nextUrl));
       // }
+      if (isLoggedIn) {
+      }
 
       const path = user.role === "admin" ? "/home" : "/user";
       const isOnDashboard = nextUrl.pathname.startsWith(path);
@@ -62,6 +64,7 @@ export const authConfig = {
         }
         return false;
       } else if (isLoggedIn) {
+        console.log("Logged In");
         return Response.redirect(new URL(path, nextUrl));
       }
       return true;

@@ -2,6 +2,7 @@ import { signIn } from "@/auth";
 import { GoogleAuthProps } from "@/lib/definition";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { redirect } from "next/navigation";
 
 export default function GoogleAuth({ buttonLabel }: GoogleAuthProps) {
   return (

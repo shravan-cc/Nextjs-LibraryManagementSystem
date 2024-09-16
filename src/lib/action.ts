@@ -1,7 +1,6 @@
 "use server";
 
 import {
-  BooksTable,
   BookTable,
   RequestTransactionTable,
   TransactionTable,
@@ -22,6 +21,7 @@ import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 import { auth, signIn } from "../auth";
 import { db } from "./db";
+import cloudinary from "./cloudinary";
 
 const memberRepo = new MemberRepository(db);
 const bookRepo = new BookRepository(db);
@@ -44,8 +44,9 @@ export async function authenticate(
       email: formData.get("email"),
       password: formData.get("password"),
     });
+
     if (result) {
-      redirect("/home");
+      redirect("/user");
     }
   } catch (error) {
     if (error instanceof AuthError) {
@@ -72,6 +73,26 @@ export async function addBook(prevState: State, formData: FormData) {
     totalCopies: Number(formData.get("totalCopies")),
   });
 
+  const price = 10;
+  const image = formData.get("image") as File;
+  let imageURL = "";
+  if (image && image.size > 0) {
+    try {
+      const bytes = await image.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const base64Image = buffer.toString("base64");
+      const dataURI = `data:${image.type};base64,${base64Image}`;
+      console.log(dataURI);
+      const result = await cloudinary.uploader.upload(dataURI, {
+        folder: "book_covers",
+      });
+      imageURL = result.secure_url;
+      console.log(imageURL);
+    } catch (error) {
+      console.error("Failed to upload image", error);
+      return { message: "Image" };
+    }
+  }
   if (!validateFields.success) {
     console.log("Failure");
     console.log(validateFields.error.flatten().fieldErrors);
@@ -81,7 +102,7 @@ export async function addBook(prevState: State, formData: FormData) {
     };
   }
 
-  const { title, author, publisher, isbnNo, pages, totalCopies } =
+  const { title, author, publisher, isbnNo, pages, totalCopies, genre } =
     validateFields.data;
 
   if (!title || !author || !publisher || !isbnNo || !pages || !totalCopies) {
@@ -96,7 +117,17 @@ export async function addBook(prevState: State, formData: FormData) {
       return { message: "Book already exists." };
     }
 
-    const createdBook = await bookRepo.create(validateFields.data);
+    const createdBook = await bookRepo.create({
+      title,
+      author,
+      publisher,
+      genre,
+      isbnNo,
+      pages,
+      totalCopies,
+      price,
+      imageURL,
+    });
     console.log(`Book ${createdBook.title} created successfully!`);
     return { message: "Success" };
   } catch (error) {
@@ -325,7 +356,7 @@ export async function fetchTransactionDetails(
 }
 
 export async function getGenres() {
-  const genre = await db.select().from(BooksTable);
+  const genre = await db.select().from(BookTable);
   const genres = genre.map((genr) => genr.genre);
   return genre
     .map((gen) => gen.genre)

@@ -8,19 +8,28 @@ import { useActionState, useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
+import axios from "axios";
 
 export default function BookForm() {
   const initialState: State = { message: "", errors: {} };
   const [state, formAction] = useActionState(addBook, initialState);
-  const [showSuccessMessage, setSuccessMessage] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const router = useRouter();
   const { toast } = useToast();
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
   useEffect(() => {
+    console.log(state.message);
     if (state.message === "Success") {
       toast({
         title: "Success",
         description: "Book added successfully to the library.",
-        duration: 1500,
+        duration: 2000,
         className: "bg-green-100 border-green-500 text-green-800 shadow-lg",
       });
       router.push("/home/books");
@@ -33,10 +42,44 @@ export default function BookForm() {
       });
     }
   }, [state.message, toast, router]);
+
+  // const uploadImageToCloudinary = async () => {
+  //   if (!imageFile) return null;
+  //   const formData = new FormData();
+  //   formData.append("file", imageFile);
+  //   formData.append("upload_preset", "book_images");
+  //   try {
+  //     const response = await axios.post(
+  //       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+  //       formData
+  //     );
+  //     console.log(
+  //       `Response:${response} data:${response.data} url:${response.data.secure_url}`
+  //     );
+  //     return response.data.secure_url;
+  //   } catch (error) {
+  //     console.error("Image Upload Failed", error);
+  //     return null;
+  //   }
+  // };
+
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.currentTarget);
+  //   const imageURL = await uploadImageToCloudinary();
+  //   if (!imageURL) {
+  //     formData.append("image", imageURL);
+  //   }
+  //   formAction(formData);
+  // };
+
   return (
     <>
       <form
+        // onSubmit={handleSubmit}
         action={formAction}
+        method="post"
+        encType="multipart/form-data"
         className="space-y-6 bg-white p-6 rounded-lg shadow-md"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
@@ -53,7 +96,6 @@ export default function BookForm() {
               placeholder="Enter book title"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
-            
           </div>
           <div>
             <Label
@@ -167,6 +209,21 @@ export default function BookForm() {
             ) : (
               <div className="min-h-6"></div>
             )}
+          </div>
+          <div>
+            <Label
+              htmlFor="image"
+              className="text-sm font-medium text-gray-700"
+            >
+              Book Cover Image
+            </Label>
+            <Input
+              id="image"
+              type="file"
+              name="image"
+              accept="image/*"
+              className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
+            />
           </div>
         </div>
         {/* {state.message && state.message !== "Success" ? (

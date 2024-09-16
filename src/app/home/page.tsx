@@ -1,6 +1,8 @@
+import { auth } from "@/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchBooks, fetchMembers } from "@/lib/action";
 import { Activity, BarChart, BookOpen, Users } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
   const books = await fetchBooks("", 10, 0);

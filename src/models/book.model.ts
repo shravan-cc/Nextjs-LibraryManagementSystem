@@ -43,6 +43,12 @@ export const bookBaseSchema = z.object({
     .number()
     .min(1, { message: "Number of pages must be at least 1" })
     .positive({ message: "Total number of copies must be a positive integer" }),
+  price: z
+    .number()
+    .positive({ message: "Price must be a positive number" })
+    .min(0, { message: "Price cannot be negative" })
+    .nullable(),
+  imageURL: z.string().optional().nullable(), // Adjust the minimum value as per your needs
 });
 
 export const bookSchema = bookBaseSchema.extend({
