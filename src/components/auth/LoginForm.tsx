@@ -4,13 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authenticate } from "@/lib/action";
-import { useActionState } from "react";
+import { useRouter } from "next/navigation";
+import { useActionState, useReducer } from "react";
 
 export default function LoginForm() {
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined
   );
+
   return (
     <>
       <form action={formAction}>
@@ -42,6 +44,11 @@ export default function LoginForm() {
               autoCorrect="off"
             />
           </div>
+          {errorMessage && (
+            <div className="text-red-500 text-sm font-medium">
+              {errorMessage}
+            </div>
+          )}
           <Button type="submit" className="bg-CustomOrange">
             Login
           </Button>

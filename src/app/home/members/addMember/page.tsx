@@ -1,6 +1,5 @@
 import MemberForm from "@/components/admin/members/memberForm";
 
-
 export default async function AddMember() {
   return (
     <>

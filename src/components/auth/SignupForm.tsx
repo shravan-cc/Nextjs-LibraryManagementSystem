@@ -6,17 +6,32 @@ import { Label } from "@/components/ui/label";
 import { registerUser, State } from "@/lib/action";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
+import { useToast } from "../hooks/use-toast";
 
 export default function SignUpForm() {
   const router = useRouter();
   const initialState: State = { message: "", errors: {} };
   const [state, formAction] = useActionState(registerUser, initialState);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (state.message === "Success") {
+      toast({
+        title: "Success",
+        description: "Registration successful! Your account has been created.",
+        duration: 1500,
+        className: "bg-green-100 border-green-500 text-green-800 shadow-lg",
+      });
       router.push("/login");
+    } else if (state.message && state.message !== "Success") {
+      toast({
+        title: "Failure",
+        description: `${state.message}`,
+        duration: 5000,
+        className: "bg-red-100 border-red-500 text-red-800 shadow-lg",
+      });
     }
-  }, [state.message, router]);
+  }, [state.message, router, toast]);
   return (
     <>
       <form action={formAction}>
@@ -131,14 +146,6 @@ export default function SignUpForm() {
               autoCorrect="off"
             />
           </div>
-          {state.errors?.confirmPassword && (
-            <p className="text-red-500 text-sm">
-              {state.errors.confirmPassword}
-            </p>
-          )}
-          {state.message && state.message !== "Success" && (
-            <p className="text-red-500 text-sm mt-2">{state.message}</p>
-          )}
           <Button type="submit" className="bg-CustomOrange">
             Sign Up
           </Button>

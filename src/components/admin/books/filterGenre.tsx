@@ -1,10 +1,10 @@
 "use client";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { filterGenreProps } from "@/lib/definition";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

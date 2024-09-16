@@ -1,24 +1,27 @@
 "use server";
 
-import { IMemberBase, memberBaseSchema } from "@/models/member.model";
-import { BookRepository } from "@/repositories/book.repository";
-import { MemberRepository } from "@/repositories/member.repository";
-import bcrypt from "bcryptjs";
-import { AuthError } from "next-auth";
-import { auth, signIn } from "../auth";
-import { db } from "./db";
-import { redirect } from "next/navigation";
-import { string } from "zod";
-import { TransactionRepository } from "@/repositories/transaction.repository";
-import { bookBaseSchema, bookSchema } from "@/models/book.model";
-import { TransactionRequestRepository } from "@/repositories/transactionRequest.repository";
 import {
-  BooksTable,
   BookTable,
   RequestTransactionTable,
   TransactionTable,
 } from "@/drizzle/schema";
-import { eq, and, ne } from "drizzle-orm";
+import { bookBaseSchema } from "@/models/book.model";
+import {
+  editMemberSchema,
+  IMemberBase,
+  memberBaseSchema,
+} from "@/models/member.model";
+import { BookRepository } from "@/repositories/book.repository";
+import { MemberRepository } from "@/repositories/member.repository";
+import { TransactionRepository } from "@/repositories/transaction.repository";
+import { TransactionRequestRepository } from "@/repositories/transactionRequest.repository";
+import bcrypt from "bcryptjs";
+import { and, eq, ne } from "drizzle-orm";
+import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
+import { auth, signIn } from "../auth";
+import { db } from "./db";
+import cloudinary from "./cloudinary";
 
 const memberRepo = new MemberRepository(db);
 const bookRepo = new BookRepository(db);
@@ -41,8 +44,9 @@ export async function authenticate(
       email: formData.get("email"),
       password: formData.get("password"),
     });
+
     if (result) {
-      redirect("/home");
+      redirect("/user");
     }
   } catch (error) {
     if (error instanceof AuthError) {
@@ -69,6 +73,26 @@ export async function addBook(prevState: State, formData: FormData) {
     totalCopies: Number(formData.get("totalCopies")),
   });
 
+  const price = 10;
+  const image = formData.get("image") as File;
+  let imageURL = "";
+  if (image && image.size > 0) {
+    try {
+      const bytes = await image.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const base64Image = buffer.toString("base64");
+      const dataURI = `data:${image.type};base64,${base64Image}`;
+      console.log(dataURI);
+      const result = await cloudinary.uploader.upload(dataURI, {
+        folder: "book_covers",
+      });
+      imageURL = result.secure_url;
+      console.log(imageURL);
+    } catch (error) {
+      console.error("Failed to upload image", error);
+      return { message: "Image" };
+    }
+  }
   if (!validateFields.success) {
     console.log("Failure");
     console.log(validateFields.error.flatten().fieldErrors);
@@ -78,7 +102,7 @@ export async function addBook(prevState: State, formData: FormData) {
     };
   }
 
-  const { title, author, publisher, isbnNo, pages, totalCopies } =
+  const { title, author, publisher, isbnNo, pages, totalCopies, genre } =
     validateFields.data;
 
   if (!title || !author || !publisher || !isbnNo || !pages || !totalCopies) {
@@ -93,7 +117,17 @@ export async function addBook(prevState: State, formData: FormData) {
       return { message: "Book already exists." };
     }
 
-    const createdBook = await bookRepo.create(validateFields.data);
+    const createdBook = await bookRepo.create({
+      title,
+      author,
+      publisher,
+      genre,
+      isbnNo,
+      pages,
+      totalCopies,
+      price,
+      imageURL,
+    });
     console.log(`Book ${createdBook.title} created successfully!`);
     return { message: "Success" };
   } catch (error) {
@@ -154,7 +188,7 @@ export async function registerUser(prevState: State, formData: FormData) {
     address: formData.get("address"),
     email: formData.get("email"),
     password: formData.get("password"),
-    role: "user",
+    role: formData.get("role") || "user",
   });
   if (!validateFields.success) {
     console.log("Failure");
@@ -168,9 +202,16 @@ export async function registerUser(prevState: State, formData: FormData) {
   const { firstName, lastName, phone, address, email, password, role } =
     validateFields.data;
 
+  const confirmPassword = formData.get("confirmPassword");
+
   if (!firstName || !lastName || !phone || !address || !email || !password) {
     console.log("All fields are required");
     return { message: "All Fields are required" };
+  }
+
+  if (password !== confirmPassword) {
+    console.log("Passwords do not match");
+    return { message: "Passwords do not match." };
   }
   try {
     const existingUser = await memberRepo.getByEmail(email);
@@ -198,6 +239,47 @@ export async function registerUser(prevState: State, formData: FormData) {
   } catch (error) {
     console.log("Error during registration:", error);
     return { message: "Error during registration:", error };
+  }
+}
+
+export async function editMember(prevState: State, formData: FormData) {
+  console.log("In edit Member");
+  const validateFields = editMemberSchema.safeParse({
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    phone: Number(formData.get("phone")),
+    address: formData.get("address"),
+    email: formData.get("email"),
+    role: "user",
+  });
+
+  if (!validateFields.success) {
+    console.log("Failure");
+    console.log(validateFields.error.flatten().fieldErrors);
+    return {
+      errors: validateFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Register.",
+    };
+  }
+
+  const { firstName, lastName, phone, address, email, role } =
+    validateFields.data;
+
+  if (!firstName || !lastName || !phone || !address || !email) {
+    console.log("All fields are required");
+    return { message: "All Fields are required" };
+  }
+  try {
+    const existingUser = await memberRepo.getByEmail(email);
+    const editedMember = await memberRepo.update(
+      existingUser!.id,
+      validateFields.data
+    );
+    console.log(`Member ${editedMember!.firstName} edited successfully!`);
+    return { message: "Success" };
+  } catch (error) {
+    console.log("Error during editing profile:", error);
+    return { message: "Error during editing profile:", error };
   }
 }
 
@@ -252,13 +334,15 @@ export async function fetchMembers(
 export async function fetchTransactionDetails(
   search: string,
   limit: number,
-  offset: number
+  offset: number,
+  status: string
 ) {
   try {
     const transactions = await transactionRepo.list({
       search: search,
       limit: limit,
       offset: offset,
+      status: status,
     });
     if (transactions) {
       console.log("Received Transaction");
@@ -272,7 +356,7 @@ export async function fetchTransactionDetails(
 }
 
 export async function getGenres() {
-  const genre = await db.select().from(BooksTable);
+  const genre = await db.select().from(BookTable);
   const genres = genre.map((genr) => genr.genre);
   return genre
     .map((gen) => gen.genre)
@@ -289,15 +373,15 @@ export async function getGenres() {
 
 export async function fetchUserDetails() {
   const session = await auth();
+  // console.log("In fetch User Details session", session);
   const user = session!.user;
   const email = user!.email;
-  console.log(email);
   try {
     const userDetails = await memberRepo.getByEmail(email as string);
-    console.log(userDetails);
     if (!userDetails) {
       throw new Error("Details could not be found");
     }
+    // console.log(`UserDetails:${userDetails}, user:${user}`);
     return { userDetails, user };
   } catch (error) {
     console.error("Error finding details of user", error);
@@ -395,6 +479,32 @@ export async function fetchBooksByMember() {
   }
 }
 
+export async function fetchTotalBooksOfMember() {
+  try {
+    const currentMember = await fetchUserDetails();
+
+    if (!currentMember) {
+      throw new Error("User details not found");
+    }
+
+    const transactions = await db
+      .select({
+        id: TransactionTable.id,
+        title: BookTable.title,
+        author: BookTable.author,
+        dueDate: TransactionTable.dueDate,
+        status: TransactionTable.status,
+      })
+      .from(TransactionTable)
+      .innerJoin(BookTable, eq(TransactionTable.bookId, BookTable.id))
+      .where(eq(TransactionTable.memberId, currentMember.userDetails.id));
+
+    return transactions;
+  } catch (error) {
+    console.error("Failed to get the book details");
+  }
+}
+
 export async function deleteMemberById(id: number) {
   try {
     const deletedMember = await memberRepo.delete(id);
@@ -428,5 +538,24 @@ export async function createUser(memberData: IMemberBase) {
     return createdUser;
   } catch (error) {
     console.error("Failed to create user for google login", error);
+  }
+}
+
+export async function returnBook(bookId: number, memberId: number) {
+  try {
+    const [transaction] = await db
+      .select({ transactionId: TransactionTable.id })
+      .from(TransactionTable)
+      .where(
+        and(
+          eq(TransactionTable.bookId, bookId),
+          eq(TransactionTable.memberId, memberId)
+        )
+      );
+    const today = new Date();
+    const returnedDate = today.toISOString().slice(0, 10);
+    await transactionRepo.update(transaction.transactionId, returnedDate);
+  } catch (error) {
+    console.error("Failed to return the book", error);
   }
 }

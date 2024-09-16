@@ -9,14 +9,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { BookOpen, Trash2 } from "lucide-react";
-import { Button } from "../ui/button";
-import { useState } from "react";
-import { IBook } from "@/models/book.model";
-import { useToast } from "../hooks/use-toast";
-import { useRouter } from "next/navigation";
 import { borrowBook } from "@/lib/action";
+import { IBook } from "@/models/book.model";
 import { IMember } from "@/models/member.model";
+import { BookOpen } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useToast } from "../hooks/use-toast";
+import { Button } from "../ui/button";
 
 export default function IssueBook({
   book,

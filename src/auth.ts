@@ -25,11 +25,11 @@ function mapMemberToUser(member: IMember): User {
     id: String(member.id), // Convert id to string
     name: member.firstName,
     email: member.email,
+    role: member.role,
   };
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  ...authConfig,
   providers: [
     Google,
     Credentials({
@@ -61,6 +61,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    ...authConfig.callbacks,
     async signIn({ user, account }) {
       if (account?.provider === "google") {
         try {

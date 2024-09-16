@@ -1,19 +1,25 @@
 "use client";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "../ui/button";
-import {
-  Menu,
-  LayoutDashboard,
-  BookIcon,
-  UsersIcon,
-  FileText,
-  ClipboardList,
-} from "lucide-react";
-import { useState } from "react";
+import { BookIcon, FileText, LayoutDashboard, UsersIcon } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
 
 export default function AdminNavigation() {
+  const pathName = usePathname();
+  console.log(pathName);
   const [activeTab, setActiveTab] = useState("dashboard");
+  useEffect(() => {
+    if (pathName === "/home") {
+      setActiveTab("dashboard");
+    } else if (pathName.startsWith("/home/books")) {
+      setActiveTab("books");
+    } else if (pathName.startsWith("/home/MyBooks")) {
+      setActiveTab("MyBooks");
+    } else if (pathName.startsWith("/home/requests")) {
+      setActiveTab("requests");
+    }
+  }, [pathName]);
   const NavItem = ({
     icon,
     label,
@@ -22,24 +28,31 @@ export default function AdminNavigation() {
     icon: React.ReactNode;
     label: string;
     value: string;
-  }) => (
-    <Link href={`/home/${value}`}>
-      <Button
-        variant={activeTab === value ? "default" : "ghost"}
-        className={`w-full justify-start ${
-          activeTab === value
-            ? "bg-orange-500 text-white hover:bg-CustomOrange"
-            : "hover:bg-CustomPeach"
-        }`}
-        onClick={() => {
-          setActiveTab(value);
-        }}
-      >
-        {icon}
-        <span className="ml-2">{label}</span>
-      </Button>
-    </Link>
-  );
+  }) => {
+    const path = value === "dashboard" ? "/home" : `/home/${value}`;
+    const isActive =
+      value === "dashboard"
+        ? activeTab === value && pathName === path
+        : activeTab === value && pathName.startsWith(path);
+    return (
+      <Link href={path}>
+        <Button
+          variant={activeTab === value ? "default" : "ghost"}
+          className={`w-full justify-start ${
+            isActive
+              ? "bg-orange-500 text-white hover:bg-CustomOrange"
+              : "hover:bg-CustomPeach bg-orange-50 text-black"
+          }`}
+          onClick={() => {
+            setActiveTab(value);
+          }}
+        >
+          {icon}
+          <span className="ml-2">{label}</span>
+        </Button>
+      </Link>
+    );
+  };
   return (
     <>
       <NavItem

@@ -2,8 +2,8 @@ import DeleteMember from "@/components/admin/members/deletemember";
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Button } from "@/components/ui/button";
-import { fetchMembers, fetchUserDetails } from "@/lib/action";
-import { Edit, Plus, Trash2 } from "lucide-react";
+import { fetchMembers } from "@/lib/action";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 
 export default async function Members({

@@ -1,7 +1,6 @@
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,24 +10,15 @@ import {
 import { fetchBooks, fetchUserDetails, getGenres } from "@/lib/action";
 import { IBook } from "@/models/book.model";
 
-import {
-  ArrowLeftCircle,
-  BookCopy,
-  BookOpen,
-  Edit,
-  Plus,
-  Trash2,
-  Users,
-} from "lucide-react";
-import Link from "next/link";
+import { BookCopy, BookOpen, InfoIcon, Users } from "lucide-react";
 
-import { BookRepository } from "@/repositories/book.repository";
-import { db } from "@/lib/db";
-import { redirect } from "next/navigation";
 import FilterGenre from "@/components/admin/books/filterGenre";
 import SortBooks from "@/components/admin/books/sortBooks";
-import DeleteBook from "@/components/admin/books/deleteBook";
 import IssueBook from "@/components/user/issueBook";
+import { db } from "@/lib/db";
+import { BookRepository } from "@/repositories/book.repository";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 const bookRepo = new BookRepository(db);
 
@@ -80,6 +70,21 @@ export default async function HomePage({
             >
               <div className="bg-CustomOrange h-1 w-full"></div>
               <CardHeader className="p-4 pb-2">
+                <div className="aspect-[2/3] relative mb-2 bg-gray-100 rounded overflow-hidden ">
+                  {book.imageURL ? (
+                    <Image
+                      src={book.imageURL}
+                      alt={`Cover of ${book.title}`}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <BookOpen className="h-12 w-12" />
+                    </div>
+                  )}
+                </div>
                 <h3 className="font-bold text-sm line-clamp-1">{book.title}</h3>
                 <p className="text-xs text-muted-foreground line-clamp-1">
                   {book.author}
@@ -93,14 +98,20 @@ export default async function HomePage({
                   >
                     {book.genre}
                   </Badge>
-                  <Badge
+                  {/* <Badge
                     variant="outline"
                     className="text-xs whitespace-nowrap"
                   >
                     {book.pages} pages
-                  </Badge>
+                  </Badge> */}
+                  <div className="flex items-center text-muted-foreground">
+                    <BookCopy className="h-3 w-3 mr-1" />
+                    <span>
+                      {book.availableCopies}/{book.totalCopies}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-xs text-muted-foreground mb-1 line-clamp-1">
+                {/* <div className="text-xs text-muted-foreground mb-1 line-clamp-1">
                   <span className="font-semibold">Publisher:</span>{" "}
                   {book.publisher}
                 </div>
@@ -117,16 +128,17 @@ export default async function HomePage({
                       {book.totalCopies - book.availableCopies} borrowed
                     </span>
                   </div>
-                </div>
+                </div> */}
               </CardContent>
               <CardFooter className="p-2 bg-orange-50 flex justify-between">
                 <IssueBook book={book} member={member} />
+                {/* <ReturnBook book={book} member={member} /> */}
                 <Button
                   variant="ghost"
                   size="sm"
                   className="text-xs hover:bg-orange-100"
                 >
-                  <ArrowLeftCircle className="h-3 w-3 mr-1" /> Return
+                  <InfoIcon className="h-3 w-3 mr-1" /> Details
                 </Button>
               </CardFooter>
             </Card>

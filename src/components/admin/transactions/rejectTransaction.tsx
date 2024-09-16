@@ -2,9 +2,15 @@
 
 import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { approveTransaction, rejectTransaction } from "@/lib/action";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/toottip";
+import { rejectTransaction } from "@/lib/action";
 import { ITransaction } from "@/models/transaction.model";
-import { CheckCircle, XCircle } from "lucide-react";
+import { XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function RejectTransaction({
@@ -25,14 +31,24 @@ export default function RejectTransaction({
     router.refresh();
   };
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className="text-xs hover:bg-red-100 text-red-600"
-      disabled={transaction.status !== "pending"}
-      onClick={handleReject}
-    >
-      <XCircle className="h-4 w-4 mr-1" /> Reject
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="outline"
+            size="icon"
+            className="bg-red-50 border-red-200 hover:bg-red-100 hover:text-red-600 transition-all duration-200 ease-in-out transform hover:scale-105"
+            disabled={transaction.status !== "pending"}
+            onClick={handleReject}
+          >
+            <XCircle className="h-4 w-4 text-red-500" />
+            <span className="sr-only">Reject</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Reject</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

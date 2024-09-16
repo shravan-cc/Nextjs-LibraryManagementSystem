@@ -16,25 +16,28 @@ export const BookTable = mysqlTable("books", {
   id: serial("id").primaryKey().autoincrement(),
   title: varchar("title", { length: 100 }).notNull(),
   author: varchar("author", { length: 150 }).notNull(),
-  publisher: varchar("publisher", { length: 50 }),
+  publisher: varchar("publisher", { length: 50 }).notNull(),
   genre: varchar("genre", { length: 31 }).notNull(),
   isbnNo: varchar("isbnNo", { length: 31 }).unique().notNull(),
   pages: int("pages").notNull(),
   totalCopies: int("totalCopies").notNull(),
   availableCopies: int("availableCopies").notNull(),
+  price: int("price"),
+  imageURL: varchar("imageURL", { length: 255 }),
 });
 
-export const BooksTable = mysqlTable("books", {
-  id: serial("id").primaryKey(),
-  title: varchar("title", { length: 100 }).notNull(),
-  author: varchar("author", { length: 150 }).notNull(),
-  publisher: varchar("publisher", { length: 100 }).notNull(),
-  genre: varchar("genre", { length: 31 }).notNull(),
-  isbnNo: varchar("isbnNo", { length: 13 }).notNull(),
-  pages: int("pages").notNull(),
-  totalCopies: int("totalCopies").notNull(),
-  availableCopies: int("availableCopies").notNull(),
-});
+// export const BooksTable = mysqlTable("books", {
+//   id: serial("id").primaryKey(),
+//   title: varchar("title", { length: 100 }).notNull(),
+//   author: varchar("author", { length: 150 }).notNull(),
+//   publisher: varchar("publisher", { length: 100 }).notNull(),
+//   genre: varchar("genre", { length: 31 }).notNull(),
+//   isbnNo: varchar("isbnNo", { length: 13 }).notNull(),
+//   pages: int("pages").notNull(),
+//   totalCopies: int("totalCopies").notNull(),
+//   availableCopies: int("availableCopies").notNull(),
+//   imageURL: varchar("imageURL", { length: 255 }),
+// });
 
 export const MemberTable = mysqlTable("members", {
   id: serial("id").primaryKey().autoincrement(),
@@ -52,7 +55,7 @@ export const TransactionTable = mysqlTable("transactions", {
   id: serial("id").primaryKey().autoincrement(),
   bookId: int("bookId")
     .notNull()
-    .references(() => BooksTable.id, {
+    .references(() => BookTable.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),

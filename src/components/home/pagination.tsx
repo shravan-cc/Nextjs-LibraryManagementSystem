@@ -1,9 +1,9 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "../ui/button";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PaginationButtonProps, PaginationProps } from "@/lib/definition";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Button } from "../ui/button";
 
 export default function Pagination({
   currentPage,
