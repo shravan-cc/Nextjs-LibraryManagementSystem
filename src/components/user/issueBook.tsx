@@ -48,12 +48,8 @@ export default function IssueBook({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-xs hover:bg-orange-100"
-        >
-          <BookOpen className="h-3 w-3 mr-1" /> Borrow
+        <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+          {book.availableCopies > 0 ? "Borrow Now" : "Join Waitlist"}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

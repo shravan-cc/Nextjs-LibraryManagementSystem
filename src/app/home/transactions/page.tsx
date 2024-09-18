@@ -5,9 +5,7 @@ import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
 import ReturnBook from "@/components/user/returnBook";
-import {
-  fetchTransactionDetails
-} from "@/lib/action";
+import { fetchTransactionDetails } from "@/lib/action";
 
 export default async function Transactions({
   searchParams,
@@ -39,7 +37,7 @@ export default async function Transactions({
           <SearchBar type="Transactions" />
           <FilterTransactionByStatus />
         </div>
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-orange-100">
               <tr>

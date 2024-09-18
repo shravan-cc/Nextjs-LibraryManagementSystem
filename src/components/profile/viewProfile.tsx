@@ -40,7 +40,7 @@ export default async function ViewProfile({
         <div className="bg-gradient-to-r from-orange-400 to-orange-600 h-32"></div>
         <CardHeader className="relative">
           <div className="absolute -top-16 left-6">
-            <Avatar className="h-32 w-32 border-4 border-white shadow-xl">
+            <Avatar className="sm:h-32 sm:w-32 h-24 w-24 border-4 border-white shadow-xl">
               <Image
                 src={userImage}
                 alt={userDetails!.firstName}
@@ -52,16 +52,16 @@ export default async function ViewProfile({
               </AvatarFallback>
             </Avatar>
           </div>
-          <div className="ml-40 pt-2 flex justify-between items-start">
+          <div className="ml-32 sm:ml-40 pt-2 flex flex-col sm:flex-row justify-between items-start">
             <div>
-              <h3 className="text-2xl font-bold text-gray-800">{`${userDetails?.firstName} ${userDetails?.lastName}`}</h3>
+              <h3 className="sm:text-2xl  text-xl  font-bold text-gray-800">{`${userDetails?.firstName} ${userDetails?.lastName}`}</h3>
               <p className="text-sm text-muted-foreground">{user?.role}</p>
               <p className="text-sm text-muted-foreground">
                 Member ID: #{userDetails?.id}
               </p>
             </div>
-            <Link href={path}>
-              <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+            <Link href={path} className="mt-4 sm:mt-0">
+              <Button className="bg-orange-500 hover:bg-orange-600 text-white sm:w-auto">
                 <Edit className="w-4 h-4 mr-2" />
                 Edit Profile
               </Button>

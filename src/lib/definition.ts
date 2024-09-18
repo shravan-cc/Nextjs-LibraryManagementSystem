@@ -6,6 +6,14 @@ export interface GoogleAuthProps {
   buttonLabel: string;
 }
 
+export type BookTableColumns =
+  | "id"
+  | "title"
+  | "author"
+  | "availableCopies"
+  | "isbnNo"
+  | "genre"; // Adjust based on actual column names
+
 export interface PaginationProps {
   currentPage: number;
   totalPages: number;

@@ -1,11 +1,12 @@
 import "dotenv/config";
-import { and, count, eq, like, or } from "drizzle-orm";
+import { and, count, eq, like, or, asc, desc } from "drizzle-orm";
 import { MySql2Database } from "drizzle-orm/mysql2";
 import { IPageRequest, IPagedResponse } from "./pagination.response";
 import { IRepository } from "./repository";
 
 import { IBook, IBookBase } from "@/models/book.model";
 import { BookTable } from "../drizzle/schema";
+import { BookTableColumns } from "@/lib/definition";
 
 export class BookRepository implements IRepository<IBookBase, IBook> {
   constructor(private readonly db: MySql2Database<Record<string, unknown>>) {}
@@ -116,7 +117,12 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
     try {
       const search = params.search?.toLowerCase();
       const genre = params.genre?.toLowerCase();
-      const sortBy = params.sort;
+      const sortBy: BookTableColumns =
+        (params.sort?.sortValue as BookTableColumns) || "id";
+      const sortAs = params.sort?.sortAs as "asc" | "desc";
+      const orderParameter =
+        sortAs === "desc" ? desc(BookTable[sortBy]) : asc(BookTable[sortBy]);
+
       const whereExpression = and(
         search
           ? or(
@@ -131,19 +137,20 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
         .select()
         .from(BookTable)
         .where(whereExpression)
+        .orderBy(orderParameter)
         .limit(params.limit)
         .offset(params.offset)
         .execute();
 
-      if (sortBy === "title") {
-        books.sort((a, b) => a.title.localeCompare(b.title));
-      }
-      if (sortBy === "author") {
-        books.sort((a, b) => a.author.localeCompare(b.author));
-      }
-      if (sortBy === "availability") {
-        books.sort((a, b) => b.availableCopies - a.availableCopies);
-      }
+      // if (sortBy === "title") {
+      //   books.sort((a, b) => a.title.localeCompare(b.title));
+      // }
+      // if (sortBy === "author") {
+      //   books.sort((a, b) => a.author.localeCompare(b.author));
+      // }
+      // if (sortBy === "availableCopies") {
+      //   books.sort((a, b) => b.availableCopies - a.availableCopies);
+      // }
 
       const result = await this.db
         .select({ count: count() })

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scrollArea";
 import CancelTransaction from "@/components/user/cancelrequest";
 import { fetchBooksByMember } from "@/lib/action";
 
@@ -8,7 +9,7 @@ export default async function Requests() {
     <>
       <div className="space-y-4">
         <h2 className="text-2xl font-bold text-orange-800">My Requests</h2>
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-orange-100">
               <tr>
@@ -48,6 +49,7 @@ export default async function Requests() {
                       {request.status}
                     </Badge>
                   </td>
+
                   <CancelTransaction request={request} />
                 </tr>
               ))}

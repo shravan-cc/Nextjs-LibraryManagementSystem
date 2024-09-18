@@ -35,7 +35,7 @@ export default function SortBooks() {
       <SelectContent>
         <SelectItem value="title">Title</SelectItem>
         <SelectItem value="author">Author</SelectItem>
-        <SelectItem value="availability">Availability</SelectItem>
+        <SelectItem value="availableCopies">Availability</SelectItem>
       </SelectContent>
     </Select>
   );

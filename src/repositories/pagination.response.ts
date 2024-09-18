@@ -10,7 +10,10 @@ export interface IPagedResponse<T> {
 export interface IPageRequest {
   genre?: string;
   search?: string;
-  sort?: string;
+  sort?: {
+    sortValue: string;
+    sortAs: "asc" | "desc";
+  };
   status?: string;
   offset: number;
   limit: number;

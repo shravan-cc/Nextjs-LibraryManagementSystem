@@ -28,6 +28,12 @@ const bookRepo = new BookRepository(db);
 const transactionRepo = new TransactionRepository(db);
 const requestTransactionRepo = new TransactionRequestRepository(db);
 
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 export interface State {
   errors?: { [key: string]: string[] };
   message?: string;
@@ -71,26 +77,45 @@ export async function addBook(prevState: State, formData: FormData) {
     isbnNo: formData.get("isbn"),
     pages: Number(formData.get("pages")),
     totalCopies: Number(formData.get("totalCopies")),
+    
   });
 
   const price = 10;
   const image = formData.get("image") as File;
   let imageURL = "";
-  if (image && image.size > 0) {
+  if (image && image instanceof File) {
     try {
-      const bytes = await image.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const base64Image = buffer.toString("base64");
-      const dataURI = `data:${image.type};base64,${base64Image}`;
-      console.log(dataURI);
-      const result = await cloudinary.uploader.upload(dataURI, {
-        folder: "book_covers",
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "book_covers" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+
+        const reader = image.stream().getReader();
+        const pump = async () => {
+          const { done, value } = await reader.read();
+          if (done) {
+            uploadStream.end();
+          } else {
+            uploadStream.write(value);
+            pump();
+          }
+        };
+        pump();
       });
-      imageURL = result.secure_url;
-      console.log(imageURL);
+
+      if (result && typeof result === "object" && "secure_url" in result) {
+        console.log(result.secure_url);
+        imageURL = result.secure_url as string;
+      }
     } catch (error) {
-      console.error("Failed to upload image", error);
-      return { message: "Image" };
+      console.error("Error uploading image:", error);
+      return {
+        message: "Failed to upload image. Please try again.",
+      };
     }
   }
   if (!validateFields.success) {
@@ -288,7 +313,10 @@ export async function fetchBooks(
   limit: number,
   offset: number,
   genre?: string,
-  sort?: string
+  sort?: {
+    sortValue: string;
+    sortAs: "asc" | "desc";
+  }
 ) {
   try {
     const books = await bookRepo.list({

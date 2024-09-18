@@ -13,7 +13,7 @@ export default async function MyBooks() {
     <>
       <div className="space-y-4">
         <h2 className="text-2xl font-bold text-orange-800">My Books</h2>
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-orange-100">
               <tr>

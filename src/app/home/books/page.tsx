@@ -36,15 +36,17 @@ export default async function HomePage({
   const currentPage = searchParams!.page || 1;
   const genre: string = searchParams!.genre || "";
   const sortBooksBy: string = searchParams!.sort || "";
+  const sortAs =
+    sortBooksBy === "availableCopies"
+      ? ("desc" as "asc" | "desc")
+      : ("asc" as "asc" | "desc");
+  const sort = {
+    sortValue: sortBooksBy,
+    sortAs: sortAs,
+  };
   const limit = 8;
   const offset = (Number(currentPage) - 1) * limit;
-  const fetchedBooks = await fetchBooks(
-    query,
-    limit,
-    offset,
-    genre,
-    sortBooksBy
-  );
+  const fetchedBooks = await fetchBooks(query, limit, offset, genre, sort);
   const books: IBook[] | undefined = fetchedBooks?.items;
   const totalBooks = fetchedBooks!.pagination.total;
   const genres = await getGenres();
