@@ -1,15 +1,15 @@
 import "dotenv/config";
 import { and, count, eq, like, or, asc, desc } from "drizzle-orm";
-import { MySql2Database } from "drizzle-orm/mysql2";
+import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import { VercelPgDatabase } from "drizzle-orm/vercel-postgres";
 import { IPageRequest, IPagedResponse } from "./pagination.response";
 import { IRepository } from "./repository";
-
 import { IBook, IBookBase } from "@/models/book.model";
 import { BookTable } from "../drizzle/schema";
 import { BookTableColumns } from "@/lib/definition";
 
 export class BookRepository implements IRepository<IBookBase, IBook> {
-  constructor(private readonly db: MySql2Database<Record<string, unknown>>) {}
+  constructor(private readonly db: VercelPgDatabase<Record<string, unknown>>) {}
 
   async create(data: IBookBase): Promise<IBook> {
     try {
@@ -20,7 +20,7 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
       const [queryResult] = await this.db
         .insert(BookTable)
         .values(newBookdata)
-        .$returningId();
+        .returning({ id: BookTable.id });
       const [insertedBook] = await this.db
         .select()
         .from(BookTable)

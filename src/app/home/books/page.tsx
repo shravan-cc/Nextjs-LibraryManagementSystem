@@ -17,7 +17,7 @@ import Link from "next/link";
 import DeleteBook from "@/components/admin/books/deleteBook";
 import FilterGenre from "@/components/admin/books/filterGenre";
 import SortBooks from "@/components/admin/books/sortBooks";
-import { db } from "@/lib/db";
+import { db } from "../../../drizzle/db";
 import { BookRepository } from "@/repositories/book.repository";
 
 const bookRepo = new BookRepository(db);

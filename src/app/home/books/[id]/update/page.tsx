@@ -1,5 +1,5 @@
 import UpdateBookForm from "@/components/admin/books/updateBookForm";
-import { db } from "@/lib/db";
+import { db } from "../../../../../drizzle/db";
 import { IBook } from "@/models/book.model";
 import { BookRepository } from "@/repositories/book.repository";
 

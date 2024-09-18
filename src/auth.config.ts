@@ -38,7 +38,7 @@ export const authConfig = {
       const paths = nextUrl.pathname;
 
       // Allow access to public routes (e.g., signup)
-      const publicPaths = ["/", "/signup", "/login"]; // Add any other public paths here
+      const publicPaths = ["/", "/signup", "/login", "/seed"]; // Add any other public paths here
       const isPublicPath = publicPaths.includes(paths);
 
       if (isPublicPath) {

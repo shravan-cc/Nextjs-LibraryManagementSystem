@@ -4,9 +4,12 @@ import { MemberTable } from "../drizzle/schema";
 import { IMember, IMemberBase } from "../models/member.model";
 import { IPageRequest, IPagedResponse } from "./pagination.response";
 import { IRepository } from "./repository";
+import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 export class MemberRepository implements IRepository<IMemberBase, IMember> {
-  constructor(private readonly db: MySql2Database<Record<string, unknown>>) {}
+  constructor(
+    private readonly db: PostgresJsDatabase<Record<string, unknown>>
+  ) {}
 
   async create(memberData: IMemberBase): Promise<IMember> {
     try {
@@ -18,7 +21,7 @@ export class MemberRepository implements IRepository<IMemberBase, IMember> {
       const [result] = await this.db
         .insert(MemberTable)
         .values(newMember)
-        .$returningId();
+        .returning({ id: MemberTable.id });
 
       const [insertedMember] = await this.db
         .select()

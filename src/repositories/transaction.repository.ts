@@ -5,11 +5,14 @@ import { MySql2Database } from "drizzle-orm/mysql2";
 import { BookTable, TransactionTable } from "../drizzle/schema";
 import { IPagedResponse, IPageRequest } from "./pagination.response";
 import { ITransactionRepository } from "./repository";
+import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 export class TransactionRepository
   implements ITransactionRepository<ITransactionBase, ITransaction>
 {
-  constructor(private readonly db: MySql2Database<Record<string, unknown>>) {}
+  constructor(
+    private readonly db: PostgresJsDatabase<Record<string, unknown>>
+  ) {}
 
   async create(data: {
     memberId: number;
@@ -25,7 +28,7 @@ export class TransactionRepository
       const [result] = await this.db
         .insert(TransactionTable)
         .values(transaction)
-        .$returningId();
+        .returning({ id: TransactionTable.id });
       const [insertedTransaction] = await this.db
         .select()
         .from(TransactionTable)

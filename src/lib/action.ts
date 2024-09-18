@@ -14,19 +14,17 @@ import {
 import { BookRepository } from "@/repositories/book.repository";
 import { MemberRepository } from "@/repositories/member.repository";
 import { TransactionRepository } from "@/repositories/transaction.repository";
-import { TransactionRequestRepository } from "@/repositories/transactionRequest.repository";
 import bcrypt from "bcryptjs";
 import { and, eq, ne } from "drizzle-orm";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 import { auth, signIn } from "../auth";
-import { db } from "./db";
+import { db } from "../drizzle/db";
 import cloudinary from "./cloudinary";
 
 const memberRepo = new MemberRepository(db);
 const bookRepo = new BookRepository(db);
 const transactionRepo = new TransactionRepository(db);
-const requestTransactionRepo = new TransactionRequestRepository(db);
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -203,7 +201,7 @@ export async function addBook(prevState: State, formData: FormData) {
     return { message: "Success" };
   } catch (error) {
     console.log("Error during registration:", error);
-    return { message: "Error during registration:", error };
+    return { message: "Error during registration:" };
   }
 }
 
@@ -309,7 +307,7 @@ export async function registerUser(prevState: State, formData: FormData) {
     return { message: "Success" };
   } catch (error) {
     console.log("Error during registration:", error);
-    return { message: "Error during registration:", error };
+    return { message: "Error during registration:" };
   }
 }
 
@@ -381,6 +379,11 @@ export async function fetchBooks(
   } catch (error) {
     console.error("Error handling book request:", error);
   }
+}
+
+export async function fetchAllBooks() {
+  const result = await db.select().from(BookTable);
+  return result;
 }
 
 export async function fetchMembers(

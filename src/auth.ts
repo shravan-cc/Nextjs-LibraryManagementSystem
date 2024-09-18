@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db } from "./drizzle/db";
 import { IMember } from "@/models/member.model";
 import { MemberRepository } from "@/repositories/member.repository";
 import bcrypt from "bcryptjs";

@@ -22,7 +22,7 @@ import {
 import FilterGenre from "@/components/admin/books/filterGenre";
 import SortBooks from "@/components/admin/books/sortBooks";
 import IssueBook from "@/components/user/issueBook";
-import { db } from "@/lib/db";
+import { db } from "../../../drizzle/db";
 import { BookRepository } from "@/repositories/book.repository";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
