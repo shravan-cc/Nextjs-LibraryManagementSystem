@@ -1,14 +1,15 @@
 "use client";
 
 import { useToast } from "@/components/hooks/use-toast";
-import { editBook, State } from "@/lib/action";
+import { editBook, State, uploadImage } from "@/lib/action";
 import { IBook } from "@/models/book.model";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
+import Image from "next/image";
 
 export default function UpdateBookForm({ books }: { books: IBook | null }) {
   const updateBook = editBook.bind(null, books!.id);
@@ -17,6 +18,24 @@ export default function UpdateBookForm({ books }: { books: IBook | null }) {
   const [state, formAction] = useActionState(updateBook, initialState);
   const { toast } = useToast();
   const router = useRouter();
+  const imageurl: string = books?.imageURL ? books.imageURL : "";
+  const [imageURL, setImageURL] = useState<string>(imageurl);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsUploading(true);
+      const result = await uploadImage(file);
+      setIsUploading(false);
+      if (result.imageURL) {
+        setImageURL(result.imageURL);
+      } else if (result.error) {
+        // Handle error
+        console.error(result.error);
+      }
+    }
+  };
 
   useEffect(() => {
     if (state.message === "Success") {
@@ -190,6 +209,57 @@ export default function UpdateBookForm({ books }: { books: IBook | null }) {
             />
             {state.errors?.totalCopies ? (
               <p className="text-red-500 text-sm">{state.errors.totalCopies}</p>
+            ) : (
+              <div className="min-h-6"></div>
+            )}
+          </div>
+          <div className="row-span-2">
+            <Label
+              htmlFor="image"
+              className="text-sm font-medium text-gray-700"
+            >
+              Book Cover Image
+            </Label>
+
+            <Input
+              id="image"
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
+            />
+            {imageURL && (
+              <div className="mt-2 mb-2">
+                <Image
+                  src={imageURL}
+                  alt="Book cover preview"
+                  width={60}
+                  height={60}
+                  className="object-cover rounded"
+                />
+              </div>
+            )}
+            {isUploading && <p>Uploading image...</p>}
+            <input type="hidden" name="imageURL" value={imageURL} />
+          </div>
+          <div>
+            <Label
+              htmlFor="price"
+              className="text-sm font-medium text-gray-700"
+            >
+              Price
+            </Label>
+            <Input
+              id="price"
+              name="price"
+              type="number"
+              placeholder="Enter the price"
+              defaultValue={books!.price!}
+              className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
+            />
+            {state.errors?.price ? (
+              <p className="text-red-500 text-sm">{state.errors.price}</p>
             ) : (
               <div className="min-h-6"></div>
             )}

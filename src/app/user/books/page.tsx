@@ -84,38 +84,54 @@ export default async function HomePage({
           {books?.map((book) => (
             <Dialog key={book.id}>
               <DialogTrigger asChild>
-                <Card
-                  key={book.id}
-                  className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white flex h-[250px] hover:cursor-pointer"
-                >
-                  <div className="w-2/5 relative">
+                <Card className="overflow-hidden transition-transform duration-300 bg-white flex h-[250px] group hover:cursor-pointer hover:scale-105 hover:shadow-lg hover:border border border-transparent">
+                  <div className="w-1/2 relative overflow-hidden">
                     {book.imageURL ? (
                       <Image
                         src={book.imageURL}
                         alt={`Cover of ${book.title}`}
                         layout="fill"
-                        objectFit="contain cover"
-                        className="h-full w-full"
+                        objectFit="cover contain"
+                        className="h-full w-full transition-transform duration-300" // Subtle zoom effect on image
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200">
-                        <BookOpen className="h-16 w-16 text-orange-500" />
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200 p-4 transition-colors duration-300 group-hover:from-orange-200 group-hover:to-orange-300">
+                        <BookOpen className="h-16 w-16 text-orange-500 mb-2" />
+                        <h4 className="text-sm font-semibold text-center line-clamp-2 mb-1">
+                          {book.title}
+                        </h4>
+                        <p className="text-xs text-muted-foreground text-center line-clamp-1">
+                          {book.author}
+                        </p>
                       </div>
                     )}
                   </div>
-                  <CardContent className="w-3/5 p-6 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-xl font-semibold line-clamp-3 mb-3">
+                  <CardContent className="w-1/2 p-4 flex flex-col justify-between bg-gradient-to-br from-white to-gray-50 transition-colors duration-300 group-hover:from-gray-50 group-hover:to-gray-100">
+                    <div className="space-y-2">
+                      <h3 className="text-base font-semibold line-clamp-2">
                         {book.title}
                       </h3>
-                      <p className="text-base text-muted-foreground mb-4 line-clamp-2">
+                      <p className="text-xs text-muted-foreground line-clamp-1">
                         {book.author}
                       </p>
+                      <Badge variant="secondary" className="text-xs">
+                        {book.genre}
+                      </Badge>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-2xl font-bold text-orange-600">
-                        ${book.price}
-                      </span>
+                    <Separator className="my-2" />
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center space-x-1">
+                          <BookCopy className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-xs font-medium text-muted-foreground">
+                            {book.availableCopies}/{book.totalCopies}
+                          </span>
+                        </div>
+                        <span className="text-lg font-bold text-orange-600">
+                          ${book!.price}
+                        </span>
+                      </div>
+                      <IssueBook book={book} member={member} />
                     </div>
                   </CardContent>
                 </Card>

@@ -112,48 +112,12 @@ export async function addBook(prevState: State, formData: FormData) {
     isbnNo: formData.get("isbn"),
     pages: Number(formData.get("pages")),
     totalCopies: Number(formData.get("totalCopies")),
-    price: 10,
+    price: Number(formData.get("price")),
   });
 
   const imageURL = formData.get("imageURL") as string;
   console.log("URL", imageURL);
-  // const image = formData.get("image") as File;
-  // let imageURL = "";
-  // if (image && image instanceof File) {
-  //   try {
-  //     const result = await new Promise((resolve, reject) => {
-  //       const uploadStream = cloudinary.uploader.upload_stream(
-  //         { folder: "book_covers" },
-  //         (error, result) => {
-  //           if (error) reject(error);
-  //           else resolve(result);
-  //         }
-  //       );
 
-  //       const reader = image.stream().getReader();
-  //       const pump = async () => {
-  //         const { done, value } = await reader.read();
-  //         if (done) {
-  //           uploadStream.end();
-  //         } else {
-  //           uploadStream.write(value);
-  //           pump();
-  //         }
-  //       };
-  //       pump();
-  //     });
-
-  //     if (result && typeof result === "object" && "secure_url" in result) {
-  //       console.log(result.secure_url);
-  //       imageURL = result.secure_url as string;
-  //     }
-  //   } catch (error) {
-  //     console.error("Error uploading image:", error);
-  //     return {
-  //       message: "Failed to upload image. Please try again.",
-  //     };
-  //   }
-  // }
   if (!validateFields.success) {
     console.log("Failure");
     console.log(validateFields.error.flatten().fieldErrors);
@@ -219,7 +183,11 @@ export async function editBook(
     isbnNo: formData.get("isbn"),
     pages: Number(formData.get("pages")),
     totalCopies: Number(formData.get("totalCopies")),
+    price: Number(formData.get("price")),
   });
+
+  const imageURL = formData.get("imageURL") as string;
+  console.log("URL", imageURL);
 
   if (!validateFields.success) {
     console.log("Failure");
@@ -230,17 +198,36 @@ export async function editBook(
     };
   }
 
-  const { title, author, publisher, isbnNo, pages, totalCopies } =
+  const { title, author, publisher, isbnNo, pages, totalCopies, genre, price } =
     validateFields.data;
 
-  if (!title || !author || !publisher || !isbnNo || !pages || !totalCopies) {
+  if (
+    !title ||
+    !author ||
+    !publisher ||
+    !isbnNo ||
+    !pages ||
+    !totalCopies ||
+    !genre ||
+    !price
+  ) {
     console.log("All fields are required");
     return { message: "All Fields are required" };
   }
 
   try {
-    const editedBook = await bookRepo.update(id, validateFields.data);
-    console.log(`Book ${editedBook!.title} created successfully!`);
+    const editedBook = await bookRepo.update(id, {
+      title,
+      author,
+      publisher,
+      genre,
+      isbnNo,
+      pages,
+      totalCopies,
+      price,
+      imageURL,
+    });
+    console.log(`Book ${editedBook!.title} edited successfully!`);
     return { message: "Success" };
   } catch (error) {
     console.log("Error during registration:", error);

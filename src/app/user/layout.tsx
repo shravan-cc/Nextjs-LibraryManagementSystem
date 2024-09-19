@@ -31,7 +31,7 @@ export default function DashboardLayout({
         <Profile />
       </header>
       <div className="flex-1 flex overflow-hidden">
-        <nav className="w-64 bg-orange-50 border-r hidden md:block  fixed h-[calc(100vh-4rem)] top-16">
+        <nav className="w-64 bg-orange-50 border-r hidden md:block fixed h-[calc(100vh-4rem)] top-16">
           <div className="p-4 space-y-2">
             <UserNavigation />
           </div>

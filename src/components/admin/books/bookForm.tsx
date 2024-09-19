@@ -8,7 +8,7 @@ import { useActionState, useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-
+import Image from "next/image";
 
 export default function BookForm() {
   const initialState: State = { message: "", errors: {} };
@@ -53,11 +53,17 @@ export default function BookForm() {
     }
   }, [state.message, toast, router]);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    formAction(formData);
+  };
+
   return (
     <>
       <form
-        // onSubmit={handleSubmit}
-        action={formAction}
+        onSubmit={handleSubmit}
+        // action={formAction}
         method="post"
         encType="multipart/form-data"
         className="space-y-6 bg-white p-6 rounded-lg shadow-md"
@@ -190,7 +196,8 @@ export default function BookForm() {
               <div className="min-h-6"></div>
             )}
           </div>
-          <div>
+
+          <div className="row-span-2">
             <Label
               htmlFor="image"
               className="text-sm font-medium text-gray-700"
@@ -205,8 +212,39 @@ export default function BookForm() {
               onChange={handleImageUpload}
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
+            {imageURL && (
+              <div className="mt-2 mb-2">
+                <Image
+                  src={imageURL}
+                  alt="Book cover preview"
+                  width={60}
+                  height={60}
+                  className="object-cover rounded"
+                />
+              </div>
+            )}
             {isUploading && <p>Uploading image...</p>}
             <input type="hidden" name="imageURL" value={imageURL} />
+          </div>
+          <div>
+            <Label
+              htmlFor="price"
+              className="text-sm font-medium text-gray-700"
+            >
+              Price
+            </Label>
+            <Input
+              id="price"
+              name="price"
+              type="number"
+              placeholder="Enter the price"
+              className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
+            />
+            {state.errors?.price ? (
+              <p className="text-red-500 text-sm">{state.errors.price}</p>
+            ) : (
+              <div className="min-h-6"></div>
+            )}
           </div>
         </div>
         {/* {state.message && state.message !== "Success" ? (
@@ -236,4 +274,3 @@ export default function BookForm() {
     </>
   );
 }
-

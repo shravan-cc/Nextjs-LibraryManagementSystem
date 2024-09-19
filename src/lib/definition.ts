@@ -11,6 +11,9 @@ export type BookTableColumns =
   | "title"
   | "author"
   | "availableCopies"
+  | "pages"
+  | "publisher"
+  | "price"
   | "isbnNo"
   | "genre"; // Adjust based on actual column names
 
@@ -71,4 +74,9 @@ export interface StatCardProps {
   title: string;
   value: number;
   icon: any;
+}
+
+export interface SortState {
+  sortValue: string;
+  sortAs: "asc" | "desc" | null;
 }

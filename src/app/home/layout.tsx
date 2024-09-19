@@ -11,7 +11,7 @@ export default function DashboardLayout({
 }>) {
   return (
     <div className="min-h-screen flex flex-col bg-CustomPeach">
-      <header className="px-4 lg:px-6 h-16 flex items-center border-b bg-white shadow-md">
+      <header className="sticky top-0 z-10 px-4 lg:px-6 h-16 flex items-center border-b bg-white shadow-md">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="md:hidden">
@@ -30,13 +30,13 @@ export default function DashboardLayout({
         </h1>
         <Profile />
       </header>
-      <div className="flex-1 flex">
-        <nav className="w-64 bg-orange-50 border-r hidden md:block">
+      <div className="flex-1 flex overflow-hidden">
+        <nav className="w-64 bg-orange-50 border-r hidden md:block fixed h-[calc(100vh-4rem)] top-16">
           <div className="p-4 space-y-2">
             <AdminNavigation />
           </div>
         </nav>
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6 md:ml-64">{children}</main>
       </div>
     </div>
   );

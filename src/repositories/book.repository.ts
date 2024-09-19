@@ -116,7 +116,7 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
   async list(params: IPageRequest): Promise<IPagedResponse<IBook>> {
     try {
       const search = params.search?.toLowerCase();
-      const genre = params.genre?.toLowerCase();
+      const genre = params.genre!;
       const sortBy: BookTableColumns =
         (params.sort?.sortValue as BookTableColumns) || "id";
       const sortAs = params.sort?.sortAs as "asc" | "desc";

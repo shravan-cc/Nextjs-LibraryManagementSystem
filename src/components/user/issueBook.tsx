@@ -34,7 +34,8 @@ export default function IssueBook({
     bookId: book.id,
   };
 
-  const handleIssue = async () => {
+  const handleIssue = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     await borrowBook(data);
     toast({
       title: "Success",
@@ -48,7 +49,10 @@ export default function IssueBook({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+        <Button
+          onClick={(e) => e.stopPropagation()}
+          className="bg-orange-500 hover:bg-orange-600 text-white"
+        >
           {book.availableCopies > 0 ? "Borrow Now" : "Join Waitlist"}
         </Button>
       </DialogTrigger>
@@ -64,7 +68,9 @@ export default function IssueBook({
           <Button
             type="button"
             variant="secondary"
-            onClick={() => setIsOpen(false)}
+            onClick={(e) => {
+              setIsOpen(false);
+            }}
           >
             Cancel
           </Button>
@@ -72,7 +78,7 @@ export default function IssueBook({
             variant="ghost"
             size="sm"
             className="text-xs hover:bg-orange-100"
-            onClick={handleIssue}
+            onClick={(e) => handleIssue(e)}
           >
             <BookOpen className="h-3 w-3 mr-1" /> Borrow
           </Button>

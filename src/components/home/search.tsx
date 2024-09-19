@@ -15,7 +15,7 @@ export default function SearchBar({ type }: { type: string }) {
     params.set("page", "1");
     if (term) {
       params.set("query", term);
-    } else {
+    } else { 
       params.delete("query");
     }
     replace(`${pathName}?${params.toString()}`);
