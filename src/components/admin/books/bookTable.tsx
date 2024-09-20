@@ -75,7 +75,7 @@ export default function BookTable({ books }: { books: IBook[] }) {
             className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors"
             onClick={() => handleTableSelect("title")}
           >
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-items-start">
               Title
               {getSortIcon("title")}
             </div>
@@ -84,7 +84,7 @@ export default function BookTable({ books }: { books: IBook[] }) {
             className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors"
             onClick={() => handleTableSelect("author")}
           >
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-items-start">
               Author
               {getSortIcon("author")}
             </div>
@@ -93,7 +93,7 @@ export default function BookTable({ books }: { books: IBook[] }) {
             className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors"
             onClick={() => handleTableSelect("genre")}
           >
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-items-start">
               Genre
               {getSortIcon("genre")}
             </div>
@@ -102,7 +102,7 @@ export default function BookTable({ books }: { books: IBook[] }) {
             className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors"
             onClick={() => handleTableSelect("pages")}
           >
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center justify-items-start">
               Pages
               {getSortIcon("pages")}
             </div>
@@ -111,7 +111,7 @@ export default function BookTable({ books }: { books: IBook[] }) {
             className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors"
             onClick={() => handleTableSelect("publisher")}
           >
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center justify-items-start">
               Publisher
               {getSortIcon("publisher")}
             </div>
@@ -120,7 +120,7 @@ export default function BookTable({ books }: { books: IBook[] }) {
             className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors"
             onClick={() => handleTableSelect("price")}
           >
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center justify-items-start">
               Price
               {getSortIcon("price")}
             </div>
@@ -129,7 +129,7 @@ export default function BookTable({ books }: { books: IBook[] }) {
             className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors"
             onClick={() => handleTableSelect("availableCopies")}
           >
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center justify-items-start">
               Copies
               {getSortIcon("availableCopies")}
             </div>
@@ -152,9 +152,9 @@ export default function BookTable({ books }: { books: IBook[] }) {
                 {book.genre}
               </Badge>
             </TableCell>
-            <TableCell className="text-center">{book.pages}</TableCell>
+            <TableCell className="text-right">{book.pages}</TableCell>
             <TableCell>{book.publisher}</TableCell>
-            <TableCell className="text-right">${book.price}</TableCell>
+            <TableCell className="text-right">₹{book.price}</TableCell>
             <TableCell>
               <div className="flex items-center justify-center">
                 <BookCopy className="h-4 w-4 mr-1 text-orange-600" />

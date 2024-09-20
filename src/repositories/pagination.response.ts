@@ -15,6 +15,8 @@ export interface IPageRequest {
     sortAs: "asc" | "desc";
   };
   status?: string;
+  price?: string;
+  duetoday?: string;
   offset: number;
   limit: number;
 }

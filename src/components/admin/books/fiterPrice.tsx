@@ -6,40 +6,44 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { filterGenreProps } from "@/lib/definition";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-export default function FilterGenre({ genres }: filterGenreProps) {
+export default function FilterBookByPrice() {
+  const priceValues = [
+    "Price",
+    "₹0 - ₹149",
+    "₹150 - ₹299",
+    "₹300 - ₹449",
+    "Above ₹450",
+  ];
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const { replace } = useRouter();
-
-  const [genreValue, setGenreValue] = useState<string>(
-    searchParams.get("genre") || "All Genres"
+  const [price, setPrice] = useState<string>(
+    searchParams.get("price") || "Price"
   );
 
   const handleValueChange = (term: string) => {
     const params = new URLSearchParams(searchParams);
-    setGenreValue(term);
+    setPrice(term);
     params.set("page", "1");
-    if (term && term !== "All Genres") {
-      params.set("genre", term);
+    if (term && term !== "Price") {
+      params.set("price", term);
     } else {
-      params.delete("genre");
+      params.delete("price");
     }
     replace(`${pathName}?${params.toString()}`);
   };
-
   return (
-    <Select value={genreValue} onValueChange={handleValueChange}>
+    <Select value={price} onValueChange={handleValueChange}>
       <SelectTrigger className="w-[180px] bg-white">
         <SelectValue placeholder="Filter by genre" />
       </SelectTrigger>
       <SelectContent>
-        {genres.map((genre) => (
-          <SelectItem key={genre} value={genre}>
-            {genre}
+        {priceValues.map((price) => (
+          <SelectItem key={price} value={price}>
+            {price}
           </SelectItem>
         ))}
       </SelectContent>

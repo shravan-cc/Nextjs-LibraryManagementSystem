@@ -37,6 +37,12 @@ export default function UpdateBookForm({ books }: { books: IBook | null }) {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    formAction(formData);
+  };
+
   useEffect(() => {
     if (state.message === "Success") {
       toast({
@@ -58,7 +64,7 @@ export default function UpdateBookForm({ books }: { books: IBook | null }) {
   return (
     <>
       <form
-        action={formAction}
+        onSubmit={handleSubmit}
         className="space-y-6 bg-white p-6 rounded-lg shadow-md"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">

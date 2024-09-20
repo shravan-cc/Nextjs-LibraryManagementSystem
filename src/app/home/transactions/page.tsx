@@ -1,27 +1,36 @@
 import ApproveTransaction from "@/components/admin/transactions/approveTransaction";
+import CheckDueToday from "@/components/admin/transactions/dueToday";
 import FilterTransactionByStatus from "@/components/admin/transactions/filterTransaction";
 import RejectTransaction from "@/components/admin/transactions/rejectTransaction";
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import ReturnBook from "@/components/user/returnBook";
 import { fetchTransactionDetails } from "@/lib/action";
 
 export default async function Transactions({
   searchParams,
 }: {
-  searchParams?: { query?: string; page?: string; status?: string };
+  searchParams?: {
+    query?: string;
+    page?: string;
+    status?: string;
+    duedate?: string;
+  };
 }) {
   const query: string = searchParams?.query || "";
   const status: string = searchParams?.status || "";
   const currentPage = searchParams!.page || 1;
+  const dueToday = searchParams?.duedate;
   const limit = 5;
   const offset = (Number(currentPage) - 1) * limit;
   const fetchedTransactions = await fetchTransactionDetails(
     query,
     limit,
     offset,
-    status
+    status,
+    dueToday
   );
   const transactions = fetchedTransactions!.items;
   const totalTransactions = fetchedTransactions!.pagination.total;
@@ -36,6 +45,7 @@ export default async function Transactions({
         <div className="flex flex-wrap gap-4 mb-4 items-center">
           <SearchBar type="Transactions" />
           <FilterTransactionByStatus />
+          <CheckDueToday />
         </div>
         <div className="bg-white rounded-lg shadow overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -117,6 +127,11 @@ export default async function Transactions({
             </tbody>
           </table>
         </div>
+        {transactions!.length === 0 && (
+          <p className="text-center text-CustomDarkOrange mt-4">
+            No Transactions requests found.
+          </p>
+        )}
         <Pagination currentPage={Number(currentPage)} totalPages={totalPages} />
       </div>
     </>

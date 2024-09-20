@@ -33,28 +33,20 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       // console.log(auth);
       const user = auth?.user;
+      const isAdmin = auth?.user?.role === "admin";
       // console.log("config", user);
 
-      const paths = nextUrl.pathname;
+      // const paths = nextUrl.pathname;
 
-      // Allow access to public routes (e.g., signup)
-      const publicPaths = ["/", "/signup", "/login", "/seed"]; // Add any other public paths here
-      const isPublicPath = publicPaths.includes(paths);
+      // // Allow access to public routes (e.g., signup)
+      // const publicPaths = ["/", "/signup", "/login", "/seed"]; // Add any other public paths here
+      // const isPublicPath = publicPaths.includes(paths);
 
-      if (isPublicPath) {
-        return true; // Allow access to public pages
-      }
+      // if (isPublicPath) {
+      //   return true; // Allow access to public pages
+      // }
 
-      if (!user) {
-        return false;
-      }
-
-      if (nextUrl.pathname === "/" && isLoggedIn) {
-        const path = user.role === "admin" ? "/home" : "/user";
-        return Response.redirect(new URL(path, nextUrl));
-      }
-
-      const path = user.role === "admin" ? "/home" : "/user";
+      const path = isAdmin ? "/home" : "/user";
       const isOnDashboard = nextUrl.pathname.startsWith(path);
       console.log("Hello");
       if (isOnDashboard) {
@@ -68,11 +60,6 @@ export const authConfig = {
       }
       return true;
     },
-    // async redirect({ url, baseUrl }) {
-    //   console.log("url", url);
-    //   console.log("baseUrl", baseUrl);
-    //   return url.startsWith(baseUrl) ? baseUrl + "/home" : url;
-    // },
   },
   providers: [],
 } satisfies NextAuthConfig;

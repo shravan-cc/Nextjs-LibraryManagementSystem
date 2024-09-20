@@ -148,9 +148,12 @@ export class TransactionRepository
         limit: params.limit,
       };
       const status = params.status;
-      const whereExpression = status
-        ? eq(TransactionTable.status, status)
-        : undefined;
+      const dueDate = params.duetoday;
+      console.log("DueDtae", dueDate);
+      const whereExpression = and(
+        status ? eq(TransactionTable.status, status) : undefined,
+        dueDate ? eq(TransactionTable.dueDate, dueDate) : undefined
+      );
 
       const transactions = await this.db
         .select()

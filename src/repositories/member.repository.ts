@@ -1,4 +1,4 @@
-import { count, eq, like, or } from "drizzle-orm";
+import { count, eq, ilike, like, or } from "drizzle-orm";
 import { MySql2Database } from "drizzle-orm/mysql2";
 import { MemberTable } from "../drizzle/schema";
 import { IMember, IMemberBase } from "../models/member.model";
@@ -102,8 +102,8 @@ export class MemberRepository implements IRepository<IMemberBase, IMember> {
       const search = params.search?.toLowerCase();
       const whereExpression = search
         ? or(
-            like(MemberTable.firstName, `%${search}%`),
-            like(MemberTable.lastName, `%${search}%`)
+            ilike(MemberTable.firstName, `%${search}%`),
+            ilike(MemberTable.lastName, `%${search}%`)
           )
         : undefined;
 

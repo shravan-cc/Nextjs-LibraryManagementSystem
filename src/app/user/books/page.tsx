@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/dialog";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Separator } from "@/components/ui/separator";
+import FilterBookByPrice from "@/components/admin/books/fiterPrice";
 
 const bookRepo = new BookRepository(db);
 
@@ -46,6 +47,7 @@ export default async function HomePage({
     page?: string;
     genre?: string;
     sort?: string;
+    price?: string;
   };
 }) {
   const query: string = searchParams?.query || "";
@@ -60,9 +62,17 @@ export default async function HomePage({
     sortValue: sortBooksBy,
     sortAs: sortAs,
   };
+  const price = searchParams?.price || "";
   const limit = 8;
   const offset = (Number(currentPage) - 1) * limit;
-  const fetchedBooks = await fetchBooks(query, limit, offset, genre, sort);
+  const fetchedBooks = await fetchBooks(
+    query,
+    limit,
+    offset,
+    genre,
+    sort,
+    price
+  );
   const books: IBook[] | undefined = fetchedBooks?.items;
   const totalBooks = fetchedBooks!.pagination.total;
   const genres = await getGenres();
@@ -79,6 +89,7 @@ export default async function HomePage({
           </div>
           <SortBooks />
           <FilterGenre genres={genres} />
+          <FilterBookByPrice />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {books?.map((book) => (
@@ -128,7 +139,7 @@ export default async function HomePage({
                           </span>
                         </div>
                         <span className="text-lg font-bold text-orange-600">
-                          ${book!.price}
+                          ₹{book!.price}
                         </span>
                       </div>
                       <IssueBook book={book} member={member} />
@@ -205,7 +216,7 @@ export default async function HomePage({
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-lg font-bold text-green-600">
-                          ${book.price}
+                          ₹{book.price}
                         </span>
                       </div>
                     </div>
@@ -219,6 +230,11 @@ export default async function HomePage({
             </Dialog>
           ))}
         </div>
+        {books!.length === 0 && (
+          <p className="text-center text-CustomDarkOrange mt-4">
+            No books found.
+          </p>
+        )}
         <Pagination totalPages={totalPages} currentPage={Number(currentPage)} />
       </div>
     </>

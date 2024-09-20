@@ -1,5 +1,16 @@
 import "dotenv/config";
-import { and, count, eq, like, or, asc, desc } from "drizzle-orm";
+import {
+  and,
+  count,
+  eq,
+  like,
+  or,
+  asc,
+  desc,
+  ilike,
+  gte,
+  lte,
+} from "drizzle-orm";
 import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { VercelPgDatabase } from "drizzle-orm/vercel-postgres";
 import { IPageRequest, IPagedResponse } from "./pagination.response";
@@ -113,9 +124,27 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
     }
   }
 
+  async getPriceRange(
+    price: string
+  ): Promise<{ min: number; max?: number } | undefined> {
+    switch (price) {
+      case "₹0 - ₹149":
+        return { min: 0, max: 149 };
+      case "₹150 - ₹299":
+        return { min: 150, max: 299 };
+      case "₹300 - ₹449":
+        return { min: 300, max: 449 };
+      case "Above ₹450":
+        return { min: 450 };
+      default:
+        return undefined; // No price filter
+    }
+  }
+
   async list(params: IPageRequest): Promise<IPagedResponse<IBook>> {
     try {
       const search = params.search?.toLowerCase();
+      const priceRange = await this.getPriceRange(params.price!);
       const genre = params.genre!;
       const sortBy: BookTableColumns =
         (params.sort?.sortValue as BookTableColumns) || "id";
@@ -126,11 +155,19 @@ export class BookRepository implements IRepository<IBookBase, IBook> {
       const whereExpression = and(
         search
           ? or(
-              like(BookTable.title, `%${search}%`),
-              like(BookTable.isbnNo, `%${search}%`)
+              ilike(BookTable.title, `%${search}%`),
+              ilike(BookTable.isbnNo, `%${search}%`)
             )
           : undefined,
-        genre ? eq(BookTable.genre, genre) : undefined
+        genre ? eq(BookTable.genre, genre) : undefined,
+        priceRange
+          ? priceRange.max
+            ? and(
+                gte(BookTable.price, priceRange.min),
+                lte(BookTable.price, priceRange.max)
+              )
+            : gte(BookTable.price, priceRange.min)
+          : undefined
       );
 
       let books = await this.db

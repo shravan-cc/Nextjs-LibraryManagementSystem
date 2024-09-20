@@ -2,6 +2,14 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scrollArea";
 import CancelTransaction from "@/components/user/cancelrequest";
 import { fetchBooksByMember } from "@/lib/action";
+import {
+  Table,
+  TableHeader,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@/components/ui/table";
 
 export default async function Requests() {
   const bookRequests = await fetchBooksByMember();
@@ -10,33 +18,32 @@ export default async function Requests() {
       <div className="space-y-4">
         <h2 className="text-2xl font-bold text-orange-800">My Requests</h2>
         <div className="bg-white rounded-lg shadow overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-orange-100">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <Table>
+            <TableHeader className="bg-orange-50">
+              <TableRow>
+                <TableHead className="font-semibold text-orange-700">
                   Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700">
                   Author
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700">
                   Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700">
                   Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {bookRequests!.map((request) => (
-                <tr key={request.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {request.title}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {request.author}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <TableRow
+                  key={request.id}
+                  className="hover:bg-white transition-colors"
+                >
+                  <TableCell className="font-medium">{request.title}</TableCell>
+                  <TableCell>{request.author}</TableCell>
+                  <TableCell>
                     <Badge
                       variant={
                         request.status === "approved"
@@ -45,17 +52,30 @@ export default async function Requests() {
                           ? "destructive"
                           : "secondary"
                       }
+                      className={
+                        request.status === "approved"
+                          ? "bg-green-100 text-green-800 "
+                          : request.status === "rejected"
+                          ? "bg-red-100 text-red-800 "
+                          : "bg-orange-100 text-orange-800 "
+                      }
                     >
                       {request.status}
                     </Badge>
-                  </td>
-
-                  <CancelTransaction request={request} />
-                </tr>
+                  </TableCell>
+                  <TableCell>
+                    <CancelTransaction request={request} />
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
+        {bookRequests!.length === 0 && (
+          <p className="text-center text-CustomDarkOrange mt-4">
+            No book requests found.
+          </p>
+        )}
       </div>
     </>
   );

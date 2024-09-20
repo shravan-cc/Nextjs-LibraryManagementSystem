@@ -28,6 +28,7 @@ import {
   TableBody,
 } from "@/components/ui/table";
 import BookTable from "@/components/admin/books/bookTable";
+import FilterBookByPrice from "@/components/admin/books/fiterPrice";
 
 const bookRepo = new BookRepository(db);
 
@@ -40,12 +41,14 @@ export default async function HomePage({
     genre?: string;
     sort?: string;
     sortAs?: "asc" | "desc";
+    price?: string;
   };
 }) {
   const query: string = searchParams?.query || "";
   const currentPage = searchParams!.page || 1;
   const genre: string = searchParams!.genre || "";
   const sortBooksBy: string = searchParams!.sort || "";
+  const price = searchParams?.price || "";
   const sortAs: "asc" | "desc" = searchParams!.sortAs as "asc" | "desc";
   const sort = {
     sortValue: sortBooksBy,
@@ -53,7 +56,14 @@ export default async function HomePage({
   };
   const limit = 8;
   const offset = (Number(currentPage) - 1) * limit;
-  const fetchedBooks = await fetchBooks(query, limit, offset, genre, sort);
+  const fetchedBooks = await fetchBooks(
+    query,
+    limit,
+    offset,
+    genre,
+    sort,
+    price
+  );
   const books: IBook[] | undefined = fetchedBooks?.items;
   const totalBooks = fetchedBooks!.pagination.total;
   const genres = await getGenres();
@@ -64,10 +74,12 @@ export default async function HomePage({
       <div className="space-y-4">
         <div className="flex flex-wrap gap-4 mb-4 items-center">
           <div className="flex-grow sm:flex-grow-0">
-            <SearchBar type="Books" />
+            <SearchBar type="Books" /> 
           </div>
           {/* <SortBooks /> */}
           <FilterGenre genres={genres} />
+          <FilterBookByPrice />
+
           <Link href="/home/books/addBook">
             <Button className="bg-orange-500 hover:bg-orange-600 text-white">
               <Plus className="mr-2 h-4 w-4" /> Add Book
@@ -77,6 +89,11 @@ export default async function HomePage({
         <div className="rounded-md border border-orange-200 overflow-y-auto">
           <BookTable books={books!} />
         </div>
+        {books!.length === 0 && (
+          <p className="text-center text-CustomDarkOrange mt-4">
+            No books found.
+          </p>
+        )}
         <Pagination totalPages={totalPages} currentPage={Number(currentPage)} />
       </div>
     </>

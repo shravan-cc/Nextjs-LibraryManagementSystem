@@ -43,15 +43,20 @@ export async function authenticate(
 ) {
   try {
     console.log("Success");
+
     const result = await signIn("credentials", {
       redirect: false,
       email: formData.get("email"),
       password: formData.get("password"),
     });
-
-    if (result) {
-      redirect("/user");
+    const email = formData.get("email");
+    const userDetails = await memberRepo.getByEmail(email as string);
+    const userRole = userDetails!.role;
+    console.log(userRole);
+    if (userRole === "admin") {
+      redirect("/home");
     }
+    redirect("/user");
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -347,7 +352,8 @@ export async function fetchBooks(
   sort?: {
     sortValue: string;
     sortAs: "asc" | "desc";
-  }
+  },
+  price?: string
 ) {
   try {
     const books = await bookRepo.list({
@@ -356,6 +362,7 @@ export async function fetchBooks(
       offset: offset,
       genre: genre,
       sort: sort,
+      price: price,
     });
     if (books) {
       console.log("Received books");
@@ -399,7 +406,8 @@ export async function fetchTransactionDetails(
   search: string,
   limit: number,
   offset: number,
-  status: string
+  status: string,
+  duetoday?: string
 ) {
   try {
     const transactions = await transactionRepo.list({
@@ -407,6 +415,7 @@ export async function fetchTransactionDetails(
       limit: limit,
       offset: offset,
       status: status,
+      duetoday: duetoday,
     });
     if (transactions) {
       console.log("Received Transaction");
@@ -431,7 +440,7 @@ export async function getGenres() {
         }
         return acc;
       },
-      ["All"]
+      ["All Genres"]
     );
 }
 
@@ -527,6 +536,7 @@ export async function fetchBooksByMember() {
         author: BookTable.author,
         dueDate: TransactionTable.dueDate,
         status: TransactionTable.status,
+        borrowDate: TransactionTable.borrowDate,
       })
       .from(TransactionTable)
       .innerJoin(BookTable, eq(TransactionTable.bookId, BookTable.id))

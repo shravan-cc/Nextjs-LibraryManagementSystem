@@ -14,10 +14,10 @@ export default function AdminNavigation() {
       setActiveTab("dashboard");
     } else if (pathName.startsWith("/home/books")) {
       setActiveTab("books");
-    } else if (pathName.startsWith("/home/MyBooks")) {
-      setActiveTab("MyBooks");
-    } else if (pathName.startsWith("/home/requests")) {
-      setActiveTab("requests");
+    } else if (pathName.startsWith("/home/members")) {
+      setActiveTab("members");
+    } else if (pathName.startsWith("/home/transactions")) {
+      setActiveTab("transactions");
     }
   }, [pathName]);
   const NavItem = ({

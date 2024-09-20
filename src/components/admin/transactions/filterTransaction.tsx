@@ -14,7 +14,9 @@ export default function FilterTransactionByStatus() {
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const { replace } = useRouter();
-  const [statusValue, setStatusValue] = useState<string>("All");
+  const [statusValue, setStatusValue] = useState<string>(
+    (searchParams.get("status") as string) || "All"
+  );
 
   const handleValueChange = (term: string) => {
     const params = new URLSearchParams(searchParams);
@@ -33,9 +35,9 @@ export default function FilterTransactionByStatus() {
         <SelectValue placeholder="Filter by genre" />
       </SelectTrigger>
       <SelectContent>
-        {status.map((statusValue) => (
-          <SelectItem key={statusValue} value={statusValue}>
-            {statusValue}
+        {status.map((stats) => (
+          <SelectItem key={stats} value={stats}>
+            {stats}
           </SelectItem>
         ))}
       </SelectContent>

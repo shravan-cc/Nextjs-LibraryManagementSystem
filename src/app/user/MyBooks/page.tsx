@@ -1,5 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { fetchBooksByMember } from "@/lib/action";
+import {
+  Table,
+  TableHeader,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@/components/ui/table";
 
 export default async function MyBooks() {
   const borrowBooks = await fetchBooksByMember();
@@ -9,54 +17,64 @@ export default async function MyBooks() {
   const borrowedBooks = borrowBooks.filter(
     (book) => book.status === "approved"
   );
+
+  const isOverdue = (dueDate: string) => {
+    return new Date(dueDate) < new Date();
+  };
   return (
     <>
       <div className="space-y-4">
         <h2 className="text-2xl font-bold text-orange-800">My Books</h2>
         <div className="bg-white rounded-lg shadow overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-orange-100">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <Table>
+            <TableHeader className="bg-orange-50">
+              <TableRow>
+                <TableHead className="font-semibold text-orange-700">
                   Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700">
                   Author
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700">
+                  Borrowed Date
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700">
                   Due Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {borrowedBooks!.map((book) => (
-                <tr key={book.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {book.title}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {book.author}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {book.dueDate}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-xs hover:bg-orange-100"
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {borrowedBooks.map((book) => (
+                <TableRow
+                  key={book.id}
+                  className={` bg-white transition-colors ${
+                    isOverdue(book.dueDate!) ? "bg-red-50" : ""
+                  }`}
+                >
+                  <TableCell className="font-medium">{book.title}</TableCell>
+                  <TableCell>{book.author}</TableCell>
+                  <TableCell>{book.borrowDate}</TableCell>
+                  <TableCell>
+                    <span
+                      className={
+                        isOverdue(book.dueDate!)
+                          ? "text-red-600 font-semibold"
+                          : ""
+                      }
                     >
-                      Return
-                    </Button>
-                  </td>
-                </tr>
+                      {book.dueDate}
+                    </span>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
+        {borrowedBooks!.length === 0 && (
+          <p className="text-center text-CustomDarkOrange mt-4">
+            No books found.
+          </p>
+        )}
       </div>
     </>
   );

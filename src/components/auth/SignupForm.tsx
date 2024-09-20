@@ -47,6 +47,7 @@ export default function SignUpForm() {
               type="text"
               autoCapitalize="none"
               autoCorrect="off"
+              required
             />
             {state.errors?.firstName && (
               <p className="text-red-500 text-sm">{state.errors.firstName}</p>

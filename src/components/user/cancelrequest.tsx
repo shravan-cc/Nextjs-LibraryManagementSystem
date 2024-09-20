@@ -39,47 +39,45 @@ export default function CancelTransaction({
     router.refresh();
   };
   return (
-    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-xs hover:bg-orange-100"
+          disabled={request.status !== "pending"}
+        >
+          <Trash2 className="h-3 w-3 mr-1" /> Cancel
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to cancel this request ? This action cannot be
+            undone.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="sm:justify-start">
           <Button
-            variant="ghost"
-            size="sm"
-            className="text-xs hover:bg-orange-100"
-            disabled={request.status !== "pending"}
+            type="button"
+            variant="secondary"
+            onClick={() => setIsOpen(false)}
           >
-            <Trash2 className="h-3 w-3 mr-1" /> Cancel
+            Cancel
           </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to cancel this request ? This action cannot
-              be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="sm:justify-start">
+          {request.status === "pending" && (
             <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setIsOpen(false)}
+              variant="ghost"
+              size="sm"
+              className="text-xs hover:bg-orange-100"
+              onClick={handleDelete}
             >
-              Cancel
+              Delete
             </Button>
-            {request.status === "pending" && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-xs hover:bg-orange-100"
-                onClick={handleDelete}
-              >
-                Delete
-              </Button>
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </td>
+          )}
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
