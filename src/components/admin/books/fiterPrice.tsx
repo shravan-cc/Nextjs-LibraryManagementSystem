@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Select,
   SelectContent,
@@ -35,14 +36,19 @@ export default function FilterBookByPrice() {
     }
     replace(`${pathName}?${params.toString()}`);
   };
+
   return (
     <Select value={price} onValueChange={handleValueChange}>
-      <SelectTrigger className="w-[180px] bg-white">
-        <SelectValue placeholder="Filter by genre" />
+      <SelectTrigger className="w-[180px] bg-orange-50 border-orange-200 focus:border-CustomOrange focus:ring-CustomOrange transition-all duration-300">
+        <SelectValue placeholder="Filter by price" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-orange-50 border-orange-200">
         {priceValues.map((price) => (
-          <SelectItem key={price} value={price}>
+          <SelectItem
+            key={price}
+            value={price}
+            className="hover:bg-orange-100 transition-colors duration-200"
+          >
             {price}
           </SelectItem>
         ))}

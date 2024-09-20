@@ -1,3 +1,4 @@
+import { IBook } from "@/models/book.model";
 import { IMember } from "@/models/member.model";
 import { User } from "next-auth";
 import React from "react";
@@ -79,4 +80,24 @@ export interface StatCardProps {
 export interface SortState {
   sortValue: string;
   sortAs: "asc" | "desc" | null;
+}
+
+export interface MyBooksProps {
+  borrowedBooks: {
+    id: number;
+    title: string;
+    author: string;
+    dueDate: string | null;
+    status: string;
+    borrowDate: string | null;
+    imageURL: string | null;
+  }[];
+}
+
+export interface BookCardProps {
+  genres: string[];
+  books: IBook[] | undefined;
+  member: IMember;
+  totalPages: number;
+  currentPage: string | 1;
 }

@@ -1,6 +1,7 @@
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
+
 import {
   Card,
   CardContent,
@@ -36,6 +37,7 @@ import {
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Separator } from "@/components/ui/separator";
 import FilterBookByPrice from "@/components/admin/books/fiterPrice";
+import BookCard from "@/components/user/bookCard";
 
 const bookRepo = new BookRepository(db);
 
@@ -82,161 +84,13 @@ export default async function HomePage({
 
   return (
     <>
-      <div className="space-y-4">
-        <div className="flex flex-wrap gap-4 mb-4 items-center">
-          <div className="flex-grow sm:flex-grow-0">
-            <SearchBar type="Books" />
-          </div>
-          <SortBooks />
-          <FilterGenre genres={genres} />
-          <FilterBookByPrice />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {books?.map((book) => (
-            <Dialog key={book.id}>
-              <DialogTrigger asChild>
-                <Card className="overflow-hidden transition-transform duration-300 bg-white flex h-[250px] group hover:cursor-pointer hover:scale-105 hover:shadow-lg hover:border border border-transparent">
-                  <div className="w-1/2 relative overflow-hidden">
-                    {book.imageURL ? (
-                      <Image
-                        src={book.imageURL}
-                        alt={`Cover of ${book.title}`}
-                        layout="fill"
-                        objectFit="cover contain"
-                        className="h-full w-full transition-transform duration-300" // Subtle zoom effect on image
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200 p-4 transition-colors duration-300 group-hover:from-orange-200 group-hover:to-orange-300">
-                        <BookOpen className="h-16 w-16 text-orange-500 mb-2" />
-                        <h4 className="text-sm font-semibold text-center line-clamp-2 mb-1">
-                          {book.title}
-                        </h4>
-                        <p className="text-xs text-muted-foreground text-center line-clamp-1">
-                          {book.author}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                  <CardContent className="w-1/2 p-4 flex flex-col justify-between bg-gradient-to-br from-white to-gray-50 transition-colors duration-300 group-hover:from-gray-50 group-hover:to-gray-100">
-                    <div className="space-y-2">
-                      <h3 className="text-base font-semibold line-clamp-2">
-                        {book.title}
-                      </h3>
-                      <p className="text-xs text-muted-foreground line-clamp-1">
-                        {book.author}
-                      </p>
-                      <Badge variant="secondary" className="text-xs">
-                        {book.genre}
-                      </Badge>
-                    </div>
-                    <Separator className="my-2" />
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center space-x-1">
-                          <BookCopy className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-xs font-medium text-muted-foreground">
-                            {book.availableCopies}/{book.totalCopies}
-                          </span>
-                        </div>
-                        <span className="text-lg font-bold text-orange-600">
-                          ₹{book!.price}
-                        </span>
-                      </div>
-                      <IssueBook book={book} member={member} />
-                    </div>
-                  </CardContent>
-                </Card>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden">
-                <div className="flex h-[500px]">
-                  <div className="w-1/2 relative">
-                    {book.imageURL ? (
-                      <Image
-                        src={book.imageURL}
-                        alt={`Cover of ${book.title}`}
-                        layout="fill"
-                        objectFit="cover contain"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200 p-4 text-center">
-                        <BookOpen className="h-24 w-24 text-orange-500 mb-4" />
-                        <h3 className="font-bold text-xl">{book.title}</h3>
-                        <p className="text-sm text-muted-foreground mt-2">
-                          {book.author}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="w-1/2 p-6 overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl font-bold text-orange-600 mb-2">
-                        {book.title}
-                      </DialogTitle>
-                      <p className="text-sm text-gray-600 italic">
-                        by {book.author}
-                      </p>
-                    </DialogHeader>
-                    <Separator className="my-4" />
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="secondary" className="text-xs">
-                          {book.genre}
-                        </Badge>
-                        <span className="text-sm text-gray-600">•</span>
-                        <span className="text-sm text-gray-600">
-                          {book.pages} pages
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Building className="h-4 w-4 text-gray-600" />
-                        <span className="text-sm font-medium">
-                          {book.publisher}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Hash className="h-4 w-4 text-gray-600" />
-                        <span className="text-sm font-medium">
-                          ISBN: {book.isbnNo}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-1">
-                          <BookCopy className="h-4 w-4 text-gray-600" />
-                          <span className="text-sm font-medium">
-                            {book.availableCopies} of {book.totalCopies}{" "}
-                            available
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Users className="h-4 w-4 text-gray-600" />
-                          <span className="text-sm font-medium">
-                            {book.totalCopies - book.availableCopies} borrowed
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-lg font-bold text-green-600">
-                          ₹{book.price}
-                        </span>
-                      </div>
-                    </div>
-                    <Separator className="my-4" />
-                    <DialogFooter>
-                      <IssueBook book={book} member={member} />
-                    </DialogFooter>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          ))}
-        </div>
-        {books!.length === 0 && (
-          <p className="text-center text-CustomDarkOrange mt-4">
-            No books found.
-          </p>
-        )}
-        <Pagination totalPages={totalPages} currentPage={Number(currentPage)} />
-      </div>
+      <BookCard
+        genres={genres}
+        books={books}
+        member={member}
+        totalPages={totalPages}
+        currentPage={currentPage}
+      />
     </>
   );
 }

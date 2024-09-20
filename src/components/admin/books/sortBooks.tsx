@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Select,
   SelectContent,
@@ -27,15 +28,31 @@ export default function SortBooks() {
     }
     replace(`${pathName}?${params.toString()}`);
   };
+
   return (
     <Select value={sortBy} onValueChange={handleValueChange}>
-      <SelectTrigger className="w-[180px] bg-white">
+      <SelectTrigger className="w-[180px] bg-orange-50 border-orange-200 focus:border-CustomOrange focus:ring-CustomOrange transition-all duration-300">
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="title">Title</SelectItem>
-        <SelectItem value="author">Author</SelectItem>
-        <SelectItem value="availableCopies">Availability</SelectItem>
+      <SelectContent className="bg-orange-50 border-orange-200">
+        <SelectItem
+          value="title"
+          className="hover:bg-orange-100 transition-colors duration-200"
+        >
+          Title
+        </SelectItem>
+        <SelectItem
+          value="author"
+          className="hover:bg-orange-100 transition-colors duration-200"
+        >
+          Author
+        </SelectItem>
+        <SelectItem
+          value="availableCopies"
+          className="hover:bg-orange-100 transition-colors duration-200"
+        >
+          Availability
+        </SelectItem>
       </SelectContent>
     </Select>
   );

@@ -1,4 +1,5 @@
 "use client";
+
 import { BookIcon, FileText, LayoutDashboard, UsersIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,6 +9,7 @@ import { Button } from "./ui/button";
 export default function UserNavigation() {
   const pathName = usePathname();
   const [activeTab, setActiveTab] = useState("dashboard");
+
   useEffect(() => {
     if (pathName === "/user") {
       setActiveTab("dashboard");
@@ -19,6 +21,7 @@ export default function UserNavigation() {
       setActiveTab("requests");
     }
   }, [pathName]);
+
   const NavItem = ({
     icon,
     label,
@@ -38,10 +41,10 @@ export default function UserNavigation() {
       <Link href={path}>
         <Button
           variant={activeTab === value ? "default" : "ghost"}
-          className={`w-full justify-start ${
+          className={`w-full justify-start transition-all duration-300 ${
             isActive
-              ? "bg-orange-500 text-white hover:bg-CustomOrange"
-              : "hover:bg-CustomPeach bg-orange-50 text-black"
+              ? "bg-gradient-to-r from-orange-500 to-CustomOrange text-white hover:from-orange-600 hover:to-CustomDarkOrange"
+              : "hover:bg-orange-100 bg-transparent text-gray-700 hover:text-CustomOrange"
           }`}
           onClick={() => {
             setActiveTab(value);
@@ -53,6 +56,7 @@ export default function UserNavigation() {
       </Link>
     );
   };
+
   return (
     <>
       <NavItem

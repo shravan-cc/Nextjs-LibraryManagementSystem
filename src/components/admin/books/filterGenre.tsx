@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Select,
   SelectContent,
@@ -33,12 +34,16 @@ export default function FilterGenre({ genres }: filterGenreProps) {
 
   return (
     <Select value={genreValue} onValueChange={handleValueChange}>
-      <SelectTrigger className="w-[180px] bg-white">
+      <SelectTrigger className="w-[180px] bg-orange-50 border-orange-200 focus:border-CustomOrange focus:ring-CustomOrange transition-all duration-300">
         <SelectValue placeholder="Filter by genre" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-orange-50 border-orange-200">
         {genres.map((genre) => (
-          <SelectItem key={genre} value={genre}>
+          <SelectItem
+            key={genre}
+            value={genre}
+            className="hover:bg-orange-100 transition-colors duration-200"
+          >
             {genre}
           </SelectItem>
         ))}

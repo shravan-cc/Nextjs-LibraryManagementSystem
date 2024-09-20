@@ -537,6 +537,7 @@ export async function fetchBooksByMember() {
         dueDate: TransactionTable.dueDate,
         status: TransactionTable.status,
         borrowDate: TransactionTable.borrowDate,
+        imageURL: BookTable.imageURL,
       })
       .from(TransactionTable)
       .innerJoin(BookTable, eq(TransactionTable.bookId, BookTable.id))
