@@ -1,5 +1,4 @@
 "use client";
-
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
@@ -13,14 +12,7 @@ import { fetchBooks, fetchUserDetails, getGenres } from "@/lib/action";
 import { IBook } from "@/models/book.model";
 import { motion, AnimatePresence } from "framer-motion";
 
-import {
-  BookCopy,
-  BookOpen,
-  Building,
-  Hash,
-  InfoIcon,
-  Users,
-} from "lucide-react";
+import { BookCopy, BookOpen, Building, Hash, Users } from "lucide-react";
 
 import FilterGenre from "@/components/admin/books/filterGenre";
 import SortBooks from "@/components/admin/books/sortBooks";
@@ -53,7 +45,7 @@ export default function BookCard({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="container mx-auto px-4 py-8"
+      className="container mx-auto px-4 py-4"
     >
       <motion.h1
         initial={{ y: -20 }}
@@ -93,52 +85,74 @@ export default function BookCard({
                   exit={{ opacity: 0, y: -50 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-orange-50 to-white transform hover:scale-105 h-[180px]">
-                    <CardContent className="p-4 flex h-full">
-                      <div className="w-1/3 relative overflow-hidden rounded-lg">
-                        {book.imageURL ? (
-                          <Image
-                            src={book.imageURL}
-                            alt={`Cover of ${book.title}`}
-                            layout="fill"
-                            objectFit="cover"
-                            className="transition-transform duration-300 group-hover:scale-110"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-orange-100">
-                            <BookOpen size={48} className="text-orange-300" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="w-2/3 pl-4 flex flex-col justify-between">
-                        <div>
-                          <h3 className="text-lg font-semibold text-orange-800 line-clamp-2 mb-1">
-                            {book.title}
-                          </h3>
-                          <p className="text-sm text-orange-600 line-clamp-1 mb-2">
-                            {book.author}
-                          </p>
-                          <Badge variant="secondary" className="text-xs mb-2">
-                            {book.genre}
-                          </Badge>
+                  {/* Updated Card Styling - removed inner hover animations */}
+                  <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105 group relative">
+                    <div className="relative aspect-[4/5] w-full">
+                      {book.imageURL ? (
+                        <Image
+                          src={book.imageURL}
+                          alt={`Cover of ${book.title}`}
+                          layout="fill"
+                          objectFit="cover contain"
+                          className="transition-transform duration-300"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-orange-100">
+                          <BookOpen size={100} className="text-orange-300" />
                         </div>
-                        <div className="flex justify-between items-center text-sm">
-                          <div className="flex items-center space-x-1">
-                            <BookCopy className="h-4 w-4 text-orange-500" />
-                            <span className="text-xs font-medium text-orange-700">
-                              {book.availableCopies}/{book.totalCopies}
-                            </span>
-                          </div>
-                          <span className="text-lg font-bold text-orange-600">
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-80" />
+                      <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                        <motion.h3
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.3 + index * 0.1 }}
+                          className="text-xl font-semibold mb-2 line-clamp-2"
+                        >
+                          {book.title}
+                        </motion.h3>
+                        <motion.p
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.4 + index * 0.1 }}
+                          className="text-sm mb-4 line-clamp-1"
+                        >
+                          {book.author}
+                        </motion.p>
+                        {/* Available Copies & Price Section */}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.5 + index * 0.1 }}
+                          className="flex justify-between items-center text-xs"
+                        >
+                          {/* Available Copies as Badge */}
+                          <Badge variant="secondary">
+                            <div className="flex items-center space-x-1">
+                              <BookCopy className="h-4 w-4 text-gray-600" />
+                              <span className="text-xs font-medium">
+                                {book.availableCopies}/{book.totalCopies}
+                              </span>
+                            </div>
+                          </Badge>
+                          {/* Price in Bold Orange */}
+                          <span className="text-lg font-bold text-orange-500">
                             ₹{book.price}
                           </span>
-                        </div>
+                        </motion.div>
+                        {/* Borrow Button */}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.6 + index * 0.1 }}
+                          className="mt-4"
+                        >
+                          <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold">
+                            Borrow
+                          </Button>
+                        </motion.div>
                       </div>
-                    </CardContent>
-                    <div className="absolute inset-0 bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="absolute inset-0 animate-wave" />
-                      <div className="absolute inset-0 animate-wave animation-delay-1000" />
-                      <div className="absolute inset-0 animate-wave animation-delay-2000" />
                     </div>
                   </Card>
                 </motion.div>

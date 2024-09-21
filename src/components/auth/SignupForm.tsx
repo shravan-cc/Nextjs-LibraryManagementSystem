@@ -32,9 +32,15 @@ export default function SignUpForm() {
       });
     }
   }, [state.message, router, toast]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    formAction(formData);
+  };
   return (
     <>
-      <form action={formAction}>
+      <form onSubmit={handleSubmit}>
         <div className="grid gap-3">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="firstName">
