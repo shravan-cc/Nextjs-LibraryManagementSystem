@@ -5,8 +5,10 @@ import ProfileHandler from "./profileHandler";
 export default async function Profile() {
   const fetchedUserDetails = await fetchUserDetails();
   const userDetails = fetchedUserDetails?.userDetails;
+  console.log("Hi user", userDetails);
   const user = fetchedUserDetails?.user;
-  const userImage = user?.image || "/user.png";
+  const userImage =
+    user?.image || userDetails?.imageURL ? userDetails?.imageURL : "/user.png";
   const profilePath =
     userDetails?.role === "admin" ? "/home/profile" : "/user/profile";
   // console.log("Details of user", userDetails);

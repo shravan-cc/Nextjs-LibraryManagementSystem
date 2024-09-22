@@ -229,7 +229,7 @@ export default function UpdateBookForm({ books }: { books: IBook | null }) {
 
             <Input
               id="image"
-              type="file"
+              type="file" 
               name="image"
               accept="image/*"
               onChange={handleImageUpload}

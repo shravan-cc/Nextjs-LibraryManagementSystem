@@ -41,7 +41,7 @@ export default function DeleteMember({ member }: { member: IMember }) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-xs hover:bg-orange-100"
+          className="text-xs text-red-600 hover:bg-red-100 hover:text-red-700 focus:ring-red-500"
         >
           <Trash2 className="h-3 w-3 mr-1" /> Delete
         </Button>

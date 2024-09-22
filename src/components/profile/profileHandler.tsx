@@ -17,6 +17,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ProfileHandlerProps } from "@/lib/definition";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function ProfileHandler({
   profilePath,
@@ -26,14 +27,25 @@ export default function ProfileHandler({
   children,
 }: ProfileHandlerProps) {
   const [open, setOpen] = useState<boolean>(false);
+  // const router = useRouter();
+  // const pathName = usePathname();
+  // if (pathName.startsWith("/user/profile")) {
+  //   console.log("Round Profile");
+  //   // router.refresh();
+  // }
   return (
     <>
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <Image src={userImage} alt="User" width={32} height={32} />
-              <AvatarFallback>JD</AvatarFallback>
+              <Image
+                src={userImage as string}
+                alt="User"
+                width={32}
+                height={32}
+              />
+              {/* <AvatarFallback>JD</AvatarFallback> */}
             </Avatar>
           </Button>
         </DropdownMenuTrigger>

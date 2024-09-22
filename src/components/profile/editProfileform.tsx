@@ -1,20 +1,39 @@
 "use client";
 
-import { editMember, State } from "@/lib/action";
+import { editMember, State, uploadImage } from "@/lib/action";
 import { IMember } from "@/models/member.model";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useToast } from "../hooks/use-toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import Image from "next/image";
 
 export default function EditProfileForm({
   userDetails,
 }: {
   userDetails: IMember | undefined;
 }) {
+  const imageurl = userDetails?.imageURL ? userDetails.imageURL : "";
+  const [imageURL, setImageURL] = useState<string>(imageurl);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsUploading(true);
+      const result = await uploadImage(file);
+      setIsUploading(false);
+      if (result.imageURL) {
+        setImageURL(result.imageURL);
+      } else if (result.error) {
+        // Handle error
+        console.error(result.error);
+      }
+    }
+  };
   const initialState: State = { message: "", errors: {} };
   const [state, formAction] = useActionState(editMember, initialState);
   const { toast } = useToast();
@@ -31,6 +50,7 @@ export default function EditProfileForm({
         className: "bg-green-100 border-green-500 text-green-800 shadow-lg",
       });
       router.push(path);
+      router.refresh();
     }
   }, [state.message, toast, router, path]);
   return (
@@ -98,19 +118,46 @@ export default function EditProfileForm({
                 autoCorrect="off"
               />
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="address" className="text-orange-800">
-              Address
-            </Label>
-            <Textarea
-              id="address"
-              name="address"
-              className="border-orange-200 focus:border-orange-500 focus:ring-orange-500 "
-              defaultValue={userDetails!.address}
-              autoCapitalize="none"
-              autoCorrect="off"
-            />
+            <div className="space-y-2">
+              <Label htmlFor="address" className="text-orange-800">
+                Address
+              </Label>
+              <Textarea
+                id="address"
+                name="address"
+                className="border-orange-200 focus:border-orange-500 focus:ring-orange-500 "
+                defaultValue={userDetails!.address}
+                autoCapitalize="none"
+                autoCorrect="off"
+              />
+            </div>
+            <div>
+              <Label htmlFor="image" className="text-orange-800">
+                Upload Image
+              </Label>
+
+              <Input
+                id="image"
+                type="file"
+                name="image"
+                accept="image/*"
+                className="border-orange-200 focus:border-orange-500 focus:ring-orange-500 mt-2"
+                onChange={handleImageUpload}
+              />
+              {imageURL && (
+                <div className="mt-2 mb-2">
+                  <Image
+                    src={imageURL}
+                    alt="Book cover preview"
+                    width={20}
+                    height={20}
+                    className="object-cover rounded"
+                  />
+                </div>
+              )}
+              {isUploading && <p>Uploading image...</p>}
+              <input type="hidden" name="imageURL" value={imageURL} />
+            </div>
           </div>
         </div>
         <Button

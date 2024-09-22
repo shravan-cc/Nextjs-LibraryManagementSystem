@@ -50,13 +50,13 @@ export interface ProfileHandlerProps {
   profilePath: string;
   // editProfilePath: string;
   userDetails: IMember | undefined;
-  userImage: string;
+  userImage: string | null | undefined;
   children: React.ReactNode;
 }
 
 export interface ViewProfileProps {
   userDetails: IMember | undefined;
-  userImage: string;
+  userImage: string | null | undefined;
   user: User | undefined;
 }
 

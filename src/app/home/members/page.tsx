@@ -80,13 +80,13 @@ export default async function Members({
                   <TableCell>{member.address}</TableCell>
                   <TableCell>
                     <div className="flex justify-center space-x-2">
-                      <Button
+                      {/* <Button
                         variant="outline"
                         size="sm"
                         className="text-xs bg-orange-50 border-orange-200 hover:bg-orange-100 text-orange-600 transition-colors"
                       >
                         <Edit className="h-3 w-3 mr-1" /> Edit
-                      </Button>
+                      </Button> */}
                       <DeleteMember member={member} />
                     </div>
                   </TableCell>

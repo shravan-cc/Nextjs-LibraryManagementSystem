@@ -314,6 +314,9 @@ export async function editMember(prevState: State, formData: FormData) {
     role: "user",
   });
 
+  const imageURL = formData.get("imageURL") as string;
+  console.log("URL", imageURL);
+
   if (!validateFields.success) {
     console.log("Failure");
     console.log(validateFields.error.flatten().fieldErrors);
@@ -322,9 +325,9 @@ export async function editMember(prevState: State, formData: FormData) {
       message: "Missing Fields. Failed to Register.",
     };
   }
-
-  const { firstName, lastName, phone, address, email, role } =
-    validateFields.data;
+  const userDetails = await fetchUserDetails();
+  const role = userDetails?.userDetails.role;
+  const { firstName, lastName, phone, address, email } = validateFields.data;
 
   if (!firstName || !lastName || !phone || !address || !email) {
     console.log("All fields are required");
@@ -332,10 +335,15 @@ export async function editMember(prevState: State, formData: FormData) {
   }
   try {
     const existingUser = await memberRepo.getByEmail(email);
-    const editedMember = await memberRepo.update(
-      existingUser!.id,
-      validateFields.data
-    );
+    const editedMember = await memberRepo.update(existingUser!.id, {
+      email,
+      firstName,
+      lastName,
+      phone,
+      address,
+      role,
+      imageURL,
+    });
     console.log(`Member ${editedMember!.firstName} edited successfully!`);
     return { message: "Success" };
   } catch (error) {

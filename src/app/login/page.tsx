@@ -34,7 +34,7 @@ export default function LoginPage() {
                 </div>
               </div>
               <div className="flex justify-center items-center">
-                <GoogleAuth buttonLabel="Login in with Google" />
+                <GoogleAuth buttonLabel="Login with Google" />
               </div>
             </CardContent>
             <CardFooter className="flex justify-center">

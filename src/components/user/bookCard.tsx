@@ -85,7 +85,6 @@ export default function BookCard({
                   exit={{ opacity: 0, y: -50 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  {/* Updated Card Styling - removed inner hover animations */}
                   <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105 group relative">
                     <div className="relative aspect-[4/5] w-full">
                       {book.imageURL ? (
@@ -120,14 +119,13 @@ export default function BookCard({
                         >
                           {book.author}
                         </motion.p>
-                        {/* Available Copies & Price Section */}
+
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.5 + index * 0.1 }}
                           className="flex justify-between items-center text-xs"
                         >
-                          {/* Available Copies as Badge */}
                           <Badge variant="secondary">
                             <div className="flex items-center space-x-1">
                               <BookCopy className="h-4 w-4 text-gray-600" />
@@ -136,25 +134,30 @@ export default function BookCard({
                               </span>
                             </div>
                           </Badge>
-                          {/* Price in Bold Orange */}
-                          <span className="text-lg font-bold text-orange-500">
-                            ₹{book.price}
-                          </span>
                         </motion.div>
-                        {/* Borrow Button */}
+
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.6 + index * 0.1 }}
-                          className="mt-4"
+                          className="mt-4 flex justify-between items-center"
                         >
-                          <IssueBook book={book} member={member} />
+                          <Badge
+                            variant="outline"
+                            className="text-xs font-medium text-white/80 border-orange-500/50 bg-orange-500/50"
+                          >
+                            ₹{book.price}
+                          </Badge>
+                          <div className="text-white/80 hover:text-white transition-colors duration-200">
+                            <IssueBook book={book} member={member} />
+                          </div>
                         </motion.div>
                       </div>
                     </div>
                   </Card>
                 </motion.div>
               </DialogTrigger>
+
               <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden">
                 <div className="flex h-[500px]">
                   <div className="w-1/2 relative">
@@ -163,7 +166,7 @@ export default function BookCard({
                         src={book.imageURL}
                         alt={`Cover of ${book.title}`}
                         layout="fill"
-                        objectFit="cover"
+                        objectFit="cover contain"
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200 p-4 text-center">
@@ -222,14 +225,14 @@ export default function BookCard({
                           </span>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-lg font-bold text-green-600">
+                      <div className="flex items-center justify-between mt-4">
+                        <span className="text-lg font-bold text-orange-600">
                           ₹{book.price}
                         </span>
                       </div>
                     </div>
                     <Separator className="my-4" />
-                    <DialogFooter>
+                    <DialogFooter className="mt-6">
                       <IssueBook book={book} member={member} />
                     </DialogFooter>
                   </div>
@@ -240,20 +243,9 @@ export default function BookCard({
         </motion.div>
       </AnimatePresence>
 
-      {books!.length === 0 && (
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="text-center text-CustomDarkOrange mt-8 text-lg"
-        >
-          No books found. Try adjusting your search or filters.
-        </motion.p>
+      {totalPages > 1 && (
+        <Pagination currentPage={Number(currentPage)} totalPages={totalPages} />
       )}
-
-      <div className="mt-8">
-        <Pagination totalPages={totalPages} currentPage={Number(currentPage)} />
-      </div>
     </motion.div>
   );
 }

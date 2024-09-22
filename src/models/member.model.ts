@@ -46,6 +46,7 @@ export const memberBaseSchema = z.object({
     .max(255, { message: "Email must be no longer than 255 characters" }),
 
   password: z.string(),
+  imageURL: z.string().optional().nullable(),
 });
 
 export const editMemberSchema = memberBaseSchema.omit({

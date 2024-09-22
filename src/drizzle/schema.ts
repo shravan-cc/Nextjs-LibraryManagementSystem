@@ -29,6 +29,7 @@ export const MemberTable = pgTable("members", {
   role: varchar("role", { length: 100 }).notNull(),
   password: varchar("password", { length: 100 }).notNull(),
   email: varchar("email", { length: 100 }).unique().notNull(),
+  imageURL: varchar("imageURL", { length: 255 }),
   refreshToken: varchar("refreshToken", { length: 100 }).unique(),
 });
 

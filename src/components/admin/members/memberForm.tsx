@@ -35,10 +35,15 @@ export default function MemberForm() {
       });
     }
   }, [state.message, toast, router]);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    formAction(formData);
+  };
   return (
     <>
       <form
-        action={formAction}
+        onSubmit={handleSubmit}
         className="space-y-6 bg-white p-6 rounded-lg shadow-md"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">

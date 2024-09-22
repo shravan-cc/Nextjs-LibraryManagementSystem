@@ -147,12 +147,14 @@ export class TransactionRepository
         offset: params.offset,
         limit: params.limit,
       };
+      const search = params.search;
       const status = params.status;
       const dueDate = params.duetoday;
       console.log("DueDtae", dueDate);
       const whereExpression = and(
         status ? eq(TransactionTable.status, status) : undefined,
-        dueDate ? eq(TransactionTable.dueDate, dueDate) : undefined
+        dueDate ? eq(TransactionTable.dueDate, dueDate) : undefined,
+        search ? eq(TransactionTable.id, Number(search)) : undefined
       );
 
       const transactions = await this.db
