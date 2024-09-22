@@ -5,9 +5,16 @@ import RejectTransaction from "@/components/admin/transactions/rejectTransaction
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
 import ReturnBook from "@/components/user/returnBook";
 import { fetchTransactionDetails } from "@/lib/action";
+import {
+  Table,
+  TableHeader,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@/components/ui/table";
 
 export default async function Transactions({
   searchParams,
@@ -35,64 +42,73 @@ export default async function Transactions({
   const transactions = fetchedTransactions!.items;
   const totalTransactions = fetchedTransactions!.pagination.total;
   const totalPages = Math.ceil(totalTransactions / limit);
-  console.log(totalPages);
+
   return (
     <>
       <div className="space-y-4">
+        <h2 className="text-2xl font-bold text-orange-800">Transactions</h2>
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-orange-800">Transactions</h2>
-        </div>
-        <div className="flex flex-wrap gap-4 mb-4 items-center">
           <SearchBar type="Transactions" />
-          <FilterTransactionByStatus />
-          <CheckDueToday />
+          <div className="flex space-x-4">
+            <FilterTransactionByStatus />
+            <CheckDueToday />
+          </div>
         </div>
         <div className="bg-white rounded-lg shadow overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-orange-100">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <Table>
+            <TableHeader className="bg-orange-50">
+              <TableRow>
+                <TableHead className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors">
                   ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors">
                   Book ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors">
                   Member ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors">
+                  Book Title
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors">
+                  Member Name
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors">
                   Borrow Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors">
                   Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors">
                   Due Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700 cursor-pointer hover:bg-orange-100 transition-colors">
                   Returned Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </TableHead>
+                <TableHead className="font-semibold text-orange-700 text-center">
                   Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {transactions!.map((transaction) => (
-                <tr key={transaction.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {transactions.map((transaction) => (
+                <TableRow
+                  key={transaction.id}
+                  className="bg-white transition-colors"
+                >
+                  <TableCell className="font-medium text-right">
                     {transaction.id}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  </TableCell>
+                  <TableCell className="text-right">
                     {transaction.bookId}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  </TableCell>
+                  <TableCell className="text-right">
                     {transaction.memberId}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {transaction.borrowDate}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  </TableCell>
+                  <TableCell>{transaction.title}</TableCell>
+                  <TableCell>{`${transaction.firstName} ${transaction.lastName}`}</TableCell>
+                  <TableCell>{transaction.borrowDate}</TableCell>
+                  <TableCell>
                     <Badge
                       variant={
                         transaction.status === "approved"
@@ -104,32 +120,38 @@ export default async function Transactions({
                     >
                       {transaction.status}
                     </Badge>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {transaction.dueDate}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {transaction.returnDate}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div className="flex space-x-2">
-                      <ApproveTransaction transaction={transaction} />
-                      <RejectTransaction transaction={transaction} />
-                      <ReturnBook
-                        bookId={transaction.bookId}
-                        memberId={transaction.memberId}
-                        status={transaction.status}
-                      />
+                  </TableCell>
+                  <TableCell>{transaction.dueDate}</TableCell>
+                  <TableCell>
+                    {transaction.returnDate || "Not returned"}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex justify-center space-x-2">
+                      {transaction.status === "pending" && (
+                        <ApproveTransaction transaction={transaction} />
+                      )}
+
+                      {transaction.status === "pending" && (
+                        <RejectTransaction transaction={transaction} />
+                      )}
+
+                      {transaction.status === "approved" && (
+                        <ReturnBook
+                          bookId={transaction.bookId}
+                          memberId={transaction.memberId}
+                          status={transaction.status}
+                        />
+                      )}
                     </div>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
-        {transactions!.length === 0 && (
+        {transactions.length === 0 && (
           <p className="text-center text-CustomDarkOrange mt-4">
-            No Transactions requests found.
+            No Transactions found.
           </p>
         )}
         <Pagination currentPage={Number(currentPage)} totalPages={totalPages} />

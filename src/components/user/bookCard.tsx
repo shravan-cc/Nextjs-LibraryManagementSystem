@@ -148,9 +148,7 @@ export default function BookCard({
                           transition={{ delay: 0.6 + index * 0.1 }}
                           className="mt-4"
                         >
-                          <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold">
-                            Borrow
-                          </Button>
+                          <IssueBook book={book} member={member} />
                         </motion.div>
                       </div>
                     </div>

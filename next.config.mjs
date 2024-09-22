@@ -9,6 +9,10 @@ const nextConfig = {
       "res.cloudinary.com",
     ],
   },
+  il8n: {
+    locales: ["en", "kn"],
+    defaultLocale: "en",
+  },
 };
 
 export default nextConfig;

@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
 
 export default function Home() {
+  const { t } = useTranslation("common");
   return (
     <div className="min-h-screen bg-[#fee7d6]">
       <header className="bg-[#ffd1b0] p-4 shadow-md">
@@ -33,7 +35,7 @@ export default function Home() {
       <main className="container mx-auto mt-8 px-4">
         <section className="text-center py-12">
           <h2 className="text-4xl font-bold text-[#F25019] mb-4">
-            Welcome to ShravanReads
+            {t("Welcome")} to ShravanReads
           </h2>
           <p className="text-xl text-gray-700 mb-8">
             Your gateway to a world of knowledge and imagination

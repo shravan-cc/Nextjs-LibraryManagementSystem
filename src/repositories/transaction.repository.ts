@@ -2,7 +2,7 @@ import { PageOption } from "@/lib/definition";
 import { ITransaction, ITransactionBase } from "@/models/transaction.model";
 import { and, count, desc, eq } from "drizzle-orm";
 import { MySql2Database } from "drizzle-orm/mysql2";
-import { BookTable, TransactionTable } from "../drizzle/schema";
+import { BookTable, MemberTable, TransactionTable } from "../drizzle/schema";
 import { IPagedResponse, IPageRequest } from "./pagination.response";
 import { ITransactionRepository } from "./repository";
 import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
@@ -141,7 +141,7 @@ export class TransactionRepository
     }
   }
 
-  async list(params: IPageRequest): Promise<IPagedResponse<ITransaction>> {
+  async list(params: IPageRequest) {
     try {
       const pageOpts: PageOption = {
         offset: params.offset,
@@ -156,8 +156,21 @@ export class TransactionRepository
       );
 
       const transactions = await this.db
-        .select()
+        .select({
+          id: TransactionTable.id,
+          bookId: TransactionTable.bookId,
+          memberId: TransactionTable.memberId,
+          borrowDate: TransactionTable.borrowDate,
+          dueDate: TransactionTable.dueDate,
+          status: TransactionTable.status,
+          returnDate: TransactionTable.returnDate,
+          title: BookTable.title,
+          firstName: MemberTable.firstName,
+          lastName: MemberTable.lastName,
+        })
         .from(TransactionTable)
+        .leftJoin(BookTable, eq(TransactionTable.bookId, BookTable.id))
+        .leftJoin(MemberTable, eq(TransactionTable.memberId, MemberTable.id))
         .where(whereExpression)
         .orderBy(desc(TransactionTable.id))
         .limit(params.limit)
@@ -170,7 +183,7 @@ export class TransactionRepository
 
       const totalTransaction = totalTransactionRows.count;
       return {
-        items: transactions as ITransaction[],
+        items: transactions,
         pagination: {
           offset: params.offset,
           limit: params.limit,
