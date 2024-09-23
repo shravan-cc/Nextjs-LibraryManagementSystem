@@ -25,7 +25,10 @@ export default async function ViewProfile({
     (book) => book.status === "approved"
   );
 
-  const totalBorrowedBooks = await fetchTotalBooksOfMember();
+  const totalBorrowed = await fetchTotalBooksOfMember();
+  const totalBorrowedBooks = totalBorrowed?.filter(
+    (book) => book.status === "approved" || book.status === "Returned"
+  );
   // console.log("Profile", user?.role);
   // console.log("USerDetails in view Profile", userDetails?.role);
   const path =
