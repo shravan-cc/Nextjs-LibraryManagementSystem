@@ -456,6 +456,8 @@ export async function fetchUserDetails() {
   const session = await auth();
   // console.log("In fetch User Details session", session);
   const user = session!.user;
+  console.log("User", user);
+  console.log("User session", user?.image);
   const email = user!.email;
   try {
     const userDetails = await memberRepo.getByEmail(email as string);

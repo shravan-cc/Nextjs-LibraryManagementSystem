@@ -48,7 +48,9 @@ export default function ProfileHandler({
                 />
               ) : (
                 <AvatarFallback className="bg-orange-200 text-orange-800">
-                  {`${userDetails?.firstName} ${userDetails?.lastName}`}
+                  {`${userDetails?.firstName.charAt(
+                    0
+                  )} ${userDetails?.lastName.charAt(0)}`}
                 </AvatarFallback>
               )}
             </Avatar>

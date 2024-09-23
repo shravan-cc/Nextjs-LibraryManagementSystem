@@ -1,4 +1,5 @@
 "use client";
+
 import Pagination from "@/components/home/pagination";
 import SearchBar from "@/components/home/search";
 import { Badge } from "@/components/ui/badge";
@@ -102,56 +103,61 @@ export default function BookCard({
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-80" />
-                      <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                        <motion.h3
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.3 + index * 0.1 }}
-                          className="text-xl font-semibold mb-2 line-clamp-2"
-                        >
-                          {book.title}
-                        </motion.h3>
-                        <motion.p
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.4 + index * 0.1 }}
-                          className="text-sm mb-4 line-clamp-1"
-                        >
-                          {book.author}
-                        </motion.p>
-
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.5 + index * 0.1 }}
-                          className="flex justify-between items-center text-xs"
-                        >
-                          <Badge variant="secondary">
-                            <div className="flex items-center space-x-1">
-                              <BookCopy className="h-4 w-4 text-gray-600" />
-                              <span className="text-xs font-medium">
-                                {book.availableCopies}/{book.totalCopies}
-                              </span>
-                            </div>
-                          </Badge>
-                        </motion.div>
-
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.6 + index * 0.1 }}
-                          className="mt-4 flex justify-between items-center"
-                        >
-                          <Badge
-                            variant="outline"
-                            className="text-xs font-medium text-white/80 border-orange-500/50 bg-orange-500/50"
+                      <div className="absolute inset-0 flex flex-col justify-end ">
+                        <div className="backdrop-blur-[3px] bg-white/30 rounded-t-3xl p-4 py-1 transition-all duration-300 group-hover:backdrop-blur-[3px] group-hover:bg-white/50">
+                          <motion.h3
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 + index * 0.1 }}
+                            className="text-xl font-semibold mb-1 line-clamp-1 text-white"
                           >
-                            ₹{book.price}
-                          </Badge>
-                          <div className="text-white/80 hover:text-white transition-colors duration-200">
-                            <IssueBook book={book} member={member} />
-                          </div>
-                        </motion.div>
+                            {book.title}
+                          </motion.h3>
+                          <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.4 + index * 0.1 }}
+                            className="text-sm mb-2 line-clamp-1 text-white/80"
+                          >
+                            {book.author}
+                          </motion.p>
+
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5 + index * 0.1 }}
+                            className="flex justify-between items-center text-xs"
+                          >
+                            <Badge
+                              variant="secondary"
+                              className="bg-white/50 text-gray-800"
+                            >
+                              <div className="flex items-center space-x-1">
+                                <BookCopy className="h-4 w-4 text-gray-600" />
+                                <span className="text-xs font-medium">
+                                  {book.availableCopies}/{book.totalCopies}
+                                </span>
+                              </div>
+                            </Badge>
+                          </motion.div>
+
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.6 + index * 0.1 }}
+                            className="mt-2 flex justify-between items-center"
+                          >
+                            <Badge
+                              variant="outline"
+                              className="text-xs font-medium text-white border-orange-500/50 bg-orange-500/50"
+                            >
+                              ₹{book.price}
+                            </Badge>
+                            <div className="text-white/80 hover:text-white transition-colors duration-200">
+                              <IssueBook book={book} member={member} />
+                            </div>
+                          </motion.div>
+                        </div>
                       </div>
                     </div>
                   </Card>

@@ -5,7 +5,11 @@ export default async function Profile() {
   const fetchedUserDetails = await fetchUserDetails();
   const userDetails = fetchedUserDetails?.userDetails;
   const user = fetchedUserDetails?.user;
-  const userImage = user?.image || "/user.png";
+  const userImage = user?.image
+    ? user.image
+    : userDetails?.imageURL
+    ? userDetails.imageURL
+    : "/user.png";
   return (
     <>
       <ViewProfile

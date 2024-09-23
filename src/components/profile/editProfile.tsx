@@ -8,8 +8,11 @@ export default async function EditProfile() {
   const fetchedUserDetails = await fetchUserDetails();
   const userDetails = fetchedUserDetails?.userDetails;
   const user = fetchedUserDetails?.user;
-  const userImage =
-    user?.image || userDetails?.imageURL ? userDetails?.imageURL : "/user.png";
+  const userImage = user?.image
+    ? user.image
+    : userDetails?.imageURL
+    ? userDetails.imageURL
+    : "/user.png";
   return (
     <div className="space-y-4">
       <h2 className="text-3xl font-bold text-orange-800 text-center">
@@ -28,7 +31,9 @@ export default async function EditProfile() {
                 />
               ) : (
                 <AvatarFallback className="bg-orange-200 text-orange-800">
-                  {`${userDetails?.firstName} ${userDetails?.lastName}`}
+                  {`${userDetails?.firstName.charAt(
+                    0
+                  )} ${userDetails?.lastName.charAt(0)}`}
                 </AvatarFallback>
               )}
             </Avatar>

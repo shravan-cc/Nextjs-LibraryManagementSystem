@@ -7,15 +7,18 @@ export default async function Profile() {
   const userDetails = fetchedUserDetails?.userDetails;
   console.log("Hi user", userDetails);
   const user = fetchedUserDetails?.user;
-  const userImage =
-    user?.image || userDetails?.imageURL ? userDetails?.imageURL : "/user.png";
+  console.log("Inside function", user?.image);
+  const userImage = user?.image
+    ? user.image
+    : userDetails?.imageURL
+    ? userDetails.imageURL
+    : "/user.png";
   const profilePath =
     userDetails?.role === "admin" ? "/home/profile" : "/user/profile";
   // console.log("Details of user", userDetails);
   // console.log("In Profile", user?.role);
   // const editProfilePath =
   //   user?.role === "admin" ? "/home/editprofile" : "/user/editprofile";
-  console.log(userImage);
   return (
     <div className="ml-auto">
       <ProfileHandler
