@@ -1,12 +1,18 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 
 export default function Home() {
+  const t = useTranslations("Home");
   return (
     <div className="min-h-screen bg-[#fee7d6]">
       <header className="bg-[#ffd1b0] p-4 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-[#F25019]">ShravanReads</h1>
+          <h1 className="text-2xl font-bold text-[#F25019]">
+            {t("ShravanReads")}
+          </h1>
+          <LocaleSwitcher />
           <nav>
             <Button
               variant="ghost"
