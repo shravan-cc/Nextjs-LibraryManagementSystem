@@ -44,15 +44,18 @@ export default async function ViewProfile({
         <CardHeader className="relative">
           <div className="absolute -top-16 left-6">
             <Avatar className="sm:h-32 sm:w-32 h-24 w-24 border-4 border-white shadow-xl">
-              <Image
-                src={userImage as string}
-                alt={userDetails!.firstName}
-                width={128}
-                height={128}
-              />
-              {/* <AvatarFallback className="text-3xl bg-orange-200 text-orange-800">
-                {`${userDetails?.firstName} ${userDetails?.lastName}`}
-              </AvatarFallback> */}
+              {userImage ? (
+                <Image
+                  src={userImage}
+                  alt={userDetails!.firstName}
+                  width={128}
+                  height={128}
+                />
+              ) : (
+                <AvatarFallback className="bg-orange-200 text-orange-800">
+                  {`${userDetails?.firstName} ${userDetails?.lastName}`}
+                </AvatarFallback>
+              )}
             </Avatar>
           </div>
           <div className="ml-32 sm:ml-40 pt-2 flex flex-col sm:flex-row justify-between items-start">

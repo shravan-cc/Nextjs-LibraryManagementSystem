@@ -39,13 +39,18 @@ export default function ProfileHandler({
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <Image
-                src={userImage as string}
-                alt="User"
-                width={32}
-                height={32}
-              />
-              {/* <AvatarFallback>JD</AvatarFallback> */}
+              {userImage ? (
+                <Image
+                  src={userImage}
+                  alt={userDetails!.firstName}
+                  width={128}
+                  height={128}
+                />
+              ) : (
+                <AvatarFallback className="bg-orange-200 text-orange-800">
+                  {`${userDetails?.firstName} ${userDetails?.lastName}`}
+                </AvatarFallback>
+              )}
             </Avatar>
           </Button>
         </DropdownMenuTrigger>

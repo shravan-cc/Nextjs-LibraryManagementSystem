@@ -19,15 +19,18 @@ export default async function EditProfile() {
         <CardHeader className="bg-gradient-to-r from-orange-400 to-orange-600">
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20 border-4 border-white">
-              <Image
-                src={userImage as string}
-                alt={userDetails!.firstName}
-                width={128}
-                height={128}
-              />
-              {/* <AvatarFallback className="bg-orange-200 text-orange-800">
-                {`${userDetails?.firstName} ${userDetails?.lastName}`}
-              </AvatarFallback> */}
+              {userImage ? (
+                <Image
+                  src={userImage}
+                  alt={userDetails!.firstName}
+                  width={128}
+                  height={128}
+                />
+              ) : (
+                <AvatarFallback className="bg-orange-200 text-orange-800">
+                  {`${userDetails?.firstName} ${userDetails?.lastName}`}
+                </AvatarFallback>
+              )}
             </Avatar>
             <div>
               <CardTitle className="text-2xl text-white">{`${userDetails?.firstName} ${userDetails?.lastName}`}</CardTitle>
