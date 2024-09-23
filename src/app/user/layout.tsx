@@ -3,12 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import UserNavigation from "@/components/user-nav";
 import { Menu } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const t = useTranslations("SideBar");
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-CustomPeach to-orange-100">
       <header className="sticky top-0 z-10 px-4 lg:px-6 h-16 flex items-center justify-between border-b bg-white bg-opacity-90 backdrop-blur-md shadow-md transition-all duration-300">
@@ -34,7 +36,7 @@ export default function DashboardLayout({
             </SheetContent>
           </Sheet>
           <h1 className="font-bold text-2xl md:text-3xl text-CustomOrange ml-2 md:ml-0">
-            Library Management System
+            {t("ShravanReads")}
           </h1>
         </div>
         <Profile />
