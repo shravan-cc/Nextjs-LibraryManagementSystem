@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { ProfileHandlerProps } from "@/lib/definition";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export default function ProfileHandler({
   profilePath,
@@ -26,6 +27,7 @@ export default function ProfileHandler({
   userImage,
   children,
 }: ProfileHandlerProps) {
+  const t = useTranslations("Profile");
   const [open, setOpen] = useState<boolean>(false);
   // const router = useRouter();
   // const pathName = usePathname();
@@ -69,10 +71,10 @@ export default function ProfileHandler({
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <div onClick={() => setOpen(false)}>
+            <div onClick={() => setOpen(false)} className="w-full">
               <Link className="flex" href={profilePath}>
                 <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+                <span>{t("Profile")}</span>
               </Link>
             </div>
           </DropdownMenuItem>

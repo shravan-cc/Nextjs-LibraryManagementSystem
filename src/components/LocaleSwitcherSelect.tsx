@@ -1,11 +1,10 @@
 "use client";
 
 import * as Select from "@radix-ui/react-select";
-import clsx from "clsx";
 import { useTransition } from "react";
 import { setUserLocale } from "@/services/locale";
 import { Locale } from "@/i18n/config";
-import { CheckIcon, LanguagesIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, GlobeIcon } from "lucide-react";
 
 type Props = {
   defaultValue: string;
@@ -32,38 +31,47 @@ export default function LocaleSwitcherSelect({
       <Select.Root defaultValue={defaultValue} onValueChange={onChange}>
         <Select.Trigger
           aria-label={label}
-          className={clsx(
-            "rounded-sm p-2 transition-colors hover:bg-slate-200",
-            isPending && "pointer-events-none opacity-60"
-          )}
+          className={`
+            flex items-center justify-between rounded-md border border-orange-200 bg-white px-3 py-2 text-sm
+            shadow-sm transition-all duration-200 ease-in-out
+            hover:bg-orange-50 hover:border-orange-300 focus:outline-none focus:ring-2 focus:ring-orange-500
+            ${isPending ? "pointer-events-none opacity-60" : ""}
+          `}
         >
+          <div className="flex items-center">
+            <GlobeIcon className="mr-2 h-4 w-4 text-orange-500" />
+            <Select.Value />
+          </div>
           <Select.Icon>
-            <LanguagesIcon className="h-6 w-6 text-slate-600 transition-colors group-hover:text-slate-900" />
+            <ChevronDownIcon className="h-4 w-4 text-orange-500" />
           </Select.Icon>
         </Select.Trigger>
         <Select.Portal>
           <Select.Content
             align="end"
-            className="min-w-[8rem] overflow-hidden rounded-sm bg-white py-1 shadow-md"
+            className="overflow-hidden rounded-md border border-orange-200 bg-white shadow-lg"
             position="popper"
           >
-            <Select.Viewport>
+            <Select.ScrollUpButton className="flex items-center justify-center h-[25px] bg-white text-orange-500 cursor-default">
+              <ChevronDownIcon className="h-4 w-4 rotate-180" />
+            </Select.ScrollUpButton>
+            <Select.Viewport className="p-1">
               {items.map((item) => (
                 <Select.Item
                   key={item.value}
-                  className="flex cursor-default items-center px-3 py-2 text-base data-[highlighted]:bg-slate-100"
                   value={item.value}
+                  className="relative flex items-center px-8 py-2 text-sm text-gray-700 rounded-sm select-none hover:bg-orange-100 focus:bg-orange-100 focus:outline-none"
                 >
-                  <div className="mr-2 w-[1rem]">
-                    {item.value === defaultValue && (
-                      <CheckIcon className="h-5 w-5 text-slate-600" />
-                    )}
-                  </div>
-                  <span className="text-slate-900">{item.label}</span>
+                  <Select.ItemText>{item.label}</Select.ItemText>
+                  <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
+                    <CheckIcon className="h-4 w-4 text-orange-500" />
+                  </Select.ItemIndicator>
                 </Select.Item>
               ))}
             </Select.Viewport>
-            <Select.Arrow className="fill-white text-white" />
+            <Select.ScrollDownButton className="flex items-center justify-center h-[25px] bg-white text-orange-500 cursor-default">
+              <ChevronDownIcon className="h-4 w-4" />
+            </Select.ScrollDownButton>
           </Select.Content>
         </Select.Portal>
       </Select.Root>

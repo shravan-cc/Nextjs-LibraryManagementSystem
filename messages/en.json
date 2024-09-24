@@ -36,7 +36,7 @@
     "Or continue with": "Or continue with",
     "First Name": "First Name",
     "Last Name": "Last Name",
-    "Phone Number": "Phone no.",
+    "Phone Number": "Phone Number",
     "Address": "Address",
     "Email": "Email",
     "Password": "Password",
@@ -70,7 +70,58 @@
     "Sort by": "Sort by",
     "Filter by genre": "Filter by genre",
     "Filter by price": "Filter by price",
-    "Search": "Search",
-    "Books": "Books"
+    "NoBooks": "No books found.",
+    "Borrow Now": "Borrow Now",
+    "Join Waitlist": "Join Waitlist",
+    "Confirm Borrow": "Confirm Borrow",
+    "Cancel": "Cancel",
+    "Borrow": "Borrow",
+    "Question": "Are you sure you want to borrow",
+    "Action": "? This action cannot be undone."
+  },
+  "Profile": {
+    "Profile": "Profile",
+    "Logout": "Log out"
+  },
+  "MyBooks": {
+    "MyBooks": "My Books",
+    "Manage": "Manage your borrowed books and keep track of due dates",
+    "EmptyLibrary": "Your library is empty. Start borrowing books to see them here!",
+    "Borrowed": "Borrowed:",
+    "Due": "Due:"
+  },
+  "MyRequests": {
+    "MyRequests": "My Requests",
+    "Title": "Title",
+    "Author": "Author",
+    "Status": "Status",
+    "Actions": "Actions",
+    "NoBooks": "No book requests found."
+  },
+  "Search": {
+    "Books": "Search Books",
+    "Members": "Search Members",
+    "Transactions": "Search Transactions"
+  },
+  "ViewProfile": {
+    "Contact Information": "Contact Information",
+    "Library Activity": "Library Activity",
+    "Books Borrowed": "Books Borrowed",
+    "Currently Borrowed": "Currently Borrowed",
+    "Pending Requests": "Pending Requests",
+    "Edit Profile": "Pending Requests",
+    "Member ID": "Member ID:"
+  },
+  "EditProfile": {
+    "Edit Profile": "Edit Profile",
+    "Personal Information": "Personal Information",
+    "Upload Image": "Upload Image",
+    "Save Changes": "Save Changes"
+  },
+  "Cancel": {
+    "Cancel": "Cancel",
+    "Confirm Deletion": "Confirm Deletion",
+    "Question": "Are you sure you want to cancel this request ? This action cannot be undone.",
+    "Delete": "Delete"
   }
 }

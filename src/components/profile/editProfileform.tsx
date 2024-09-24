@@ -10,12 +10,15 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function EditProfileForm({
   userDetails,
 }: {
   userDetails: IMember | undefined;
 }) {
+  const t1 = useTranslations("EditProfile");
+  const t = useTranslations("SignUp");
   const imageurl = userDetails?.imageURL ? userDetails.imageURL : "";
   const [imageURL, setImageURL] = useState<string>(imageurl);
   const [isUploading, setIsUploading] = useState(false);
@@ -58,12 +61,12 @@ export default function EditProfileForm({
       <form action={formAction} className="space-y-6">
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-orange-600">
-            Personal Information
+            {t1("Personal Information")}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName" className="text-orange-800">
-                First Name
+                {t("First Name")}
               </Label>
               <Input
                 id="firstName"
@@ -77,7 +80,7 @@ export default function EditProfileForm({
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName" className="text-orange-800">
-                Last Name
+                {t("Last Name")}
               </Label>
               <Input
                 id="lastName"
@@ -91,7 +94,7 @@ export default function EditProfileForm({
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone" className="text-orange-800">
-                Phone Number
+                {t("Phone Number")}
               </Label>
               <Input
                 id="phone"
@@ -106,7 +109,7 @@ export default function EditProfileForm({
             </div>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-orange-800">
-                Email
+                {t("Email")}
               </Label>
               <Input
                 id="email"
@@ -120,7 +123,7 @@ export default function EditProfileForm({
             </div>
             <div className="space-y-2">
               <Label htmlFor="address" className="text-orange-800">
-                Address
+                {t("Address")}
               </Label>
               <Textarea
                 id="address"
@@ -133,7 +136,7 @@ export default function EditProfileForm({
             </div>
             <div>
               <Label htmlFor="image" className="text-orange-800">
-                Upload Image
+                {t1("Upload Image")}
               </Label>
 
               <Input
@@ -164,7 +167,7 @@ export default function EditProfileForm({
           type="submit"
           className="w-full bg-orange-500 hover:bg-orange-600 text-white"
         >
-          Save Changes
+          {t1("Save Changes")}
         </Button>
       </form>
     </>

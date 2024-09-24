@@ -5,10 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { useTranslations } from "next-intl"; 
 
 export default function UserNavigation() {
   const pathName = usePathname();
   const [activeTab, setActiveTab] = useState("dashboard");
+  const t = useTranslations("SideBar");
 
   useEffect(() => {
     if (pathName === "/user") {
@@ -61,22 +63,22 @@ export default function UserNavigation() {
     <>
       <NavItem
         icon={<LayoutDashboard className="h-5 w-5" />}
-        label="Dashboard"
+        label={t("Dashboard")}
         value="dashboard"
       />
       <NavItem
         icon={<BookIcon className="h-5 w-5" />}
-        label="Books"
+        label={t("Books")}
         value="books"
       />
       <NavItem
         icon={<UsersIcon className="h-5 w-5" />}
-        label="My Books"
+        label={t("My Books")}
         value="MyBooks"
       />
       <NavItem
         icon={<FileText className="h-5 w-5" />}
-        label="Requests"
+        label={t("Requests")}
         value="requests"
       />
     </>

@@ -6,8 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Calendar, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function MyBooksList({ borrowedBooks }: MyBooksProps) {
+  const t = useTranslations("MyBooks");
   const isOverdue = (dueDate: string) => {
     return new Date(dueDate) < new Date();
   };
@@ -20,10 +22,10 @@ export default function MyBooksList({ borrowedBooks }: MyBooksProps) {
         transition={{ duration: 0.5 }}
         className="text-center mb-12"
       >
-        <h1 className="text-4xl font-bold text-orange-800 mb-2">My Books</h1>
-        <p className="text-lg text-orange-600">
-          Manage your borrowed books and keep track of due dates
-        </p>
+        <h1 className="text-4xl font-bold text-orange-800 mb-2">
+          {t("MyBooks")}
+        </h1>
+        <p className="text-lg text-orange-600">{t("Manage")}</p>
       </motion.div>
 
       {borrowedBooks.length === 0 ? (
@@ -34,7 +36,7 @@ export default function MyBooksList({ borrowedBooks }: MyBooksProps) {
           className="text-center"
         >
           <p className="text-CustomDarkOrange text-lg mb-4">
-            Your library is empty. Start borrowing books to see them here!
+            {t("EmptyLibrary")}
           </p>
           <BookOpen size={100} className="mx-auto text-orange-300" />
         </motion.div>
@@ -77,7 +79,9 @@ export default function MyBooksList({ borrowedBooks }: MyBooksProps) {
                   <div className="flex justify-between items-center text-xs text-orange-700">
                     <div className="flex items-center space-x-2">
                       <Calendar size={14} className="text-orange-500" />
-                      <span>Borrowed: {book.borrowDate}</span>
+                      <span>
+                        {t("Borrowed")} {book.borrowDate}
+                      </span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Clock size={14} className="text-orange-500" />
@@ -89,7 +93,7 @@ export default function MyBooksList({ borrowedBooks }: MyBooksProps) {
                           isOverdue(book.dueDate!) ? "animate-pulse" : ""
                         }
                       >
-                        Due: {book.dueDate}
+                        {t("Due")} {book.dueDate}
                       </Badge>
                     </div>
                   </div>

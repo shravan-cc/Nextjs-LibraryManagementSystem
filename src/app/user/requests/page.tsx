@@ -10,28 +10,32 @@ import {
   TableCell,
   TableBody,
 } from "@/components/ui/table";
+import { getTranslations } from "next-intl/server";
 
 export default async function Requests() {
+  const t = await getTranslations("MyRequests");
   const bookRequests = await fetchBooksByMember();
   return (
     <>
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-orange-800">My Requests</h2>
+        <h2 className="text-2xl font-bold text-orange-800">
+          {t("MyRequests")}
+        </h2>
         <div className="bg-white rounded-lg shadow overflow-x-auto">
           <Table>
             <TableHeader className="bg-orange-50">
               <TableRow>
                 <TableHead className="font-semibold text-orange-700">
-                  Title
+                  {t("Title")}
                 </TableHead>
                 <TableHead className="font-semibold text-orange-700">
-                  Author
+                  {t("Author")}
                 </TableHead>
                 <TableHead className="font-semibold text-orange-700">
-                  Status
+                  {t("Status")}
                 </TableHead>
                 <TableHead className="font-semibold text-orange-700">
-                  Actions
+                  {t("Actions")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -73,7 +77,7 @@ export default async function Requests() {
         </div>
         {bookRequests!.length === 0 && (
           <p className="text-center text-CustomDarkOrange mt-4">
-            No book requests found.
+            {t("NoBooks")}
           </p>
         )}
       </div>

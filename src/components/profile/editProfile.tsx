@@ -3,8 +3,10 @@ import Image from "next/image";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import EditProfileForm from "./editProfileform";
+import { getTranslations } from "next-intl/server";
 
 export default async function EditProfile() {
+  const t = await getTranslations("EditProfile");
   const fetchedUserDetails = await fetchUserDetails();
   const userDetails = fetchedUserDetails?.userDetails;
   const user = fetchedUserDetails?.user;
@@ -16,7 +18,7 @@ export default async function EditProfile() {
   return (
     <div className="space-y-4">
       <h2 className="text-3xl font-bold text-orange-800 text-center">
-        Edit Profile
+        {t("Edit Profile")}
       </h2>
       <Card className="w-full max-w-3xl mx-auto shadow-lg">
         <CardHeader className="bg-gradient-to-r from-orange-400 to-orange-600">

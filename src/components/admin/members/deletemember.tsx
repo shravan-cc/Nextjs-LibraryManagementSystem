@@ -73,6 +73,6 @@ export default function DeleteMember({ member }: { member: IMember }) {
           </Button>
         </DialogFooter>
       </DialogContent>
-    </Dialog>
+    </Dialog> 
   );
 }

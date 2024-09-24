@@ -16,12 +16,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "../hooks/use-toast";
 import { Button } from "../ui/button";
+import { useTranslations } from "next-intl";
 
 export default function CancelTransaction({
   request,
 }: {
   request: RequestProps;
 }) {
+  const t = useTranslations("Cancel");
   const { toast } = useToast();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -47,16 +49,13 @@ export default function CancelTransaction({
           className="text-xs hover:bg-orange-100"
           disabled={request.status !== "pending"}
         >
-          <Trash2 className="h-3 w-3 mr-1" /> Cancel
+          <Trash2 className="h-3 w-3 mr-1" /> {t("Cancel")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Confirm Deletion</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to cancel this request ? This action cannot be
-            undone.
-          </DialogDescription>
+          <DialogTitle>{t("Confirm Deletion")}</DialogTitle>
+          <DialogDescription>{t("Question")}</DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:justify-start">
           <Button
@@ -64,16 +63,16 @@ export default function CancelTransaction({
             variant="secondary"
             onClick={() => setIsOpen(false)}
           >
-            Cancel
+            {t("Cancel")}
           </Button>
           {request.status === "pending" && (
             <Button
               variant="ghost"
               size="sm"
-              className="text-xs hover:bg-orange-100"
+              className="text-xs hover:bg-red-100 text-red-600"
               onClick={handleDelete}
             >
-              Delete
+              {t("Delete")}
             </Button>
           )}
         </DialogFooter>

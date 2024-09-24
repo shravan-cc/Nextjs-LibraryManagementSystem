@@ -1,5 +1,6 @@
 import ViewProfile from "@/components/profile/viewProfile";
 import { fetchUserDetails } from "@/lib/action";
+import { useTranslations } from "next-intl";
 
 export default async function Profile() {
   const fetchedUserDetails = await fetchUserDetails();
