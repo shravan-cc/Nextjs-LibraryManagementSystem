@@ -1,0 +1,127 @@
+{
+  "Home": {
+    "Welcome": "Welcome to ShravanReads",
+    "ShravanReads": "ShravanReads",
+    "Welcome Message": "Your gateway to a world of knowledge and imagination",
+    "About": "About",
+    "Services": "Services",
+    "Contact": "Contact",
+    "SignUp": "Sign up",
+    "Login": "Login",
+    "Home-Page": {
+      "Vast Collection": "Vast Collection",
+      "Vast Collection Description": "Access thousands of books, e-books, and audiobooks from our extensive library.",
+      "Easy Management": "Easy Management",
+      "Easy Management Description": "Keep track of your borrowed items, due dates, and reading history effortlessly.",
+      "Community Events": "Community Events",
+      "Community Events Description": "Join book clubs, author talks, and workshops to connect with fellow readers.",
+
+      "Empowering readers since 2023": "Empowering readers since 2023",
+      "Quick Links": "Quick Links",
+      "FAQ": "FAQ",
+      "Privacy Policy": "Privacy Policy",
+      "Terms of Service": "Terms of Service",
+      "Connect With Us": "Connect With Us",
+      "Facebook": "Facebook",
+      "Twitter": "Twitter",
+      "Instagram": "Instagram"
+    }
+  },
+  "LocaleSwitcher": {
+    "kn": "Kannada",
+    "en": "English",
+    "label": "Language"
+  },
+  "SignUp": {
+    "Or continue with": "Or continue with",
+    "First Name": "First Name",
+    "Last Name": "Last Name",
+    "Phone Number": "Phone Number",
+    "Address": "Address",
+    "Email": "Email",
+    "Password": "Password",
+    "Confirm Password": "Confirm Password",
+    "SignUp": "Sign up",
+    "Already have an account?": "Already have an account?",
+    "Login": "Login",
+    "SignUpLink": "Signup",
+    "Do not have an account?": "Do not have an account?"
+  },
+  "SideBar": {
+    "ShravanReads": "ShravanReads",
+    "Dashboard": "Dashboard",
+    "Books": "Books",
+    "My Books": "My Books",
+    "Requests": "Requests"
+  },
+  "Dashboard": {
+    "Dashboard": "Dashboard",
+    "Total Books": "Total Books",
+    "+20 from last month": "+20 from last month",
+    "Active Members": "Active Members",
+    "+7 new members this week": "+7 new members this week",
+    "Books Borrowed": "Books Borrowed",
+    "+180 from last month": "+180 from last month",
+    "Late Returns": "Late Returns",
+    "+2 from last month": "+2 from last month"
+  },
+  "UserBooks": {
+    "Explore Our Collection of Books": "Explore Our Collection of Books",
+    "Sort by": "Sort by",
+    "Filter by genre": "Filter by genre",
+    "Filter by price": "Filter by price",
+    "NoBooks": "No books found.",
+    "Borrow Now": "Borrow Now",
+    "Join Waitlist": "Join Waitlist",
+    "Confirm Borrow": "Confirm Borrow",
+    "Cancel": "Cancel",
+    "Borrow": "Borrow",
+    "Question": "Are you sure you want to borrow",
+    "Action": "? This action cannot be undone."
+  },
+  "Profile": {
+    "Profile": "Profile",
+    "Logout": "Log out"
+  },
+  "MyBooks": {
+    "MyBooks": "My Books",
+    "Manage": "Manage your borrowed books and keep track of due dates",
+    "EmptyLibrary": "Your library is empty. Start borrowing books to see them here!",
+    "Borrowed": "Borrowed:",
+    "Due": "Due:"
+  },
+  "MyRequests": {
+    "MyRequests": "My Requests",
+    "Title": "Title",
+    "Author": "Author",
+    "Status": "Status",
+    "Actions": "Actions",
+    "NoBooks": "No book requests found."
+  },
+  "Search": {
+    "Books": "Search Books",
+    "Members": "Search Members",
+    "Transactions": "Search Transactions"
+  },
+  "ViewProfile": {
+    "Contact Information": "Contact Information",
+    "Library Activity": "Library Activity",
+    "Books Borrowed": "Books Borrowed",
+    "Currently Borrowed": "Currently Borrowed",
+    "Pending Requests": "Pending Requests",
+    "Edit Profile": "Pending Requests",
+    "Member ID": "Member ID:"
+  },
+  "EditProfile": {
+    "Edit Profile": "Edit Profile",
+    "Personal Information": "Personal Information",
+    "Upload Image": "Upload Image",
+    "Save Changes": "Save Changes"
+  },
+  "Cancel": {
+    "Cancel": "Cancel",
+    "Confirm Deletion": "Confirm Deletion",
+    "Question": "Are you sure you want to cancel this request ? This action cannot be undone.",
+    "Delete": "Delete"
+  }
+}

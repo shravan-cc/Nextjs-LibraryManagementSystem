@@ -33,14 +33,17 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Separator } from "@/components/ui/separator";
 import FilterBookByPrice from "@/components/admin/books/fiterPrice";
 import { BookCardProps } from "@/lib/definition";
+import { useTranslations } from "next-intl";
 
 export default function BookCard({
   genres,
-  books,
+  books, 
   member,
   totalPages,
   currentPage,
 }: BookCardProps) {
+  const t = useTranslations("UserBooks");
+  const t1 = useTranslations("Search");
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -53,13 +56,13 @@ export default function BookCard({
         animate={{ y: 0 }}
         className="text-3xl font-bold text-orange-800 text-center mb-8"
       >
-        Welcome to Our Library
+        {t("Explore Our Collection of Books")}
       </motion.h1>
 
       <div className="bg-orange-50 rounded-lg shadow-md p-6 mb-8">
         <div className="flex flex-wrap gap-4 items-center justify-between">
           <div className="flex-grow sm:flex-grow-0 w-full sm:w-auto">
-            <SearchBar type="Books" />
+            <SearchBar type={t1("Books")} />
           </div>
           <div className="flex flex-wrap gap-4">
             <SortBooks />
@@ -246,6 +249,11 @@ export default function BookCard({
               </DialogContent>
             </Dialog>
           ))}
+          {books!.length === 0 && (
+            <p className="text-center text-CustomDarkOrange mt-4">
+              {t("NoBooks")}
+            </p>
+          )}
         </motion.div>
       </AnimatePresence>
 

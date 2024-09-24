@@ -7,8 +7,10 @@ import { registerUser, State } from "@/lib/action";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { useToast } from "../hooks/use-toast";
+import { useTranslations } from "next-intl";
 
 export default function SignUpForm() {
+  const t = useTranslations("SignUp");
   const router = useRouter();
   const initialState: State = { message: "", errors: {} };
   const [state, formAction] = useActionState(registerUser, initialState);
@@ -44,12 +46,12 @@ export default function SignUpForm() {
         <div className="grid gap-3">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="firstName">
-              First Name
+              {t("First Name")}
             </Label>
             <Input
               id="firstName"
               name="firstName"
-              placeholder="First Name"
+              placeholder={t("First Name")}
               type="text"
               autoCapitalize="none"
               autoCorrect="off"
@@ -61,11 +63,11 @@ export default function SignUpForm() {
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="lastName">
-              Last Name
+              {t("Last Name")}
             </Label>
             <Input
               id="lastName"
-              placeholder="lastName"
+              placeholder={t("Last Name")}
               name="lastName"
               type="text"
               autoCapitalize="none"
@@ -77,11 +79,11 @@ export default function SignUpForm() {
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="phone">
-              Phone Number
+              {t("Phone Number")}
             </Label>
             <Input
               id="phone"
-              placeholder="Phone no."
+              placeholder={t("Phone Number")}
               type="number"
               name="phone"
               autoCapitalize="none"
@@ -93,11 +95,11 @@ export default function SignUpForm() {
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="address">
-              Address
+              {t("Address")}
             </Label>
             <Input
               id="address"
-              placeholder="Address"
+              placeholder={t("Address")}
               type="text"
               name="address"
               autoCapitalize="none"
@@ -109,11 +111,11 @@ export default function SignUpForm() {
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
-              Email
+              {t("Email")}
             </Label>
             <Input
               id="email"
-              placeholder="Email"
+              placeholder={t("Email")}
               type="email"
               name="email"
               autoCapitalize="none"
@@ -126,11 +128,11 @@ export default function SignUpForm() {
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="password">
-              Password
+              {t("Password")}
             </Label>
             <Input
               id="password"
-              placeholder="Password"
+              placeholder={t("Password")}
               name="password"
               type="password"
               autoCapitalize="none"
@@ -142,11 +144,11 @@ export default function SignUpForm() {
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="confirmPassword">
-              Confirm Password
+              {t("Confirm Password")}
             </Label>
             <Input
               id="confirmPassword"
-              placeholder="Confirm Password"
+              placeholder={t("Confirm Password")}
               name="confirmPassword"
               type="password"
               autoCapitalize="none"
@@ -154,7 +156,7 @@ export default function SignUpForm() {
             />
           </div>
           <Button type="submit" className="bg-CustomOrange">
-            Sign Up
+            {t("SignUp")}
           </Button>
         </div>
       </form>

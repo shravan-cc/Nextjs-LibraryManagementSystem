@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "../hooks/use-toast";
 import { Button } from "../ui/button";
+import { useTranslations } from "next-intl";
 
 export default function IssueBook({
   book,
@@ -25,6 +26,7 @@ export default function IssueBook({
   book: IBook;
   member: IMember;
 }) {
+  const t = useTranslations("UserBooks");
   const { toast } = useToast();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -53,15 +55,15 @@ export default function IssueBook({
           onClick={(e) => e.stopPropagation()}
           className="bg-orange-500 hover:bg-orange-600 text-white"
         >
-          {book.availableCopies > 0 ? "Borrow Now" : "Join Waitlist"}
+          {book.availableCopies > 0 ? t("Borrow Now") : t("Join Waitlist")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Confirm Borrow</DialogTitle>
+          <DialogTitle>{t("Confirm Borrow")}</DialogTitle>
           <DialogDescription>
-            Are you sure you want to borrow {`"${book.title}"`}? This action
-            cannot be undone.
+            {t("Question")} {`"${book.title}"`}
+            {t("Action")}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:justify-start">
@@ -72,7 +74,7 @@ export default function IssueBook({
               setIsOpen(false);
             }}
           >
-            Cancel
+            {t("Cancel")}
           </Button>
           <Button
             variant="ghost"
@@ -80,7 +82,7 @@ export default function IssueBook({
             className="text-xs hover:bg-orange-100"
             onClick={(e) => handleIssue(e)}
           >
-            <BookOpen className="h-3 w-3 mr-1" /> Borrow
+            <BookOpen className="h-3 w-3 mr-1" /> {t("Borrow")}
           </Button>
         </DialogFooter>
       </DialogContent>

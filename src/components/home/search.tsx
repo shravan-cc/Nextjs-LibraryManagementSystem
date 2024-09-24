@@ -27,7 +27,7 @@ export default function SearchBar({ type }: { type: string }) {
       <div className="relative w-full">
         <Input
           type="text"
-          placeholder={`Search ${type}...`}
+          placeholder={`${type}...`}
           className="bg-orange-50 border-orange-200 hover:outline-none focus:border-CustomOrange focus:outline-none focus:ring-2 focus:ring-CustomOrange transition-all duration-300 pl-10"
           onChange={(e) => handleSearch(e.target.value)}
           defaultValue={searchParams.get("query")?.toString()}

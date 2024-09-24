@@ -6,8 +6,10 @@ import { Label } from "@/components/ui/label";
 import { authenticate } from "@/lib/action";
 import { useRouter } from "next/navigation";
 import { useActionState, useReducer } from "react";
+import { useTranslations } from "next-intl";
 
 export default function LoginForm() {
+  const t = useTranslations("SignUp");
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined
@@ -19,11 +21,11 @@ export default function LoginForm() {
         <div className="grid gap-3">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
-              Email
+              {t("Email")}
             </Label>
             <Input
               id="email"
-              placeholder="Email"
+              placeholder={t("Email")}
               type="email"
               name="email"
               autoCapitalize="none"
@@ -33,11 +35,11 @@ export default function LoginForm() {
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="password">
-              Password
+              {t("Password")}
             </Label>
             <Input
               id="password"
-              placeholder="Password"
+              placeholder={t("Password")}
               name="password"
               type="password"
               autoCapitalize="none"
@@ -50,7 +52,7 @@ export default function LoginForm() {
             </div>
           )}
           <Button type="submit" className="bg-CustomOrange">
-            Login
+            {t("Login")}
           </Button>
         </div>
       </form>

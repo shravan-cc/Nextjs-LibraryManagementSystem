@@ -11,12 +11,14 @@ import Link from "next/link";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "../ui/card";
+import { getTranslations } from "next-intl/server";
 
 export default async function ViewProfile({
   userDetails,
   userImage,
   user,
 }: ViewProfileProps) {
+  const t = await getTranslations("ViewProfile");
   const pendingRequests = await fetchBooksByMember();
   if (!pendingRequests) {
     throw new Error("Books not found");
@@ -62,23 +64,23 @@ export default async function ViewProfile({
           </div>
           <div className="ml-32 sm:ml-40 pt-2 flex flex-col sm:flex-row justify-between items-start">
             <div>
-              <h3 className="sm:text-2xl  text-xl  font-bold text-gray-800">{`${userDetails?.firstName} ${userDetails?.lastName}`}</h3>
+              <h3 className="sm:text-2xl text-xl font-bold text-gray-800">{`${userDetails?.firstName} ${userDetails?.lastName}`}</h3>
               <p className="text-sm text-muted-foreground">{user?.role}</p>
               <p className="text-sm text-muted-foreground">
-                Member ID: #{userDetails?.id}
+                {t("Member ID")}: #{userDetails?.id}
               </p>
             </div>
             <Link href={path} className="mt-4 sm:mt-0">
               <Button className="bg-orange-500 hover:bg-orange-600 text-white sm:w-auto">
                 <Edit className="w-4 h-4 mr-2" />
-                Edit Profile
+                {t("Edit Profile")}
               </Button>
             </Link>
           </div>
         </CardHeader>
         <CardContent className="space-y-8 px-6">
           <ProfileSection
-            title="Contact Information"
+            title={t("Contact Information")}
             icon={<User className="h-5 w-5 text-orange-500" />}
           >
             <InfoItem
@@ -96,22 +98,22 @@ export default async function ViewProfile({
           </ProfileSection>
 
           <ProfileSection
-            title="Library Activity"
+            title={t("Library Activity")}
             icon={<BookOpen className="h-5 w-5 text-orange-500" />}
           >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <StatCard
-                title="Books Borrowed"
+                title={t("Books Borrowed")}
                 value={totalBorrowedBooks!.length}
                 icon={<BookOpen className="h-8 w-8 text-orange-500" />}
               />
               <StatCard
-                title="Currently Borrowed"
+                title={t("Currently Borrowed")}
                 value={borrowedBooks.length}
                 icon={<BookOpen className="h-8 w-8 text-orange-500" />}
               />
               <StatCard
-                title="Pending Requests"
+                title={t("Pending Requests")}
                 value={pendingRequests!.length}
                 icon={<BookOpen className="h-8 w-8 text-orange-500" />}
               />

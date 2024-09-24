@@ -8,8 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function LoginPage() {
+  const t = useTranslations("SignUp");
   return (
     <>
       <main>
@@ -17,7 +19,7 @@ export default function LoginPage() {
           <Card className="w-full max-w-md bg-CustomPeachCream">
             <CardHeader className="space-y-1">
               <CardTitle className="text-2xl font-bold text-center">
-                Login
+                {t("Login")}
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4 px-16">
@@ -29,7 +31,7 @@ export default function LoginPage() {
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-transparent px-2 text-black">
-                    Or continue with
+                    {t("Or continue with")}
                   </span>
                 </div>
               </div>
@@ -39,12 +41,12 @@ export default function LoginPage() {
             </CardContent>
             <CardFooter className="flex justify-center">
               <p className="px-8 text-center text-sm text-black">
-                Do not have an account??{" "}
+                {t("Do not have an account?")}{" "}
                 <Link
                   href="/signup"
                   className="text-CustomDarkOrange hover:text-primary"
                 >
-                  Signup
+                  {t("SignUpLink")}
                 </Link>
               </p>
             </CardFooter>

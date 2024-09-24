@@ -10,14 +10,16 @@ import {
 import { filterGenreProps } from "@/lib/definition";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function FilterGenre({ genres }: filterGenreProps) {
+  const t = useTranslations("UserBooks");
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const { replace } = useRouter();
 
   const [genreValue, setGenreValue] = useState<string>(
-    searchParams.get("genre") || "All Genres"
+    searchParams.get("genre") || ""
   );
 
   const handleValueChange = (term: string) => {
@@ -35,7 +37,7 @@ export default function FilterGenre({ genres }: filterGenreProps) {
   return (
     <Select value={genreValue} onValueChange={handleValueChange}>
       <SelectTrigger className="w-[180px] bg-orange-50 border-orange-200 focus:border-CustomOrange focus:ring-CustomOrange transition-all duration-300">
-        <SelectValue placeholder="Filter by genre" />
+        <SelectValue placeholder={t("Filter by genre")} />
       </SelectTrigger>
       <SelectContent className="bg-orange-50 border-orange-200">
         {genres.map((genre) => (
