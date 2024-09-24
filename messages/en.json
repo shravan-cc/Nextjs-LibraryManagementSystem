@@ -45,7 +45,8 @@
     "Already have an account?": "Already have an account?",
     "Login": "Login",
     "SignUpLink": "Signup",
-    "Do not have an account?": "Do not have an account?"
+    "Do not have an account?": "Do not have an account?",
+    "SigningIn": "SigningIn..."
   },
   "SideBar": {
     "ShravanReads": "ShravanReads",
