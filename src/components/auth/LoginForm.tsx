@@ -7,6 +7,7 @@ import { authenticate } from "@/lib/action";
 import { useRouter } from "next/navigation";
 import { useActionState, useReducer } from "react";
 import { useTranslations } from "next-intl";
+import { Loader2 } from "lucide-react";
 
 export default function LoginForm() {
   const t = useTranslations("SignUp");
@@ -31,6 +32,7 @@ export default function LoginForm() {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
+              disabled={isPending}
             />
           </div>
           <div className="grid gap-1">
@@ -44,6 +46,7 @@ export default function LoginForm() {
               type="password"
               autoCapitalize="none"
               autoCorrect="off"
+              disabled={isPending}
             />
           </div>
           {errorMessage && (
@@ -52,7 +55,14 @@ export default function LoginForm() {
             </div>
           )}
           <Button type="submit" className="bg-CustomOrange">
-            {t("Login")}
+            {isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {t("SigningIn")}
+              </>
+            ) : (
+              t("Login")
+            )}
           </Button>
         </div>
       </form>
