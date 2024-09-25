@@ -1,11 +1,18 @@
 "use client";
 
-import { BookIcon, FileText, LayoutDashboard, UsersIcon } from "lucide-react";
+import {
+  BookIcon,
+  Calendar,
+  FileText,
+  GraduationCap,
+  LayoutDashboard,
+  UsersIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { useTranslations } from "next-intl"; 
+import { useTranslations } from "next-intl";
 
 export default function UserNavigation() {
   const pathName = usePathname();
@@ -21,6 +28,10 @@ export default function UserNavigation() {
       setActiveTab("MyBooks");
     } else if (pathName.startsWith("/user/requests")) {
       setActiveTab("requests");
+    } else if (pathName.startsWith("/user/professors")) {
+      setActiveTab("professors");
+    } else if (pathName.startsWith("/user/appointments")) {
+      setActiveTab("appointments");
     }
   }, [pathName]);
 
@@ -80,6 +91,16 @@ export default function UserNavigation() {
         icon={<FileText className="h-5 w-5" />}
         label={t("Requests")}
         value="requests"
+      />
+      <NavItem
+        icon={<GraduationCap className="h-5 w-5" />}
+        label="Professors"
+        value="professors"
+      />
+      <NavItem
+        icon={<Calendar className="h-5 w-5" />}
+        label="Appointments"
+        value="appointments"
       />
     </>
   );
