@@ -20,36 +20,25 @@ const Calendly = ({
   };
   id: number;
 }) => {
-  const [scheduledMeeting, setScheduledMeeting] = useState(null);
-
-  useEffect(() => {
-    const handleCalendlyEvent = async (e: any) => {
-      if (e.data.event && e.data.event.indexOf("calendly") === 0) {
-        if (e.data.event === "calendly.event_scheduled") {
-          const appointmentData = e.data.payload;
-          // Send this data to your server
-          const insertingData = {
-            memberId: id,
-            professorId: professor.id,
-            appointMentStartTime: appointmentData.event.start_time,
-            appointMentEndTime: appointmentData.event.end_time,
-            googleMeetLink: appointmentData.location?.join_url,
-          };
-          console.log("Appointments", insertingData);
-          await createAppointment(insertingData);
-        }
-      }
-    };
-
-    window.addEventListener("message", handleCalendlyEvent);
-
-    return () => {
-      window.removeEventListener("message", handleCalendlyEvent);
-    };
-  }, [id, professor.id]);
+  const primaryColor = "#f97316"; // Orange-500
+  const textColor = "#7c2d12"; // Orange-900
+  const backgroundColor = "#fff7ed"; // Orange-50
   return (
     <div className="App">
-      <InlineWidget url={calendlyURL} />
+      <InlineWidget
+        url={calendlyURL}
+        styles={{
+          height: "1000px",
+          width: "100%",
+        }}
+        pageSettings={{
+          backgroundColor: backgroundColor,
+          hideEventTypeDetails: false,
+          hideLandingPageDetails: false,
+          primaryColor: primaryColor,
+          textColor: textColor,
+        }}
+      />
     </div>
   );
 };

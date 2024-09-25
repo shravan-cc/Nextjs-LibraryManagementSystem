@@ -804,37 +804,23 @@ export async function getInviteeDetails() {
 
       const convertToIST = (utcTime: string) => {
         const date = new Date(utcTime);
-        const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC +5:30 in milliseconds
-        const istDate = new Date(date.getTime() + istOffset);
 
-        // Get day of the week
-        const daysOfWeek = [
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ];
-        const dayOfWeek = daysOfWeek[istDate.getDay()]; // Local day in IST
+        // Options for time formatting in IST
+        const options: Intl.DateTimeFormatOptions = {
+          timeZone: "Asia/Kolkata", // IST timezone
+          weekday: "long",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true, // 12-hour format
+        };
 
-        // Convert to 12-hour format (local hours in IST)
-        let hours = istDate.getHours(); // Local hours in IST
-        const minutes = istDate.getMinutes();
-        const ampm = hours >= 12 ? "PM" : "AM";
-        hours = hours % 12;
-        hours = hours ? hours : 12; // Handle 0 (midnight) as 12
+        // Convert UTC time to IST using toLocaleString
+        const istDateTime = date.toLocaleString("en-IN", options);
 
-        // Format time with leading zeros
-        const time = `${hours.toString().padStart(2, "0")}:${minutes
-          .toString()
-          .padStart(2, "0")} ${ampm}`;
-
-        // Format date as YYYY-MM-DD
-        const formattedDate = istDate.toISOString().slice(0, 10);
-
-        return `${dayOfWeek}, ${formattedDate} ${time}`;
+        return istDateTime; // Format: "Day, MM/DD/YYYY, HH:MM AM/PM"
       };
       // Map the invitees to the desired output format
       const invitees = data.collection.map((invitee: any) => ({
@@ -872,7 +858,10 @@ export async function getProfessorByEmail(email: string) {
 export async function getUserAppointments() {
   try {
     const userDetails = await fetchUserDetails();
-    const userEmail = userDetails?.userDetails.email;
+    const userEmail = userDetails?.user?.email
+      ? userDetails.user.email
+      : userDetails!.userDetails.email;
+    console.log("Email", userEmail);
     const scheduledDetails = await getInviteeDetails();
     const userAppointments = scheduledDetails.filter(
       (details) => details.email === userEmail
