@@ -1,5 +1,12 @@
 "use client";
-import { BookIcon, FileText, LayoutDashboard, UsersIcon } from "lucide-react";
+import {
+  BookIcon,
+  Calendar,
+  FileText,
+  GraduationCap,
+  LayoutDashboard,
+  UsersIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,6 +25,10 @@ export default function AdminNavigation() {
       setActiveTab("members");
     } else if (pathName.startsWith("/home/transactions")) {
       setActiveTab("transactions");
+    } else if (pathName.startsWith("/home/professors")) {
+      setActiveTab("professors");
+    } else if (pathName.startsWith("/home/appointments")) {
+      setActiveTab("appointments");
     }
   }, [pathName]);
   const NavItem = ({
@@ -75,11 +86,16 @@ export default function AdminNavigation() {
         label="Transactions"
         value="transactions"
       />
-      {/* <NavItem
-        icon={<ClipboardList className="h-5 w-5" />}
-        label="Transaction Requests"
-        value="requests"
-      /> */}
+      <NavItem
+        icon={<GraduationCap className="h-5 w-5" />}
+        label="Professors"
+        value="professors"
+      />
+      <NavItem
+        icon={<Calendar className="h-5 w-5" />}
+        label="Appointments"
+        value="appointments"
+      />
     </>
   );
 }

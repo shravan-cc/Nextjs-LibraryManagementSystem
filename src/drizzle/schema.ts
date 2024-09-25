@@ -53,6 +53,35 @@ export const TransactionTable = pgTable("transactions", {
   returnDate: varchar("returnDate", { length: 10 }),
 });
 
+export const ProfessorsTable = pgTable("professors", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 50 }).notNull(),
+  bio: varchar("bio", { length: 255 }),
+  email: varchar("email", { length: 100 }).unique().notNull(),
+  department: varchar("department", { length: 50 }),
+  calendlylink: varchar("calendlylink", { length: 255 }).notNull(),
+});
+
+export const AppointmentsTable = pgTable("appointments", {
+  id: serial("id").primaryKey(),
+  professorId: integer("professorId")
+    .notNull()
+    .references(() => ProfessorsTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  memberId: integer("memberId")
+    .notNull()
+    .references(() => MemberTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  appointMentStartTime: varchar("appointMentTime", { length: 100 }),
+  appointMentEndTime: varchar("appointMentTime", { length: 100 }),
+  googleMeetLink: varchar("googleMeetLink", { length: 255 }),
+  status: varchar("status", { length: 15 }).notNull(),
+});
+
 export const RequestTransactionTable = pgTable("TransactionRequests", {
   id: serial("id").primaryKey(),
   memberId: integer("memberId").notNull(),

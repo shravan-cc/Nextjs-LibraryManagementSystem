@@ -2,6 +2,7 @@
 
 import {
   BookTable,
+  ProfessorsTable,
   RequestTransactionTable,
   TransactionTable,
 } from "@/drizzle/schema";
@@ -21,16 +22,22 @@ import { redirect } from "next/navigation";
 import { auth, signIn } from "../auth";
 import { db } from "../drizzle/db";
 import cloudinary from "./cloudinary";
+import { IAppointmentBase } from "@/models/appointment.model";
+import { AppointmentRepository } from "@/repositories/appointment.repository";
+import { error } from "console";
 
 const memberRepo = new MemberRepository(db);
 const bookRepo = new BookRepository(db);
 const transactionRepo = new TransactionRepository(db);
+const appointmentRepo = new AppointmentRepository(db);
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+const CALENDLY_API_TOKEN = process.env.NEXT_PUBLIC_CALENDLY_ACCESS_TOKEN;
 
 export interface State {
   errors?: { [key: string]: string[] };
@@ -456,8 +463,8 @@ export async function fetchUserDetails() {
   const session = await auth();
   // console.log("In fetch User Details session", session);
   const user = session!.user;
-  console.log("User", user);
-  console.log("User session", user?.image);
+  // console.log("User", user);
+  // console.log("User session", user?.image);
   const email = user!.email;
   try {
     const userDetails = await memberRepo.getByEmail(email as string);
@@ -642,5 +649,281 @@ export async function returnBook(bookId: number, memberId: number) {
     await transactionRepo.update(transaction.transactionId, returnedDate);
   } catch (error) {
     console.error("Failed to return the book", error);
+  }
+}
+
+export async function getProfessors() {
+  try {
+    const professors = await db.select().from(ProfessorsTable);
+    return professors;
+  } catch (error) {
+    console.error("Failed to fetch professors", error);
+  }
+}
+
+export async function getProfessorById(id: number) {
+  try {
+    const [professors] = await db
+      .select()
+      .from(ProfessorsTable)
+      .where(eq(ProfessorsTable.id, id));
+    return professors;
+  } catch (error) {
+    console.error("Failed to fetch professor by id", error);
+  }
+}
+
+export async function createAppointment(data: IAppointmentBase) {
+  try {
+    const createdAppointment = await appointmentRepo.create(data);
+    return createdAppointment;
+  } catch (error) {
+    console.error("Failed to create an appointment", error);
+  }
+}
+
+export async function getUserUri() {
+  try {
+    const response = await fetch("https://api.calendly.com/users/me", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${CALENDLY_API_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Organizations", response);
+    if (!response.ok) {
+      throw new Error(`Error fetching user info: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.resource.uri; // This is the user's URI
+  } catch (error) {
+    console.error("Error fetching user URI", error);
+    throw error;
+  }
+}
+
+// Fetch scheduled events for the user
+export async function getScheduledEvents() {
+  const userUri = await getUserUri(); // Get the logged-in user's URI
+
+  try {
+    const response = await fetch(
+      `https://api.calendly.com/scheduled_events?user=${encodeURIComponent(
+        userUri
+      )}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${CALENDLY_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.log("Error fetching scheduled events:", errorText);
+      throw new Error(`Error fetching Calendly events: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    // console.log("Scheduled events:", data);
+    // console.log("Members", data.collection);
+    return data.collection; // Return an array of scheduled events
+  } catch (error) {
+    console.error("Error fetching scheduled events", error);
+    throw error;
+  }
+}
+
+export async function getEventUuid() {
+  const events = await getScheduledEvents();
+  // console.log("Events in getEventuuid", events);
+
+  if (events.length > 0) {
+    const eventDetails = events.map((event: any) => {
+      const eventUuid = event.uri.split("/").pop(); // Extract the UUID from the URI
+      const startTime = event.start_time;
+      const endTime = event.end_time;
+      const gmeetLink = event.location.join_url; // Extract Google Meet link
+
+      const membership = event.event_memberships[0]; // Get the first membership
+      const profEmail = membership ? membership.user_email : null;
+      return {
+        uuid: eventUuid,
+        startTime,
+        endTime,
+        gmeetLink,
+        profEmail,
+      };
+    });
+
+    console.log("Event Details:", eventDetails);
+    return eventDetails;
+  } else {
+    console.log("No events found");
+    return null;
+  }
+}
+
+export async function getInviteeDetails() {
+  const eventDetails = await getEventUuid();
+
+  // Use Promise.all to wait for all fetch calls to complete
+  const inviteeDetails = await Promise.all(
+    eventDetails.map(async (event: any) => {
+      const startTime = event.startTime;
+      const endTime = event.endTime;
+      const gmeetLink = event.gmeetLink;
+      const professorEmail = event.profEmail;
+      const event_uuid = event.uuid;
+
+      const response = await fetch(
+        `https://api.calendly.com/scheduled_events/${event_uuid}/invitees`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${CALENDLY_API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.log("Error fetching scheduled events:", errorText);
+        throw new Error(
+          `Error fetching Calendly events: ${response.statusText}`
+        );
+      }
+
+      const data = await response.json();
+      // console.log("Scheduled event invitees:", data);
+
+      const convertToIST = (utcTime: string) => {
+        const date = new Date(utcTime);
+        const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC +5:30 in milliseconds
+        const istDate = new Date(date.getTime() + istOffset);
+
+        // Get day of the week
+        const daysOfWeek = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+        const dayOfWeek = daysOfWeek[istDate.getDay()]; // Local day in IST
+
+        // Convert to 12-hour format (local hours in IST)
+        let hours = istDate.getHours(); // Local hours in IST
+        const minutes = istDate.getMinutes();
+        const ampm = hours >= 12 ? "PM" : "AM";
+        hours = hours % 12;
+        hours = hours ? hours : 12; // Handle 0 (midnight) as 12
+
+        // Format time with leading zeros
+        const time = `${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")} ${ampm}`;
+
+        // Format date as YYYY-MM-DD
+        const formattedDate = istDate.toISOString().slice(0, 10);
+
+        return `${dayOfWeek}, ${formattedDate} ${time}`;
+      };
+      // Map the invitees to the desired output format
+      const invitees = data.collection.map((invitee: any) => ({
+        startTime: convertToIST(startTime),
+        endTime: convertToIST(endTime),
+        gmeetLink,
+        professorEmail,
+        name: invitee.name,
+        email: invitee.email,
+      }));
+
+      return invitees; // Return the array of invitee details for this event
+    })
+  );
+
+  // Flatten the array of arrays into a single array
+  return inviteeDetails.flat();
+}
+
+export async function getProfessorByEmail(email: string) {
+  try {
+    const [professors] = await db
+      .select()
+      .from(ProfessorsTable)
+      .where(eq(ProfessorsTable.email, email));
+    if (!professors) {
+      console.log("No professors");
+    }
+    return professors;
+  } catch (error) {
+    console.error("Failed to fetch professor by email", error);
+  }
+}
+
+export async function getUserAppointments() {
+  try {
+    const userDetails = await fetchUserDetails();
+    const userEmail = userDetails?.userDetails.email;
+    const scheduledDetails = await getInviteeDetails();
+    const userAppointments = scheduledDetails.filter(
+      (details) => details.email === userEmail
+    );
+    console.log("User appoints", userAppointments);
+    const enrichedAppointments = await Promise.all(
+      userAppointments.map(async (appointment) => {
+        // Assuming getProfessorDetailsByEmail returns an object like { profname, profdept }
+        const profDetails = await getProfessorByEmail(
+          appointment.professorEmail
+        );
+        console.log(profDetails);
+        // Add the professor details to the appointment
+        return {
+          ...appointment,
+          profname: profDetails!.name,
+          profdept: profDetails!.department,
+        };
+      })
+    );
+    console.log("Enriched", enrichedAppointments);
+    return enrichedAppointments;
+  } catch (error) {
+    console.error("Failed to get appointments", error);
+  }
+}
+
+export async function getAllAppointments() {
+  try {
+    const userDetails = await fetchUserDetails();
+    const userEmail = userDetails?.userDetails.email;
+    const scheduledDetails = await getInviteeDetails();
+    console.log("User appoints", scheduledDetails);
+    const enrichedAppointments = await Promise.all(
+      scheduledDetails.map(async (appointment) => {
+        // Assuming getProfessorDetailsByEmail returns an object like { profname, profdept }
+        const profDetails = await getProfessorByEmail(
+          appointment.professorEmail
+        );
+        console.log(profDetails);
+        // Add the professor details to the appointment
+        return {
+          ...appointment,
+          profname: profDetails!.name,
+          profdept: profDetails!.department,
+        };
+      })
+    );
+    console.log("Enriched All", enrichedAppointments);
+    return enrichedAppointments;
+  } catch (error) {
+    console.error("Failed to get appointments", error);
   }
 }

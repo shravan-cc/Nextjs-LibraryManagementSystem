@@ -101,3 +101,21 @@ export interface BookCardProps {
   totalPages: number;
   currentPage: string | 1;
 }
+
+export interface AppointmentsCardProps {
+  appointments: {
+    startTime: string;
+    endTime: string;
+    gmeetLink: string;
+    professorEmail: string;
+    name: string;
+    email: string;
+    profname: string;
+    profdept: string;
+  }[];
+}
+
+export interface ProfessorDetailsProps {
+  professorName: string;
+  professorDept: string;
+}
