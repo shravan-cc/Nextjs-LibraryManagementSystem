@@ -12,17 +12,11 @@ export default async function CalendlyPage({
   const calendlyURL = new URL(professor!.calendlylink);
 
   if (searchParams.name) {
-    calendlyURL.searchParams.set("name", searchParams.name);
+    calendlyURL.searchParams.set("name", searchParams.name); 
   }
   if (searchParams.email) {
     calendlyURL.searchParams.set("email", searchParams.email);
   }
 
-  return (
-    <Calendly
-      calendlyURL={calendlyURL.toString()}
-      professor={professor!}
-      id={params.id}
-    />
-  );
+  return <Calendly calendlyURL={calendlyURL.toString()} />;
 }
