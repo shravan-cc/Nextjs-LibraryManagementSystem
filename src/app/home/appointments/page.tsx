@@ -10,7 +10,9 @@ export default async function AdminAppointmentsCard() {
     const [date, time] = dateString.split(" ");
     return `${date.split("-").reverse().join("/")} ${time}`;
   };
-
+  const formatTime = (dateString: string) => {
+    return dateString.split(" ")[2] + " " + dateString.split(" ")[3];
+  };
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold mb-6 text-orange-800">
@@ -72,8 +74,8 @@ export default async function AdminAppointmentsCard() {
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-orange-600" />
                 <span className="text-xs text-gray-700">
-                  {appointment.startTime.split(" ")[1]} -{" "}
-                  {appointment.endTime.split(" ")[1]}
+                  {formatTime(appointment.startTime)} -{" "}
+                  {formatTime(appointment.endTime)}
                 </span>
               </div>
               <div className="flex items-center space-x-2">

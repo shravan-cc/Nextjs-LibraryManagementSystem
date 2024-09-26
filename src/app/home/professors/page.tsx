@@ -18,7 +18,7 @@ export default async function AdminProfessorCard() {
       <h1 className="text-3xl font-bold mb-6 text-orange-800">
         Manage Professors
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {professors!.map((professor) => (
           <Card
             key={professor.id}

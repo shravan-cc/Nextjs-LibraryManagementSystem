@@ -697,7 +697,7 @@ export async function getUserUri() {
     }
 
     const data = await response.json();
-    return data.resource.uri; // This is the user's URI
+    return data.resource.current_organization; // This is the user's URI
   } catch (error) {
     console.error("Error fetching user URI", error);
     throw error;
@@ -710,7 +710,7 @@ export async function getScheduledEvents() {
 
   try {
     const response = await fetch(
-      `https://api.calendly.com/scheduled_events?user=${encodeURIComponent(
+      `https://api.calendly.com/scheduled_events?organization=${encodeURIComponent(
         userUri
       )}`,
       {
@@ -974,8 +974,34 @@ export async function getAllAppointments() {
         };
       })
     );
+    const now = new Date();
+
+    // Helper function to parse the custom end time format
+    const parseEndTime = (endTime: string) => {
+      // Example: "Friday, 27/09/2024, 01:30 pm"
+      const regex = /^([^,]+), (.+), (.+)$/; // Match day, date, time parts
+      const match = endTime.match(regex);
+
+      if (!match) {
+        console.error(`Invalid end time format: ${endTime}`);
+        return null; // Handle invalid formats gracefully
+      }
+
+      const [, , dateString, timeString] = match;
+      const [day, month, year] = dateString.split("/");
+
+      // Reformat to MM/DD/YYYY hh:mm AM/PM (US style)
+      const formattedDate = `${month}/${day}/${year} ${timeString}`;
+      console.log(`Formatted Date: ${formattedDate}`);
+      return new Date(formattedDate);
+    };
     console.log("Enriched All", enrichedAppointments);
-    return enrichedAppointments;
+    return enrichedAppointments.filter((appointment) => {
+      console.log("endTime", appointment.endTime);
+      const appointmentEndTime = parseEndTime(appointment.endTime);
+      console.log(`AppointmentEnd ${appointmentEndTime} now ${now}`);
+      return appointmentEndTime! > now && appointment.status === "active";
+    });
   } catch (error) {
     console.error("Failed to get appointments", error);
   }
