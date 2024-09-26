@@ -828,8 +828,12 @@ export async function getInviteeDetails() {
         endTime: convertToIST(endTime),
         gmeetLink,
         professorEmail,
+        event_uuid,
         name: invitee.name,
         email: invitee.email,
+        cancel_url: invitee.cancel_url,
+        reschedule_url: invitee.reschedule_url,
+        status: invitee.status,
       }));
 
       return invitees; // Return the array of invitee details for this event
@@ -838,6 +842,36 @@ export async function getInviteeDetails() {
 
   // Flatten the array of arrays into a single array
   return inviteeDetails.flat();
+}
+
+export async function cancelAppointments(event_uuid: string) {
+  try {
+    const response = await fetch(
+      `https://api.calendly.com/scheduled_events/${event_uuid}/cancellation`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${CALENDLY_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          reason: "User canceled the event",
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.log("Error fetching scheduled events:", errorText);
+      throw new Error(`Error fetching Calendly events: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("Canceled Data", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to cancel appointment");
+  }
 }
 
 export async function getProfessorByEmail(email: string) {
@@ -883,7 +917,9 @@ export async function getUserAppointments() {
       })
     );
     console.log("Enriched", enrichedAppointments);
-    return enrichedAppointments;
+    return enrichedAppointments.filter(
+      (appointment) => appointment.status === "active"
+    );
   } catch (error) {
     console.error("Failed to get appointments", error);
   }

@@ -112,6 +112,9 @@ export interface AppointmentsCardProps {
     email: string;
     profname: string;
     profdept: string;
+    cancel_url: string;
+    reschedule_url: string;
+    event_uuid: string;
   }[];
 }
 

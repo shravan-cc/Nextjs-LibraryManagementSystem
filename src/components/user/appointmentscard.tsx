@@ -2,8 +2,16 @@
 
 import { AppointmentsCardProps } from "@/lib/definition";
 import { Calendar, Clock, Video } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import CancelAppointment from "./appointmentCancel";
 
 export default function AppointmentsCard({
   appointments,
@@ -63,6 +71,15 @@ export default function AppointmentsCard({
                 </a>
               </div>
             </CardContent>
+            <CardFooter className="p-4 bg-orange-50 flex justify-between">
+              <Button
+                variant="outline"
+                className="text-orange-600 border-orange-600 hover:bg-orange-100"
+              >
+                Reschedule
+              </Button>
+              <CancelAppointment eventUuid={appointment.event_uuid}/>
+            </CardFooter>
           </Card>
         ))}
       </div>
