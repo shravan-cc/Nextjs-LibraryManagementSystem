@@ -82,6 +82,11 @@ export default function BookForm() {
               placeholder="Enter book title"
               className="mt-1 bg-gray-50 border border-gray-300 focus:ring-orange-500 focus:border-orange-500"
             />
+            {state.errors?.title ? (
+              <p className="text-red-500 text-sm">{state.errors.title}</p>
+            ) : (
+              <div className="min-h-6"></div>
+            )}
           </div>
           <div>
             <Label

@@ -8,16 +8,27 @@ export const ProfessorBaseSchema = z.object({
   bio: z
     .string()
     .max(255, { message: "Bio cannot be longer than 255 characters" })
-    .optional(),
-  department: z 
+    .optional()
+    .nullable(),
+  department: z
     .string()
     .max(50, { message: "Description cannot be longer than 50 characters" })
     .optional(),
-  calendlylink: z
+  email: z
     .string()
-    .max(255, {
-      message: "Calendly link cannot be longer than 255 characters",
-    }),
+    .trim()
+    .email({ message: "Invalid email address" })
+    .min(5, { message: "Email must be at least 5 characters long" })
+    .max(255, { message: "Email must be no longer than 255 characters" }),
+  calendlylink: z.string().max(255, {
+    message: "Calendly link cannot be longer than 255 characters",
+  }),
+  status: z.string().nullable(),
+});
+
+export const ProfessorAddSchema = ProfessorBaseSchema.omit({
+  calendlylink: true,
+  status: true,
 });
 
 export const ProfessorSchema = ProfessorBaseSchema.extend({

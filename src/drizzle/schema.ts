@@ -60,6 +60,7 @@ export const ProfessorsTable = pgTable("professors", {
   email: varchar("email", { length: 100 }).unique().notNull(),
   department: varchar("department", { length: 50 }),
   calendlylink: varchar("calendlylink", { length: 255 }).notNull(),
+  status: varchar("status", { length: 15 }),
 });
 
 export const AppointmentsTable = pgTable("appointments", {

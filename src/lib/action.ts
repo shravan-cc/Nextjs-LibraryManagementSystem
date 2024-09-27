@@ -25,11 +25,17 @@ import cloudinary from "./cloudinary";
 import { IAppointmentBase } from "@/models/appointment.model";
 import { AppointmentRepository } from "@/repositories/appointment.repository";
 import { error } from "console";
+import {
+  ProfessorAddSchema,
+  ProfessorBaseSchema,
+} from "@/models/professor.model";
+import { ProfessorRepository } from "@/repositories/professor.repository";
 
 const memberRepo = new MemberRepository(db);
 const bookRepo = new BookRepository(db);
 const transactionRepo = new TransactionRepository(db);
 const appointmentRepo = new AppointmentRepository(db);
+const professorRepo = new ProfessorRepository(db);
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -244,6 +250,56 @@ export async function editBook(
   } catch (error) {
     console.log("Error during registration:", error);
     return { message: "Error during registration:", error };
+  }
+}
+
+export async function addProfessor(prevState: State, formData: FormData) {
+  console.log("In add professor");
+  const validateFields = ProfessorAddSchema.safeParse({
+    name: formData.get("name"),
+    bio: formData.get("bio"),
+    email: formData.get("email"),
+    department: formData.get("department"),
+  });
+
+  if (!validateFields.success) {
+    console.log("Failure");
+    console.log(validateFields.error.flatten().fieldErrors);
+    return {
+      errors: validateFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Add professor.",
+    };
+  }
+  const { name, bio, email, department } = validateFields.data;
+
+  if (!name || !bio || !email || !department) {
+    console.log("All fields are required");
+    return { message: "All Fields are required" };
+  }
+
+  try {
+    const existingProfessor = await professorRepo.getProfessorByEmail(email);
+    if (existingProfessor) {
+      console.log("Professor already exists.");
+      return { message: "Professor already exists." };
+    }
+
+    const status = await inviteProfessor(email);
+    console.log(status);
+
+    const createdProfessor = await professorRepo.create({
+      name,
+      email,
+      bio,
+      department,
+      calendlylink: "",
+      status: status,
+    });
+    console.log(`Professor ${createdProfessor.name} created successfully!`);
+    return { message: "Success" };
+  } catch (error) {
+    console.log("Error during registration:", error);
+    return { message: "Error during registration:" };
   }
 }
 
@@ -704,6 +760,31 @@ export async function getUserUri() {
   }
 }
 
+export async function inviteProfessor(emailValue: string) {
+  const organizationUrl = await getUserUri();
+  const uuid = organizationUrl.split("/").pop();
+  try {
+    const response = await fetch(
+      `https://api.calendly.com/organizations/${uuid}/invitations`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${CALENDLY_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: emailValue }),
+      }
+    );
+    console.log("Organizations", response);
+    if (!response.ok) {
+      throw new Error(`Error fetching user info: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data.resource.status;
+  } catch (error) {
+    console.error("Error inviting professor", error);
+  }
+}
 // Fetch scheduled events for the user
 export async function getScheduledEvents() {
   const userUri = await getUserUri(); // Get the logged-in user's URI
@@ -1004,5 +1085,58 @@ export async function getAllAppointments() {
     });
   } catch (error) {
     console.error("Failed to get appointments", error);
+  }
+}
+
+export async function updateStatus(emailValue: string) {
+  const organizationUrl = await getUserUri();
+  const uuid = organizationUrl.split("/").pop();
+  console.log("UUID", uuid);
+  try {
+    const response = await fetch(
+      `https://api.calendly.com/organizations/${uuid}/invitations?email=${emailValue}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${CALENDLY_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("Organizations", response);
+    if (!response.ok) {
+      console.error(`Error fetching user info: ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log("DAta", data);
+    if (data.collection[0].status === "accepted") {
+      console.log("Accepted the invitation");
+      try {
+        const response = await fetch(`${data.collection[0].user}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${CALENDLY_API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        });
+        console.log("User Response", response);
+        if (!response.ok) {
+          console.error(`Error fetching user info: ${response.statusText}`);
+          throw new Error(`Error fetching user info: ${response.statusText}`);
+        }
+        const result = await response.json();
+        await db
+          .update(ProfessorsTable)
+          .set({
+            status: data.collection[0].status,
+            calendlylink: result.resource.scheduling_url,
+          })
+          .where(eq(ProfessorsTable.email, emailValue));
+      } catch (error) {
+        console.error("Error while updating status", error);
+      }
+    }
+  } catch (error) {
+    console.error("Error inviting professor", error);
   }
 }
