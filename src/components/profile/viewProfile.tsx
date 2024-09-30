@@ -60,14 +60,14 @@ export default async function ViewProfile({
                   )} ${userDetails?.lastName.charAt(0)}`}
                 </AvatarFallback>
               )}
-            </Avatar> 
+            </Avatar>
           </div>
           <div className="ml-32 sm:ml-40 pt-2 flex flex-col sm:flex-row justify-between items-start">
             <div>
               <h3 className="sm:text-2xl text-xl font-bold text-gray-800">{`${userDetails?.firstName} ${userDetails?.lastName}`}</h3>
               <p className="text-sm text-muted-foreground">{user?.role}</p>
               <p className="text-sm text-muted-foreground">
-                {t("Member ID")}: #{userDetails?.id}
+                {t("Member ID")} #{userDetails?.id}
               </p>
             </div>
             <Link href={path} className="mt-4 sm:mt-0">

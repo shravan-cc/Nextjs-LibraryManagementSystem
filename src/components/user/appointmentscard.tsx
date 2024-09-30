@@ -1,7 +1,7 @@
 "use client";
 
 import { AppointmentsCardProps } from "@/lib/definition";
-import { Calendar, Clock, Video } from "lucide-react";
+import { Calendar, CalendarX, Clock, Video } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -29,9 +29,22 @@ export default function AppointmentsCard({
     <div className="container mx-auto px-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {appointments.length === 0 ? (
-          <p className="text-center text-CustomDarkOrange mt-4">
-            No Appointments
-          </p>
+          <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+            <CardContent className="p-8 text-center">
+              <CalendarX className="h-16 w-16 mx-auto text-orange-300 mb-4" />
+              <CardTitle className="text-2xl font-bold text-orange-800 mb-2">
+                No Appointments
+              </CardTitle>
+              <p className="text-orange-600 mb-6">
+                You dont have any scheduled appointments at the moment.
+              </p>
+              <Link href="/user/professors">
+                <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                  Book an Appointment
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         ) : (
           appointments.map((appointment, index) => (
             <Card

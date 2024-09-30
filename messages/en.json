@@ -72,6 +72,7 @@
     "Filter by genre": "Filter by genre",
     "Filter by price": "Filter by price",
     "NoBooks": "No books found.",
+    "NoBooksDescription": "We couldn't find any books matching your search or filters. Try adjusting your search criteria or removing filters",
     "Borrow Now": "Borrow Now",
     "Join Waitlist": "Join Waitlist",
     "Confirm Borrow": "Confirm Borrow",
@@ -87,7 +88,8 @@
   "MyBooks": {
     "MyBooks": "My Books",
     "Manage": "Manage your borrowed books and keep track of due dates",
-    "EmptyLibrary": "Your library is empty. Start borrowing books to see them here!",
+    "EmptyLibrary": "No Books Borrowed Yet",
+    "EmptyLibraryDescription": "It looks like you haven't borrowed any books yet. Start exploring and add books to your library!",
     "Borrowed": "Borrowed:",
     "Due": "Due:"
   },
@@ -97,7 +99,8 @@
     "Author": "Author",
     "Status": "Status",
     "Actions": "Actions",
-    "NoBooks": "No book requests found."
+    "NoBooks": "No book requests found.",
+    "NoRequestsDescription": "You haven't requested any books yet. Browse the library and place a request for the ones you'd like to read!"
   },
   "Search": {
     "Books": "Search Books",
@@ -117,7 +120,8 @@
     "Edit Profile": "Edit Profile",
     "Personal Information": "Personal Information",
     "Upload Image": "Upload Image",
-    "Save Changes": "Save Changes"
+    "Save Changes": "Save Changes",
+    "Saving Changes": "Saving Changes..."
   },
   "Cancel": {
     "Cancel": "Cancel",

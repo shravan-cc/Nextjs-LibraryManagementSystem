@@ -1,43 +1,9 @@
-import Pagination from "@/components/home/pagination";
-import SearchBar from "@/components/home/search";
-import { Badge } from "@/components/ui/badge";
-
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
 import { fetchBooks, fetchUserDetails, getGenres } from "@/lib/action";
 import { IBook } from "@/models/book.model";
 
-import {
-  BookCopy,
-  BookOpen,
-  Building,
-  Hash,
-  InfoIcon,
-  Users,
-} from "lucide-react";
-
-import FilterGenre from "@/components/admin/books/filterGenre";
-import SortBooks from "@/components/admin/books/sortBooks";
-import IssueBook from "@/components/user/issueBook";
-import { db } from "../../../drizzle/db";
-import { BookRepository } from "@/repositories/book.repository";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
-import { Separator } from "@/components/ui/separator";
-import FilterBookByPrice from "@/components/admin/books/fiterPrice";
 import BookCard from "@/components/user/bookCard";
+import { BookRepository } from "@/repositories/book.repository";
+import { db } from "../../../drizzle/db";
 
 const bookRepo = new BookRepository(db);
 

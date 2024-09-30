@@ -11,6 +11,7 @@ import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Loader2 } from "lucide-react";
 
 export default function EditProfileForm({
   userDetails,
@@ -38,7 +39,10 @@ export default function EditProfileForm({
     }
   };
   const initialState: State = { message: "", errors: {} };
-  const [state, formAction] = useActionState(editMember, initialState);
+  const [state, formAction, isPending] = useActionState(
+    editMember,
+    initialState
+  );
   const { toast } = useToast();
   const router = useRouter();
   const path =
@@ -46,13 +50,13 @@ export default function EditProfileForm({
 
   useEffect(() => {
     if (state.message === "Success") {
+      router.push(path);
       toast({
         title: "Success",
         description: "Member edited successfully from the library.",
         duration: 1500,
         className: "bg-green-100 border-green-500 text-green-800 shadow-lg",
       });
-      router.push(path);
       router.refresh();
     }
   }, [state.message, toast, router, path]);
@@ -167,7 +171,14 @@ export default function EditProfileForm({
           type="submit"
           className="w-full bg-orange-500 hover:bg-orange-600 text-white"
         >
-          {t1("Save Changes")}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              {t1("Saving Changes")}
+            </>
+          ) : (
+            t1("Save Changes")
+          )}
         </Button>
       </form>
     </>

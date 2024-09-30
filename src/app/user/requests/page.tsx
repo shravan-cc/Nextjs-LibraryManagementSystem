@@ -11,6 +11,8 @@ import {
   TableBody,
 } from "@/components/ui/table";
 import { getTranslations } from "next-intl/server";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { FileX } from "lucide-react";
 
 export default async function Requests() {
   const t = await getTranslations("MyRequests");
@@ -76,9 +78,15 @@ export default async function Requests() {
           </Table>
         </div>
         {bookRequests!.length === 0 && (
-          <p className="text-center text-CustomDarkOrange mt-4">
-            {t("NoBooks")}
-          </p>
+          <Card className="bg-white rounded-lg shadow">
+            <CardContent className="p-8 text-center">
+              <FileX className="h-16 w-16 mx-auto text-orange-300 mb-4" />
+              <CardTitle className="text-2xl font-bold text-orange-800 mb-2">
+                {t("NoBooks")}
+              </CardTitle>
+              <p className="text-orange-600">{t("NoRequestsDescription")}</p>
+            </CardContent>
+          </Card>
         )}
       </div>
     </>

@@ -37,7 +37,7 @@ import { useTranslations } from "next-intl";
 
 export default function BookCard({
   genres,
-  books, 
+  books,
   member,
   totalPages,
   currentPage,
@@ -250,9 +250,21 @@ export default function BookCard({
             </Dialog>
           ))}
           {books!.length === 0 && (
-            <p className="text-center text-CustomDarkOrange mt-4">
-              {t("NoBooks")}
-            </p>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.5 }}
+              className="col-span-full flex flex-col items-center justify-center p-8 bg-orange-50 rounded-lg shadow-md"
+            >
+              <BookOpen className="h-24 w-24 text-orange-300 mb-4" />
+              <h2 className="text-2xl font-bold text-orange-800 mb-2 text-center">
+                {t("NoBooks")}
+              </h2>
+              <p className="text-orange-600 text-center max-w-md">
+                {t("NoBooksDescription")}
+              </p>
+            </motion.div>
           )}
         </motion.div>
       </AnimatePresence>

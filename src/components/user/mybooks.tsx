@@ -33,12 +33,15 @@ export default function MyBooksList({ borrowedBooks }: MyBooksProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center"
+          className="text-center bg-orange-50 p-8 rounded-lg shadow-md"
         >
-          <p className="text-CustomDarkOrange text-lg mb-4">
+          <BookOpen size={100} className="mx-auto text-orange-300 mb-4" />
+          <h2 className="text-2xl font-bold text-orange-800 mb-2">
             {t("EmptyLibrary")}
+          </h2>
+          <p className="text-orange-600 max-w-md mx-auto">
+            {t("EmptyLibraryDescription")}
           </p>
-          <BookOpen size={100} className="mx-auto text-orange-300" />
         </motion.div>
       ) : (
         <motion.div
