@@ -30,12 +30,18 @@ import {
   ProfessorBaseSchema,
 } from "@/models/professor.model";
 import { ProfessorRepository } from "@/repositories/professor.repository";
+import Razorpay from "razorpay";
 
 const memberRepo = new MemberRepository(db);
 const bookRepo = new BookRepository(db);
 const transactionRepo = new TransactionRepository(db);
 const appointmentRepo = new AppointmentRepository(db);
 const professorRepo = new ProfessorRepository(db);
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID as string,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -1138,5 +1144,21 @@ export async function updateStatus(emailValue: string) {
     }
   } catch (error) {
     console.error("Error inviting professor", error);
+  }
+}
+
+export async function performPayment(amount: number) {
+  const options = {
+    amount: amount * 100,
+    currency: "INR",
+    receipt: "receipt_order_74394",
+  };
+
+  try {
+    const order = await razorpay.orders.create(options);
+    console.log("Orders", order);
+    return { orderId: order.id };
+  } catch (error) {
+    console.error("Failed to perform payments", error);
   }
 }

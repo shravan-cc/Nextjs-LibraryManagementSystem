@@ -122,3 +122,18 @@ export interface ProfessorDetailsProps {
   professorName: string;
   professorDept: string;
 }
+
+export interface RazorpayProps {
+  professor: {
+    status: string | null;
+    id: number;
+    email: string;
+    name: string;
+    bio: string | null;
+    department: string | null;
+    calendlylink: string;
+  };
+  memberName: string;
+  memberEmail: string | undefined;
+  memberPhoneNumber: number | null | undefined;
+}
