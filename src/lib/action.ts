@@ -794,12 +794,15 @@ export async function inviteProfessor(emailValue: string) {
 // Fetch scheduled events for the user
 export async function getScheduledEvents() {
   const userUri = await getUserUri(); // Get the logged-in user's URI
-
+  const currentDate = new Date().toISOString(); // Today's date
+  const nextWeekDate = new Date();
+  nextWeekDate.setDate(nextWeekDate.getDate() + 15); // One week from today
+  const nextWeek = nextWeekDate.toISOString();
   try {
     const response = await fetch(
       `https://api.calendly.com/scheduled_events?organization=${encodeURIComponent(
         userUri
-      )}`,
+      )}&min_start_time=${currentDate}&max_start_time=${nextWeek}`,
       {
         method: "GET",
         headers: {
@@ -1028,10 +1031,11 @@ export async function getUserAppointments() {
       console.log(`Formatted Date: ${formattedDate}`);
       return new Date(formattedDate);
     };
-    // Filter appointments where the end time hasn't passed
+
     return enrichedAppointments.filter((appointment) => {
       console.log("endTime", appointment.endTime);
       const appointmentEndTime = parseEndTime(appointment.endTime);
+      console.log("Appointments", appointment);
       console.log(`AppointmentEnd ${appointmentEndTime} now ${now}`);
       return appointmentEndTime! > now && appointment.status === "active";
     });
