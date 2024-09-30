@@ -137,3 +137,7 @@ export interface RazorpayProps {
   memberEmail: string | undefined;
   memberPhoneNumber: number | null | undefined;
 }
+
+export interface UserNavigationProps {
+  closeSheet?: () => void;
+}

@@ -1,3 +1,4 @@
+import AdminMobileBar from "@/components/admin/mobileNaav";
 import AdminNavigation from "@/components/admin/nav";
 import Profile from "@/components/profile/profile";
 import { Button } from "@/components/ui/button";
@@ -12,19 +13,7 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen flex flex-col bg-CustomPeach">
       <header className="sticky top-0 z-10 px-4 lg:px-6 h-16 flex items-center border-b bg-white shadow-md">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-64 bg-orange-50">
-            <nav className="flex flex-col space-y-2">
-              <AdminNavigation />
-            </nav>
-          </SheetContent>
-        </Sheet>
+        <AdminMobileBar />
         <h1 className="font-bold text-2xl md:text-3xl text-CustomOrange">
           Library Management System
         </h1>

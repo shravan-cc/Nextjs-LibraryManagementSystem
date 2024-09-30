@@ -2,6 +2,7 @@ import Profile from "@/components/profile/profile";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import UserNavigation from "@/components/user-nav";
+import MobileSidebar from "@/components/user/mobileNav";
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -15,26 +16,7 @@ export default function DashboardLayout({
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-CustomPeach to-orange-100">
       <header className="sticky top-0 z-10 px-4 lg:px-6 h-16 flex items-center justify-between border-b bg-white bg-opacity-90 backdrop-blur-md shadow-md transition-all duration-300">
         <div className="flex items-center">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden text-CustomOrange hover:bg-orange-100 transition-colors duration-200"
-              >
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="left"
-              className="w-64 bg-gradient-to-br from-orange-50 to-orange-100"
-            >
-              <nav className="flex flex-col space-y-2 mt-8">
-                <UserNavigation />
-              </nav>
-            </SheetContent>
-          </Sheet>
+          <MobileSidebar />
           <h1 className="font-bold text-2xl md:text-3xl text-CustomOrange ml-2 md:ml-0">
             {t("ShravanReads")}
           </h1>

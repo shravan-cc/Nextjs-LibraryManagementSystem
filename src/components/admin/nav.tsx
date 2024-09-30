@@ -11,8 +11,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { UserNavigationProps } from "@/lib/definition";
 
-export default function AdminNavigation() {
+export default function AdminNavigation({ closeSheet }: UserNavigationProps) {
   const pathName = usePathname();
   console.log(pathName);
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -56,6 +57,7 @@ export default function AdminNavigation() {
           }`}
           onClick={() => {
             setActiveTab(value);
+            if (closeSheet) closeSheet();
           }}
         >
           {icon}

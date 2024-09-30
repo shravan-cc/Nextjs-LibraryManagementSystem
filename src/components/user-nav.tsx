@@ -13,8 +13,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { useTranslations } from "next-intl";
+import { UserInfo } from "os";
+import { UserNavigationProps } from "@/lib/definition";
 
-export default function UserNavigation() {
+export default function UserNavigation({ closeSheet }: UserNavigationProps) {
   const pathName = usePathname();
   const [activeTab, setActiveTab] = useState("dashboard");
   const t = useTranslations("SideBar");
@@ -61,6 +63,7 @@ export default function UserNavigation() {
           }`}
           onClick={() => {
             setActiveTab(value);
+            if (closeSheet) closeSheet();
           }}
         >
           {icon}
