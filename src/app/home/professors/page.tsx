@@ -13,6 +13,7 @@ import { getProfessors } from "@/lib/action";
 import AddProfessor from "@/components/admin/professors/addProfessor";
 import RefreshProfessor from "@/components/admin/professors/refreshprofessor";
 import Link from "next/link";
+import DeleteProfessor from "@/components/admin/professors/deleteProfessor";
 
 export default async function AdminProfessorCard() {
   const professors = await getProfessors();
@@ -85,13 +86,7 @@ export default async function AdminProfessorCard() {
                   No Calendly Link
                 </Button>
               )}
-              <Button
-                variant="destructive"
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white w-full"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </Button>
+              <DeleteProfessor professor={professor} />
             </CardFooter>
           </Card>
         ))}

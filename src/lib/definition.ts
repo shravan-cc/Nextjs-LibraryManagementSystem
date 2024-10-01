@@ -141,3 +141,15 @@ export interface RazorpayProps {
 export interface UserNavigationProps {
   closeSheet?: () => void;
 }
+
+export interface DeleteProfessorProps {
+  professor: {
+    id: number;
+    email: string;
+    status: string | null;
+    name: string;
+    bio: string | null;
+    department: string | null;
+    calendlylink: string;
+  };
+}

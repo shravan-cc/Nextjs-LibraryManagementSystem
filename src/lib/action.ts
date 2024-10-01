@@ -31,6 +31,7 @@ import {
 } from "@/models/professor.model";
 import { ProfessorRepository } from "@/repositories/professor.repository";
 import Razorpay from "razorpay";
+import { revalidatePath } from "next/cache";
 
 const memberRepo = new MemberRepository(db);
 const bookRepo = new BookRepository(db);
@@ -735,6 +736,23 @@ export async function getProfessorById(id: number) {
   }
 }
 
+export async function deleteProfessorById(professorId: number) {
+  try {
+    const existingProfessor = await getProfessorById(professorId);
+    if (!existingProfessor) {
+      return null;
+    }
+    const deleteProfessor = await db
+      .delete(ProfessorsTable)
+      .where(eq(ProfessorsTable.id, professorId));
+
+    return existingProfessor;
+  } catch (error) {
+    console.error(`Deletion failed: ${error}`);
+    throw new Error(`Deletion failed: ${error}`);
+  }
+}
+
 export async function createAppointment(data: IAppointmentBase) {
   try {
     const createdAppointment = await appointmentRepo.create(data);
@@ -789,6 +807,77 @@ export async function inviteProfessor(emailValue: string) {
     return data.resource.status;
   } catch (error) {
     console.error("Error inviting professor", error);
+  }
+}
+
+export async function fetchMembershipUuid(email: string) {
+  try {
+    console.log("email while deleting", email);
+    const orgUri = await getUserUri();
+    const response = await fetch(
+      `https://api.calendly.com/organization_memberships?organization=${encodeURIComponent(
+        orgUri
+      )}&email=${encodeURIComponent(email)}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${CALENDLY_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      console.error(`Error fetching membership UUID: ${response.statusText}`);
+      throw new Error(`Error fetching membership UUID: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const membership = data.collection[0]; // Assuming the first entry is the required one
+
+    return membership.uri.split("/").pop();
+  } catch (error) {
+    console.error("Failed to get membership Id", error);
+  }
+}
+
+export async function deleteProfessor(professorId: number) {
+  try {
+    const professor = await getProfessorById(professorId);
+    if (!professor) throw new Error("Professor not found");
+
+    const membershipUuid = await fetchMembershipUuid(professor.email);
+
+    const response = await fetch(
+      `https://api.calendly.com/organization_memberships/${membershipUuid}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${CALENDLY_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to remove professor from organization:`);
+    }
+
+    const deletedProfessor = await deleteProfessorById(professorId);
+
+    return {
+      success: true,
+      message: "Professor successfully removed from organization and database",
+      deletedProfessor,
+    };
+  } catch (error: any) {
+    console.error("Error removing professor:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to remove professor",
+    };
+  } finally {
+    revalidatePath("/home/professors");
   }
 }
 // Fetch scheduled events for the user
